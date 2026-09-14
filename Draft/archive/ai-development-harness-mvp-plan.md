@@ -2,10 +2,10 @@
 
 > 대상: 바이브 코딩 사용자 및 중·소규모 프로젝트  
 > 상태: Draft  
-> 버전: 0.4  
+> 버전: 0.5\
 > 작성일: 2026-09-13  
 > 수정일: 2026-09-14  
-> 개정 내용: 공통 설치·자연어 요청·SQLite 단일 상태 관리에 작업 계약, 규칙 참조, Revision 검증, 재개 복구와 위험 분류 정책 반영  
+> 개정 내용: Git 쓰기 자동화 제거, 파일 내용 기반 완료·재개 기준으로 전환, 기획 변경 이력 추가\
 > 첫 dogfooding 대상: Decision Desk  
 > 관련 문서: `Draft/ai-development-harness-plan.md`는 장기 Target Architecture로 유지한다.
 
@@ -29,7 +29,7 @@ MVP의 목표는 다음 Phase 개발 흐름을 안정적으로 완성하는 것�
 → 필요한 경우 AI Review
 → Workflow에서 요구하는 후속 검증
 → 제한적 재시도
-→ Task별 Git Commit
+→ 최종 코드 Revision과 Task 완료 기록
 → Phase 보고서
 → 사용자 인수
 ```
@@ -41,7 +41,7 @@ MVP의 목표는 다음 Phase 개발 흐름을 안정적으로 완성하는 것�
 → 관련 코드 확인과 Task 생성
 → Workflow 자동 선택 및 권한 확인
 → 구현·검증
-→ Task Commit
+→ 최종 Revision 확인·Task 완료 기록
 → 결과 안내
 ```
 
@@ -62,7 +62,7 @@ MVP의 목표는 다음 Phase 개발 흐름을 안정적으로 완성하는 것�
 - 테스트 성공 여부는 실제 명령 실행 결과로 판정한다.
 - 위험한 행동에서만 사용자 승인을 요청한다.
 - 컴퓨터를 재시작해도 개발 Run을 재개할 수 있어야 한다.
-- 실제 코드와 테스트는 Git으로 관리한다.
+- 실제 코드와 테스트는 프로젝트 작업 폴더에 유지한다. Git 사용 여부와 모든 Git 쓰기 작업은 사용자가 수동으로 결정·수행한다.
 
 ### 2.2 MVP에서 축소할 것
 
@@ -75,8 +75,8 @@ MVP의 목표는 다음 Phase 개발 흐름을 안정적으로 완성하는 것�
 - 실패 분석 전용 Agent를 만들지 않고 오류 로그를 Developer에게 전달한다.
 - Codex CLI Adapter 하나부터 지원한다.
 - Task는 순차 실행한다.
-- Phase Branch 하나와 Task별 Commit을 사용한다.
-- 산출물은 Git, SQLite, 간단한 Phase Report로 관리한다.
+- 커밋 없이 파일 내용 기반 Revision과 Task별 검증 결과를 연결한다.
+- 산출물은 프로젝트 파일, SQLite, 간단한 Phase Report로 관리한다.
 
 ### 2.3 MVP에서 제외할 것
 
@@ -88,7 +88,8 @@ MVP의 목표는 다음 Phase 개발 흐름을 안정적으로 완성하는 것�
 - 원격 Artifact Store
 - 완전한 Event Sourcing
 - Web Dashboard
-- 자동 Merge 및 Production 배포
+- Git 초기화, Branch 생성·전환, staging, commit, push, PR 생성, merge 등 모든 Git 쓰기 자동화
+- Production 배포
 - 복잡한 비용 정산 엔진
 
 ---
@@ -115,7 +116,7 @@ Orchestrator 프로그램
 - Validation 명령 실행
 - 재시도 횟수 제한
 - 완료 조건 판정
-- Git과 보고서 관리
+- 코드 Revision·변경 내역과 보고서 관리
 ```
 
 핵심 원칙은 다음과 같다.
@@ -176,7 +177,7 @@ Orchestrator Engine
   ├─ Approval Controller
   ├─ Validation Runner
   ├─ Retry Controller
-  ├─ Git Manager
+  ├─ Workspace Tracker
   └─ SQLite State Store
        ↓
 Codex CLI Adapter
@@ -206,7 +207,7 @@ Orchestrator가 실제 실행
 - Phase 개발: 기획서에서 전체 Phase와 현재 Phase의 Task를 계획하고 승인 후 실행한다.
 - 자연어 수정: 초기 설정을 마친 프로젝트에서 요청을 작은 Task로 변환하고 Workflow를 자동 선택한다.
 
-두 방식은 Task Scheduler, Workflow Router, Approval Controller, Validation Runner, Git Manager와 SQLite State Store를 공유한다. 자연어 요청을 위한 별도 실행 엔진이나 전용 AI Agent는 추가하지 않는다.
+두 방식은 Task Scheduler, Workflow Router, Approval Controller, Validation Runner, Workspace Tracker와 SQLite State Store를 공유한다. 자연어 요청을 위한 별도 실행 엔진이나 전용 AI Agent는 추가하지 않는다.
 
 Slash Command는 자연어의 의도를 먼저 구분한다. `/development Phase2 개발해보자`는 Phase 시작으로, `/development 상단의 폰트를 10pt로 줄여줘`는 작은 수정 요청으로 연결한다. 작은 수정은 Core CLI에서 `devh request "<요청>"`으로도 전달할 수 있다. 연결되지 않은 일반 채팅의 문장을 자동 수집하지 않는다. 명령 연결과 실행 예시는 14절에 정의한다.
 
@@ -236,7 +237,7 @@ devh init Draft/product-plan.md
 
 ### 4.4 현재 프로젝트 식별
 
-- Core CLI는 현재 작업 폴더에서 해당 Git 저장소의 루트까지 설정을 탐색하고, 가장 가까운 `.dev-harness/project.yaml`을 기준으로 프로젝트를 식별한다.
+- Core CLI는 현재 작업 폴더에서 상위 폴더 방향으로 설정을 탐색하고, 가장 가까운 `.dev-harness/project.yaml`이 있는 폴더를 프로젝트 루트로 식별한다. Git 없는 폴더도 지원하며 Git 루트나 최근 프로젝트를 대신 선택하지 않는다. `devh init`은 명령을 실행한 대상 폴더를 루트로 등록하고 Git 저장소를 생성하지 않는다.
 - Slash Command는 AI 도구에서 현재 열린 프로젝트의 작업 경로를 Core CLI에 전달한다. 최근에 사용한 다른 프로젝트를 임의로 선택하지 않는다.
 - 설정의 프로젝트 ID와 체크아웃 식별 정보를 이용해 해당 프로젝트의 SQLite를 연결한다. 여러 프로젝트가 같은 실행 프로그램을 사용해도 진행 상태와 승인 기록은 섞이지 않는다.
 - 기획 문서와 검증 명령의 기준 경로는 식별된 프로젝트 루트로 통일한다.
@@ -277,18 +278,18 @@ project-root/
 
 | 저장 대상 | 저장 위치 | 기준 역할 |
 |---|---|---|
-| 소스 코드와 테스트 | Git | 실제 제품 산출물 |
-| 프로젝트 설정 | `project.yaml` + Git | 실행 설정의 정의 |
-| Phase·Task 정의, 의존성, 완료 조건 | `work-items.yaml` + Git | 작업 계획의 정의 |
-| 공통·Task별 Domain Rule | `domain-rules.md` + Git | 규칙의 정의와 원문 출처 |
-| 사람이 읽는 계획 설명 | `plan.md` + Git | 계획의 설명과 판단 근거 |
+| 소스 코드와 테스트 | 프로젝트 작업 폴더 | 실제 제품 산출물 |
+| 프로젝트 설정 | `project.yaml` | 실행 설정의 정의 |
+| Phase·Task 정의, 의존성, 완료 조건 | `work-items.yaml` | 작업 계획의 정의 |
+| 공통·Task별 Domain Rule | `domain-rules.md` | 규칙의 정의와 원문 출처 |
+| 사람이 읽는 계획 설명 | `plan.md` | 계획의 설명과 판단 근거 |
 | Run·Phase·Task·Step 상태, 적용 Workflow, 재시도 횟수 | SQLite | 현재 실행 상태의 유일한 기준 |
-| 승인 기록, Review·Validation 결과, 연결된 commit SHA | SQLite | 실행과 완료 판정의 근거 |
+| 승인 기록, Review·Validation 결과, 연결된 코드 Revision | SQLite | 실행과 완료 판정의 근거 |
 | 실행에 사용한 설정·계획·Domain Rule 사본과 revision/hash | SQLite | 해당 Run의 입력 기준선 |
 | 실행 로그 | LocalAppData | 문제 분석 |
-| Task·Phase 결과 | SQLite와 Git에서 생성한 안내·Markdown Report | 사용자 확인 및 인수 |
+| Task·Phase 결과 | SQLite와 파일 변경 내역에서 생성한 안내·Markdown Report | 사용자 확인 및 인수 |
 
-MVP에서는 복잡한 Artifact Registry를 만들지 않는다. SQLite에는 실행 단계별 코드 Revision, 계획 revision, Review·Validation 결과와 완료 Commit을 연결해 기록하고, 결과 안내와 Phase Report는 이 기록과 Git에서 생성한다.
+MVP에서는 복잡한 Artifact Registry를 만들지 않는다. SQLite에는 실행 단계별 코드 Revision, 계획 revision, Review·Validation 결과와 Task 완료 상태를 연결해 기록하고, 결과 안내와 Phase Report는 이 기록과 파일 변경 내역에서 생성한다. 사용자가 파일을 Git으로 관리할 수 있으나 Git 사용과 커밋 여부는 완료 조건이 아니다.
 
 ### 5.2 SQLite 단일 실행 상태 원칙
 
@@ -305,7 +306,7 @@ MVP에서는 복잡한 Artifact Registry를 만들지 않는다. SQLite에는 �
 
 Task 완료와 정상 중단 시 SQLite의 백업 기능으로 `backups/`에 복구용 사본을 자동 생성한다. 백업은 현재 상태를 별도로 갱신하는 저장소가 아니며, 같은 장치의 백업만으로 장치 손실까지 복구할 수 있다고 보지 않는다.
 
-MVP의 기본 재개 범위는 같은 컴퓨터의 같은 저장소다. Git 복제만으로 실행 이력과 승인이 전달되지는 않는다. DB가 없으면 기존 Run을 정확히 재개할 수 없음을 알리고, Git과 계획을 확인해 새로운 Run을 준비한다. 다른 컴퓨터로 실행 상태를 이전하는 전용 기능은 이후 확장으로 둔다.
+MVP의 기본 재개 범위는 같은 컴퓨터의 같은 프로젝트 폴더다. 파일 복사나 Git 복제만으로 실행 이력과 승인이 전달되지는 않는다. DB가 없으면 기존 Run을 정확히 재개할 수 없음을 알리고, 현재 파일과 계획을 확인해 새로운 Run을 준비한다. 다른 컴퓨터로 실행 상태를 이전하는 전용 기능은 이후 확장으로 둔다.
 
 `plan.md`, `work-items.yaml`, `domain-rules.md`는 Planner가 생성·갱신하는 계획 산출물이다. 사용자가 시작 전에 별도로 작성해야 하는 필수 설정 파일을 늘리지 않는다.
 
@@ -380,14 +381,11 @@ approval:
   architecture_change: ask
   database_migration: ask
   external_api: ask
-  git_commit: auto
-  git_push: ask
-  merge: ask
+  git_write: deny
   production_deploy: deny
 
-git:
-  strategy: phase-branch
-  task_commit: true
+workspace:
+  revision_strategy: content-hash
 ```
 
 ### 6.1 설정 검증
@@ -510,7 +508,7 @@ P1이 완료되면 실제 결과와 새로 발견한 위험을 반영해 P2를 �
 - 수정 대상이 여러 개여서 특정할 수 없으면 대상을 확인한다. 영향 범위만 불확실한 경우의 Workflow 선택은 8.5절을 따른다.
 - 진행 중인 Task가 있으면 새 요청도 순차 처리한다. 기존 작업을 중단하거나 덮어쓰면서 동시에 코드를 수정하지 않는다.
 - 진행 상태, 원래 요청과 연결된 승인 기록, 실행에 사용한 작업 정의 사본은 SQLite에 저장한다. 승인 규칙은 11.5절을 따른다.
-- 독립 Task도 동일한 검증·재시도·커밋 규칙을 적용하고 완료 후 간단한 결과를 안내한다. Git 전략은 13.1절을 따른다.
+- 독립 Task도 동일한 검증·재시도·완료 기록 규칙을 적용하고 완료 후 간단한 결과를 안내한다. 작업 폴더와 Git 경계는 13.1절을 따른다.
 
 ### 7.5 Domain Rule 저장과 참조
 
@@ -584,7 +582,7 @@ Orchestrator는 다음 순서로 선택한다.
 ```text
 Implement
 → Quick Validation
-→ Task Commit
+→ 최종 Revision 확인·Task 완료 기록
 ```
 
 AI Reviewer는 기본적으로 호출하지 않는다. 위 작업 유형은 저위험 후보이며 실제 선택은 7.6의 위험 우선순위를 따른다. Quick Validation은 `validation.quick`에 설정한 검사를 실행한다.
@@ -604,7 +602,7 @@ Implement
 → Pre-review Validation
 → Light AI Review
 → 필요한 Targeted/Full Validation
-→ Task Commit
+→ 최종 Revision 확인·Task 완료 기록
 ```
 
 Reviewer는 현재 Task 요구사항과 관련 diff만 확인한다.
@@ -630,7 +628,7 @@ Implement
 → Pre-review Validation
 → Strict AI Review
 → Post-review Full Validation
-→ Task Commit
+→ 최종 Revision 확인·Task 완료 기록
 ```
 
 #### 상세 순서
@@ -664,7 +662,7 @@ Developer 수정
 → 수정 diff에 대한 Delta Review
 → Post-review Validation 재실행
        ↓
-Task Commit
+최종 Revision 확인·Task 완료 기록
 ```
 
 ### 8.4 마지막 코드 기준선 규칙
@@ -709,12 +707,12 @@ Workflow 선택은 요청의 길이나 수정할 코드의 줄 수만으로 결�
 
 ### 8.6 Revision과 Task 완료 조건
 
-Revision은 검사 대상 코드의 내용을 식별하는 값이다. Task Commit은 검증 후 생성하므로 현재 `HEAD`의 Commit SHA만으로 작업 중 Revision을 표현하지 않는다.
+Revision은 검사 대상 코드의 내용을 식별하는 값이다. 하네스는 Git 커밋을 생성하지 않으며 Git 없이도 동일한 검증·완료 판정을 수행한다.
 
-- 코드 Revision은 기존 코드 기준선과 미커밋 변경을 반영한 스냅샷으로 계산한다. 새 소스 파일, 삭제, 테스트, 실행 설정, 의존성 잠금 파일도 포함한다.
-- Git tree 또는 동등한 내용 hash를 사용할 수 있다. 스테이징 영역을 사용한다면 실제 검사한 작업 폴더와 동일한 내용을 가리키는지 확인한다.
+- 코드 Revision은 검사 대상 파일의 정규화된 상대 경로와 내용 hash를 정렬한 manifest로 계산한다. 새 소스 파일, 삭제, 테스트, 실행 설정, 의존성 잠금 파일도 포함한다.
+- 실제 작업 폴더의 내용을 직접 읽어 계산한다. Git index·tree 생성이나 staging을 사용하지 않으며 `.git` 메타데이터는 코드 Revision에서 제외한다. 변경 내역은 Run·Task 시작 기준선과 현재 파일을 비교한다. hash만으로 이전 내용을 복원할 수 없으므로 diff에 필요한 대상 파일 기준선은 보호된 로컬 실행 저장소에 보존하고 비밀값·불필요한 데이터는 제외한다.
 - 로그·캐시·검증 보고서 등 생성물은 제외 범위를 명시한다. 검사 중 로그가 추가됐다는 이유로 코드 Revision이 바뀌게 만들지 않는다.
-- Review·Validation 시작과 종료, Commit 직전에 Revision을 확인한다. 하네스는 검사 중 다른 코드 수정 단계를 동시에 실행하지 않는다.
+- Review·Validation 시작과 종료, 완료 기록 직전에 Revision을 확인한다. 하네스는 검사 중 다른 코드 수정 단계를 동시에 실행하지 않는다.
 - 결과에는 코드 Revision뿐 아니라 승인된 `plan_revision`과 적용 Workflow를 연결한다. 코드가 같아도 완료 기준·규칙·검증 정책이 달라지면 이전 결과를 그대로 재사용하지 않는다.
 
 다음 값은 완료 판정을 이해하기 위한 요약이다.
@@ -729,7 +727,7 @@ Strict Task: R2에 대한 Review와 Validation이 없으므로 완료 불가
 
 실제 저장은 검사별로 한다. 예를 들어 `pre_review.unit`, `post_review.integration` 각각의 Revision, 실행 결과와 종료 여부를 기록한다. `validated_revision`은 필요한 검사가 모두 통과했을 때만 같은 Revision으로 판정하며, 마지막 명령 하나의 성공으로 갱신하지 않는다.
 
-| Workflow | Commit 전에 최종 Revision에서 충족할 조건 |
+| Workflow | Task 완료 전에 최종 Revision에서 충족할 조건 |
 |---|---|
 | Fast | Quick Validation의 필수 검사 통과. 기본 Review는 `SKIPPED_BY_POLICY`로 기록한다. |
 | Standard | Pre-review Validation 통과, Light/유효한 Delta Review PASS, 정책이 요구하는 후속 Validation 통과 |
@@ -740,7 +738,7 @@ Strict Task: R2에 대한 Review와 Validation이 없으므로 완료 불가
 - 승인된 Task 계약이 유효하고, 선행 Task가 완료되어 있어야 한다.
 - 필요한 Review가 있다면 미해결 필수 수정 요청이 없어야 한다.
 - 필요한 검사 목록은 Orchestrator가 정책에 따라 확정하고 기록한다. 생략·미실행·중단된 필수 검사를 PASS로 간주하지 않는다.
-- 조건을 충족하면 Commit을 진행할 수 있다. 실제 Task `COMPLETED`는 Commit 내용 확인과 SQLite 완료 기록까지 끝난 뒤 확정한다.
+- 조건을 충족하고 최종 Revision이 검사 결과와 일치하면 13.4절에 따라 SQLite에 Task `COMPLETED`를 기록한다. 커밋 여부는 완료 조건이 아니며 Phase의 사용자 인수는 별도로 유지한다.
 
 Strict Task에서 R1 검토 후 Developer가 R2로 수정한 경우의 흐름은 다음과 같다.
 
@@ -750,7 +748,7 @@ R1 Review / Validation 결과는 이력으로 보존하되 R2의 완료 근거�
 → R2 Delta Review 또는 전체 Review
 → R2 Post-review Full Validation
 → 최종 Revision과 필수 결과 확인
-→ Task Commit 내용 확인
+→ 최종 파일 Revision과 검사 결과 일치 확인
 → SQLite에 COMPLETED 기록
 ```
 
@@ -770,7 +768,7 @@ Reviewer에게 다음만 제공한다.
 - Acceptance Criteria
 - 공통 Domain Rule과 Task가 참조하는 Domain Rule
 - 구현 계획 요약
-- 현재 Task의 Git diff
+- 현재 Task 기준선 대비 파일 diff (Git 유무와 무관하게 제공)
 - Pre-review Validation 결과 요약
 - diff가 의존하는 최소 코드
 - 검토 대상 코드 Revision과 계획 revision
@@ -896,9 +894,10 @@ MVP에서는 동적 Agent Registry를 구현하지 않고 내장 역할과 Skill
 2. 현재 Phase Task 계획
 3. 실행 중 새로 발견된 고위험 결정
 4. Phase 완료 결과
-5. Git Push와 Merge
 
 위 계획 승인 지점은 Phase 개발 흐름에 적용한다. 독립적인 작은 자연어 수정의 승인 방식은 11.5절을 따른다.
+
+Git 쓰기는 이 승인 흐름의 대상이 아니다. 하네스는 Branch·commit·push·PR·merge 등을 수행하지 않으며, 사용자가 별도로 수동 실행한다. `git_write: deny`는 MVP의 고정 경계로 설정 변경이나 행동 승인으로 완화하지 않는다.
 
 ### 11.2 자동 허용 예시
 
@@ -906,7 +905,6 @@ MVP에서는 동적 Agent Registry를 구현하지 않고 내장 역할과 Skill
 - 테스트 추가 및 실행
 - lint와 format 수정
 - 승인된 설계 안의 작은 리팩터링
-- 로컬 Task Commit
 
 ### 11.3 승인 필요 예시
 
@@ -917,7 +915,6 @@ MVP에서는 동적 Agent Registry를 구현하지 않고 내장 역할과 Skill
 - 개인정보 외부 전송
 - 테스트 삭제 또는 기준 완화
 - Phase 범위 변경
-- Git Push와 Merge
 - Production 배포
 
 ### 11.4 승인 무효화
@@ -979,23 +976,23 @@ SQLite에 상태와 마지막 성공 Step, 진행 중 Step, 코드·계획 Revis
 
 ### 12.3 Resume 정합성 검사
 
-`devh resume`는 저장된 Run과 실제 저장소가 같은 작업 상태를 가리키는지 확인한 뒤 실행한다.
+`devh resume`는 저장된 Run과 실제 프로젝트 폴더가 같은 작업 상태를 가리키는지 확인한 뒤 실행한다.
 
 | 비교 대상 | 확인 내용 |
 |---|---|
-| Project와 저장소 | Project ID 및 실제 저장소 경로. 같은 ID의 다른 복제본을 잘못 재개하지 않는다. |
-| Branch와 HEAD | 저장한 Branch·Commit과 현재 값. Commit 직후 중단은 13.4의 복구 규칙으로 확인한다. |
-| 코드 Revision과 Working Tree | 스테이징·미스테이징 변경 및 새 파일 내용이 저장한 체크포인트의 예상 상태와 일치하는지 확인한다. |
+| Project와 작업 루트 | Project ID 및 실제 프로젝트 경로. 같은 ID의 다른 복제본을 잘못 재개하지 않는다. |
+| 선택적 Git 정보 | Git이 있으면 Branch·HEAD·상태를 읽기 전용 참고 정보로 확인한다. Git이 없어도 실행·재개할 수 있다. |
+| 코드 Revision과 작업 폴더 | 새 파일·수정·삭제를 포함한 실제 파일 내용이 저장한 체크포인트의 예상 상태와 일치하는지 확인한다. |
 | 계획 revision | Task 완료 기준, Domain Rule, 실행 설정이 승인된 계획과 같은지 확인한다. |
 | 현재 Task와 Step | Task가 해당 Run·계획에 속하며, 실행 단계·승인·선행 의존성이 유효한지 확인한다. |
 
-Working Tree에 미커밋 변경이 있다는 이유만으로 오류로 처리하지 않는다. Task 진행 중 중단했다면 미커밋 변경은 정상일 수 있다. 파일 목록이나 `dirty` 여부만 비교하지 않고 저장한 코드 내용과 대조한다.
+하네스는 결과물을 커밋하지 않으므로 미커밋 변경은 정상이다. 파일 목록이나 Git의 `dirty` 여부만 비교하지 않고 저장한 코드 내용과 대조한다. 사용자가 수동 commit·staging·Branch 전환을 했더라도 프로젝트 식별, 코드·계획 Revision과 실행 입력이 같다면 Git 메타데이터 변화만으로 승인·검증을 무효화하거나 재개를 막지 않는다.
 
 ```text
 devh resume
 → SQLite Run 조회
-→ 실제 Git·계획·작업 폴더 상태 조회
-→ 중단된 Step 및 Commit 복구 여부 확인
+→ 실제 계획·작업 폴더 상태 조회 (Git 정보는 선택적 참고)
+→ 중단된 Step 및 Task 완료 기록 확인
 → 저장된 예상 상태와 일치: 필요한 단계부터 재개
 → 설명되지 않는 불일치: 실행 중단 후 차이와 복구 안내 표시
 ```
@@ -1003,11 +1000,11 @@ devh resume
 | 상황 | 처리 |
 |---|---|
 | 체크포인트와 코드·계획이 같음 | 완료가 확인된 Step은 재사용하고 다음 단계로 진행 |
-| 다른 Branch 또는 예상하지 못한 코드 변경 | `BLOCKED`, 사유 `STATE_MISMATCH`. 저장된 값·현재 값과 변경 파일을 표시 |
+| 예상하지 못한 코드 또는 실행 입력 변경 | `BLOCKED`, 사유 `STATE_MISMATCH`. 저장된 값·현재 값과 변경 파일을 표시 |
 | 완료 기준·규칙 등 계획 내용 변경 | `REPLAN_REQUIRED`. 계획을 갱신하고 기존 승인 절차 적용 |
-| Commit은 성공했으나 DB 기록이 없음 | 13.4에 따라 기존 Commit을 검증하고 완료 기록 복구 |
+| 검증은 성공했으나 Task 완료 기록이 없음 | 13.4에 따라 저장된 검사 결과·Revision·승인을 확인하고 완료 기록 복구 |
 
-불일치 시 자동으로 파일을 덮어쓰거나 Git을 되돌리지 않는다. Branch 복원으로 해결되는 상황에 재계획을 강제하지 않으며, 사용자가 변경을 유지하려면 계획·작업 상태를 확인한 뒤 필요한 검사를 새로 수행한다.
+불일치 시 자동으로 파일을 덮어쓰거나 Git을 되돌리지 않는다. 코드만 바뀌었다면 영향과 필요한 재검증을 확인하고, 범위·완료 기준 등 계획이 달라진 경우 재계획·승인을 적용한다. 사용자가 변경을 유지하려면 계획·작업 상태를 확인한 뒤 필요한 검사를 새로 수행한다.
 
 ### 12.4 실행 중 종료된 Step
 
@@ -1016,43 +1013,30 @@ devh resume
 - 재개는 Retry 횟수나 승인 기록을 초기화하지 않는다. 이미 소비한 재시도 횟수를 유지한다.
 - 중복 Run이 같은 작업 폴더를 동시에 수정하지 못하도록 실행 소유권을 확인한다. 중단된 기존 프로세스가 살아 있다면 새 실행을 시작하지 않는다.
 
-사용자의 수동 변경은 Task 범위에 속하는지 확인한다. 관련 없는 변경을 임의로 되돌리거나 Task Commit에 포함하지 않는다. AI 세션의 내부 작업 과정을 그대로 복원할 필요는 없으며, 저장된 Task·현재 코드·마지막 실행 결과로 필요한 단계부터 진행한다.
+사용자의 수동 변경은 Task 범위에 속하는지 확인한다. 관련 없는 변경을 임의로 되돌리거나 하네스의 작업 결과로 귀속하지 않는다. AI 세션의 내부 작업 과정을 그대로 복원할 필요는 없으며, 저장된 Task·현재 코드·마지막 실행 결과로 필요한 단계부터 진행한다.
 
 ---
 
-## 13. Git과 산출물 관리
+## 13. 산출물 관리와 Git 경계
 
-### 13.1 기본 Git 전략
+### 13.1 작업 폴더와 Git 경계
 
-```text
-Phase당 Branch 하나
-Task당 Commit 하나
-Phase당 PR 하나
-Merge는 사람 승인
-```
+하네스의 완료 범위는 검증된 개발 산출물과 사용자 인수까지다. Git 사용, Branch 관리, staging, commit, push, PR, merge는 사용자가 수동으로 결정·수행한다.
 
-```text
-main
- └─ phase/P1-document-processing
-     ├─ commit: P1-T1
-     ├─ commit: P1-T2
-     ├─ commit: P1-T3
-     └─ commit: P1-T4
-```
-
-Phase에 연결된 자연어 수정은 해당 Phase Branch에서 순차 실행한다. Phase에 속하지 않는 독립 Task는 `request/<task-id>` 로컬 Branch에서 실행하고 Task Commit을 생성한다. 사용자에게 작은 수정을 위한 형식적인 Phase 생성을 요구하지 않는다.
-
-두 경우 모두 기존 작업과 사용자 변경을 확인하고 관련 변경만 커밋한다. Git Push와 Merge에는 기존 승인 정책을 적용하며, 독립 요청으로 다른 Run이 사용 중인 Branch를 임의로 전환하지 않는다.
+- 하네스는 Git 저장소를 초기화하거나 Git 쓰기 명령을 실행하지 않는다. 이 경계는 Orchestrator와 작업 에이전트 모두에 적용한다.
+- Git이 있다면 상태·diff·HEAD 등 읽기 전용 정보만 보조적으로 활용한다. Git이 없어도 초기화·개발·검증·결과 인수·재개가 가능해야 한다.
+- Phase Task와 독립 자연어 Task는 식별된 프로젝트 작업 폴더에서 순차 실행한다. 독립 요청을 위해 Branch나 형식적인 Phase를 만들지 않는다.
+- Run·Task 시작 시 파일 기준선을 기록하고 사용자 기존 변경을 보존한다. Task 변경 내역은 해당 기준선 대비 계산하며 기존 사용자 변경과 구분한다.
+- Git 쓰기 정책을 승인 가능한 선택지로 제시하지 않는다. 필요한 Git 작업은 사용자가 하네스 밖에서 직접 수행한다.
 
 ### 13.2 Task 완료 기록
 
-Task 완료 시 다음을 SQLite에 저장한다. Git은 실제 커밋과 코드의 기준이며, Task 완료 상태를 별도로 관리하지 않는다.
+Task 완료 시 다음을 SQLite에 저장한다. 실제 제품 산출물은 작업 폴더의 파일이며, Task 완료 상태와 검증 근거는 SQLite가 관리한다.
 
 - Task ID와 상태
 - 적용 Workflow, Risk Tag와 선택 근거
 - 승인된 계획 revision
-- 최종 코드 Revision
-- Git commit SHA
+- 시작 기준선과 최종 코드 Revision
 - 변경 파일 목록
 - Review 결과 요약과 검사한 Revision, Delta Review의 이전 기록 연결
 - Validation 명령별 결과와 검사한 Revision, 정책상 생략한 검사와 사유
@@ -1062,7 +1046,7 @@ Task 완료 시 다음을 SQLite에 저장한다. Git은 실제 커밋과 코드
 
 ### 13.3 Phase Report
 
-Phase Report는 SQLite의 실행 기록과 Git 정보를 읽어 생성한다. 보고서를 편집하거나 삭제해도 SQLite의 실행 상태와 승인 기록은 바뀌지 않는다.
+Phase Report는 SQLite의 실행 기록과 파일 변경 내역을 읽어 생성한다. 보고서를 편집하거나 삭제해도 SQLite의 실행 상태와 승인 기록은 바뀌지 않는다.
 
 ```markdown
 # Phase P1 완료 보고서
@@ -1089,36 +1073,32 @@ Phase Report는 SQLite의 실행 기록과 Git 정보를 읽어 생성한다. �
 
 - 일부 오래된 문서 양식 미검증
 
-## Git
+## 산출물
 
-- Branch: phase/P1-document-processing
-- Start Commit: abc123
-- End Commit: def456
+- 변경 파일: src/ocr/, tests/unit/ocr/, tests/integration/ocr/
+- 결과물 위치: 현재 프로젝트 작업 폴더
+- 상세 변경 목록과 검증 근거: 해당 Run의 기록
 ```
 
-### 13.4 Task Commit과 중단 복구
+### 13.4 Task 완료 기록과 중단 복구
 
-Git Commit과 SQLite 갱신은 별도 작업이다. Commit 성공 직후 프로그램이 종료되어 DB에 완료 기록이 남지 않는 경우를 처리한다.
+파일 변경과 SQLite 갱신은 별도 작업이다. 검증 후 완료 기록 전에 종료될 수 있으므로 저장된 증거와 실제 파일을 대조한다.
 
 ```text
 Workflow별 최종 검증 조건 충족
-→ SQLite에 COMMIT_PENDING 기록
-  - Run ID / Task ID / 계획 revision
-  - 예상 부모 Commit / Branch / 최종 코드 스냅샷
-  - 이번 Commit 작업의 고유 식별자
-→ 해당 스냅샷으로 Git Commit 생성
-→ 생성된 Commit의 부모·내용 및 작업 폴더 확인
-→ SQLite 트랜잭션으로 Commit SHA와 COMPLETED 기록
+→ 코드·계획 Revision과 승인 유효성 재확인
+→ SQLite 트랜잭션으로 최종 Revision·검사 근거·COMPLETED 기록
 → 다음 Task
 ```
 
-- Commit 메시지의 메타데이터에 Run ID, Task ID, Commit 작업 식별자를 남긴다.
-- Commit 직전 코드가 바뀌었으면 완료 절차를 멈추고 새 Revision에서 필요한 검사를 수행한다. Commit 과정에서 내용이 달라진 경우에도 기존 검사 결과로 완료하지 않는다.
-- `COMMIT_PENDING`에서 재개하면 해당 식별자·부모·내용을 가진 Commit이 실제 Branch에 생성됐는지 확인한다. 내용까지 일치하고 작업 폴더에 예상하지 못한 변경이 없으면 기존 Commit을 연결하고 DB 완료 기록만 복구한다.
-- Commit이 없고 Branch·HEAD·코드 스냅샷이 예상한 Commit 직전 상태라면, 승인과 필수 검사 결과가 여전히 유효한지 확인한 뒤 Commit 단계만 재시도한다.
-- 다른 Commit이나 예상하지 못한 변경이 있으면 `STATE_MISMATCH`로 중단한다. 중복 Commit을 만들거나 이미 완료된 Task를 처음부터 자동 재실행하지 않는다.
+- 완료 기록 직전에 코드가 바뀌었으면 완료 절차를 멈추고 새 Revision에서 필요한 검사를 수행한다.
+- 완료 기록 전에 종료됐다면 현재 파일·계획·실행 입력이 저장된 검사 대상과 일치하는지 확인한다. 필수 검사와 승인이 모두 유효할 때만 완료 기록을 확정하며 구현을 중복 실행하지 않는다.
+- 성공 결과가 DB에 확정되지 않은 검사는 성공으로 추정하지 않고 다시 실행한다. 로그의 성공 문구만으로 완료를 복원하지 않는다.
+- 완료 기록이 이미 있다면 같은 기록을 사용한다. 이후 코드가 바뀌었다면 과거 완료 사실은 이력으로 보존하되 현재 코드의 통과 근거로 재사용하지 않는다.
+- 예상하지 못한 파일 변경은 `STATE_MISMATCH`로 중단한다. 사용자 변경을 덮어쓰거나 Git을 되돌리지 않는다.
+- Report는 SQLite에서 다시 생성할 수 있는 출력물이다. 보고서 생성 실패가 코드 재구현이나 Git 동작으로 이어지지 않으며, 사용자 인수 전에는 보고서 생성을 재시도한다.
 
-복구에 필요한 현재 작업 기록만 SQLite에 저장하며 완전한 Event Sourcing은 도입하지 않는다.
+복구에 필요한 현재 작업 기록만 SQLite에 저장하며 완전한 Event Sourcing은 도입하지 않는다. Git 쓰기와 Git·DB 간 완료 동기화는 구현하지 않는다.
 
 ---
 
@@ -1194,7 +1174,7 @@ Quick Validation
 - 관련된 빠른 검사 실행
 - 화면 확인 수단이 있는 경우 해당 영역 확인
    ↓
-필수 검사와 최종 Revision 확인 후 Task Commit·SQLite 완료 기록 (13.4)
+필수 검사와 최종 Revision 확인 후 SQLite에 Task 완료 기록 (13.4)
    ↓
 변경 결과와 실제 수행한 검사를 사용자에게 안내
 ```
@@ -1206,7 +1186,7 @@ Quick Validation
 간단한 스타일 수정으로 진행합니다.
 ```
 
-완료 안내에는 변경 내용, 실제 검사 결과와 커밋 정보를 제공한다. 화면을 직접 확인하지 않았다면 그 사실을 함께 표시한다.
+완료 안내에는 변경 내용, 실제 검사 결과와 산출물 위치를 제공한다. 화면을 직접 확인하지 않았다면 그 사실을 함께 표시한다.
 
 코드를 확인한 결과 공통 글꼴 설정을 바꿔야 해서 여러 화면에 영향을 준다면 수정 범위를 다시 검토하거나 Standard로 상향한다. 상단 제목을 여러 개 발견해 대상을 특정할 수 없다면 먼저 확인한다. 예상보다 큰 범위 변경이나 승인 대상 행동이 필요하면 해당 행동 전에 중단한다.
 
@@ -1391,7 +1371,7 @@ pytest tests/unit   PASS
 
 #### Strict Review
 
-Reviewer는 Task 요구사항, 관련 규칙, Git diff, Validation 요약만 읽는다.
+Reviewer는 Task 요구사항, 관련 규칙, 기준선 대비 파일 diff와 필요한 최소 코드, Validation 요약을 읽는다.
 
 첫 Review에서 다음 문제를 발견했다고 가정한다.
 
@@ -1419,7 +1399,7 @@ PDF E2E Test            PASS
 개인정보 로그 검사       PASS
 ```
 
-현재 코드와 Review·필수 Validation의 Revision이 같고 계획 승인도 유효한지 확인한다. 통과하면 13.4의 절차로 `P1-T5` commit을 생성하고, Commit 내용 확인 후 SQLite 상태를 `COMPLETED`로 갱신한다.
+현재 코드와 Review·필수 Validation의 Revision이 같고 계획 승인도 유효한지 확인한다. 통과하면 13.4의 절차로 최종 Revision과 검사 근거를 연결하고 SQLite의 `P1-T5` 상태를 `COMPLETED`로 갱신한다. 커밋은 생성하지 않는다.
 
 ### 15.7 실행 중 승인
 
@@ -1464,7 +1444,7 @@ Validation: 전체 통과
 알려진 제한사항: 오래된 일부 등기 양식 미검증
 ```
 
-사용자는 Phase 결과, Git Push 및 Merge를 승인한다.
+사용자는 Phase 결과를 확인하고 인수한다. Git commit·push 등의 여부와 실행은 사용자가 별도로 수동 결정·수행하며 Phase 인수 조건에 포함하지 않는다.
 
 ### 15.9 다음 Phase
 
@@ -1496,8 +1476,8 @@ Phase 1 착수 전에 Work Item 계약, 규칙 참조, Workflow별 완료 조건
 - `plan.md`, `work-items.yaml`, `domain-rules.md` 구조와 참조 검증
 - 실행 상태와 승인 기록을 전담하는 SQLite State Store
 - 실행 입력 사본 저장과 로컬 DB 백업
-- 코드·계획 Revision 및 검사 결과·Commit 복구 기록 모델
-- Git 저장소 정합성 검사와 재개 판단
+- 파일 내용 기반 코드·계획 Revision 및 검사 결과·Task 완료 기록 모델
+- Git 없는 프로젝트를 포함한 작업 폴더 정합성 검사와 재개 판단
 - `init`, `status`, `resume` 명령
 - 현재 프로젝트 탐색과 프로젝트별 초기화·상태 구분
 - 재초기화 시 기존 설정·계획·실행 상태 보존
@@ -1523,7 +1503,7 @@ Phase 1 착수 전에 Work Item 계약, 규칙 참조, Workflow별 완료 조건
 - Developer와 Reviewer 역할 분리
 - Revision에 연결된 Review·Validation Runner와 Workflow별 완료 판정
 - Retry 제한
-- Task Commit과 Commit 직후 중단 복구
+- 최종 Revision 기반 Task 완료 기록과 중단 복구
 - 독립 자연어 요청의 순차 실행과 Task 결과 안내
 
 ### Harness Phase 4 — Delivery
@@ -1531,7 +1511,7 @@ Phase 1 착수 전에 Work Item 계약, 규칙 참조, Workflow별 완료 조건
 - 하네스 설치·AI 도구 연결·프로젝트 초기화 사용 안내
 - Phase 통합 검증
 - Phase Report
-- Push 및 Merge 승인
+- Git 작업과 분리된 Phase 결과 인수
 - Decision Desk Phase 하나 dogfooding
 
 ---
@@ -1556,7 +1536,7 @@ Phase 1 착수 전에 Work Item 계약, 규칙 참조, Workflow별 완료 조건
 - Orchestrator가 Risk Tag와 정책에 따라 Fast, Standard, Strict를 선택하고 근거를 기록한다.
 - 실행 중 새 위험이 발견되면 Workflow를 강화하며, 필요한 행동 승인은 별도로 확인한다.
 - 관련 코드에서 영향과 위험을 확인하며, 불확실한 작업을 Fast로 실행하지 않는다.
-- 자연어 수정 요청도 적용 Workflow·판단 근거·승인·검증·커밋을 SQLite 기록과 연결한다.
+- 자연어 수정 요청도 적용 Workflow·판단 근거·승인·검증·최종 코드 Revision을 SQLite 기록과 연결한다.
 - Pre-review Validation 실패 시 Reviewer를 호출하지 않는다.
 - Reviewer는 전체 프로젝트가 아닌 관련 diff 중심으로 검토한다.
 - 선택된 Workflow에 필요한 Review·Validation이 최종 코드 Revision과 유효한 계획 revision에 연결되어야 완료한다.
@@ -1567,11 +1547,13 @@ Phase 1 착수 전에 Work Item 계약, 규칙 참조, Workflow별 완료 조건
 - 실행 상태와 승인 기록은 SQLite만을 기준으로 관리하며 YAML·Markdown과 이중 관리하지 않는다.
 - `work-items.yaml`에는 실행 상태 없이 작업 정의만 저장한다.
 - 실행에 사용한 계획 사본과 승인 기록을 SQLite에서 연결할 수 있다.
-- 컴퓨터 재부팅 후 Git·Working Tree·계획·SQLite 상태를 확인하고 Run을 재개할 수 있다.
+- 컴퓨터 재부팅 후 작업 폴더·계획·SQLite 상태를 확인하고 Run을 재개할 수 있다.
 - 예상하지 못한 상태 불일치는 차이를 표시하고 중단하며 자동 덮어쓰기·되돌리기를 하지 않는다.
-- Commit 직후 DB 저장 전 중단을 복구하며 Task 중복 실행·중복 Commit을 만들지 않는다.
+- 검증 후 Task 완료 기록 전 중단을 복구하며 Task 구현을 중복 실행하지 않는다.
 - 실행 중 중단된 검사를 성공으로 간주하지 않는다.
-- Task마다 Git commit과 검증 결과를 연결할 수 있다.
+- Task마다 최종 파일 Revision과 검증 결과를 연결하며 Git 없이도 완료할 수 있다.
+- 하네스와 작업 에이전트는 Git 초기화·Branch 생성 및 전환·staging·commit·push·PR·merge를 수행하지 않는다.
+- 사용자의 수동 Git 작업이 코드·계획·실행 입력을 바꾸지 않았다면 Git 메타데이터 변화만으로 재개를 차단하지 않는다.
 - Phase 종료 시 결과, 테스트, 결정, 제한사항을 보고서로 제공한다.
 - Decision Desk의 실제 Phase 하나를 처음부터 끝까지 실행할 수 있다.
 
@@ -1582,7 +1564,7 @@ Phase 1 착수 전에 Work Item 계약, 규칙 참조, Workflow별 완료 조건
 실사용에서 필요성이 확인된 기능만 다음 순서로 확장한다.
 
 1. 추가 AI Provider Adapter
-2. Task별 Git worktree
+2. 별도 작업 폴더 격리 (Git 쓰기 자동화 제외)
 3. 독립 Failure Analyst
 4. Security Reviewer 및 Domain Reviewer
 5. Agent Registry 외부 설정
@@ -1602,20 +1584,20 @@ Phase 1 착수 전에 Work Item 계약, 규칙 참조, Workflow별 완료 조건
 4. 사용자 계획 구조는 `기획 → Phase → Task`를 기본으로 한다.
 5. 전체 Phase는 먼저 계획하고 현재 Phase만 상세화한다.
 6. Workflow는 Fast, Standard, Strict 세 가지를 내장하며, AI의 요청·코드 해석을 바탕으로 Orchestrator가 자동 선택한다.
-7. Strict는 `Implement → Pre-review Validation → AI Review → Post-review Full Validation → Commit` 순서로 실행한다.
+7. Strict는 `Implement → Pre-review Validation → AI Review → Post-review Full Validation → 최종 Revision 확인·완료 기록` 순서로 실행한다.
 8. Review 이후 수정에는 Delta Review를 적용한다.
 9. Reviewer는 관련 요구사항과 diff만 읽어 토큰 사용을 제한한다.
 10. Tester는 AI Agent가 아니라 Validation Runner로 시작한다.
 11. Agent 역할은 Planner, Developer, Reviewer만 우선 제공한다.
 12. Task는 순차 실행한다.
 13. 일반 수정은 자동화하고 중요한 결정만 사용자에게 승인받는다.
-14. 실행 상태와 승인 기록의 유일한 기준은 SQLite다. 코드는 Git, 작업 정의는 YAML, 결과 안내와 보고서는 SQLite·Git에서 생성한 출력물로 관리한다.
-15. Phase Branch, Task Commit, Phase PR을 기본 Git 전략으로 한다.
+14. 실행 상태와 승인 기록의 유일한 기준은 SQLite다. 코드는 작업 폴더, 작업 정의는 YAML, 결과 안내와 보고서는 SQLite·파일 변경 내역에서 생성한 출력물로 관리한다.
+15. Git 쓰기는 하네스 범위에서 제외한다. 사용자가 Git 사용과 commit·push 등을 수동 결정·실행하며 하네스는 결과물과 검증 근거까지 제공한다.
 16. Decision Desk의 실제 Phase 하나를 첫 dogfooding 목표로 삼는다.
 17. 초기 설정 후 자연어 수정 요청은 작은 Task로 만들고 같은 실행 엔진에서 처리한다. 작은 수정마다 전체 Phase 계획을 다시 만들지 않는다.
 18. 명확하고 작은 사용자 요청은 해당 범위의 승인 근거로 SQLite에 기록하며, 기존 승인 정책의 `ask`·`deny`를 우회하지 않는다.
 19. YAML에는 작업 정의만 저장하고, 실행 상태·승인·검증 결과는 SQLite에만 기록한다. 보고서와 로그에서 현재 상태를 복원하지 않는다.
-20. SQLite 상태와 실제 Git·작업 파일을 확인하여 재개하며, 기존 변경 보존과 중복 실행·커밋 방지를 기본 동작으로 제공한다.
+20. SQLite 상태와 실제 작업 파일을 확인하여 재개하며, 기존 변경 보존과 중복 실행 방지를 기본 동작으로 제공한다. Git은 선택적 읽기 전용 참고 정보다.
 21. 자연어의 Phase 시작과 작은 수정 요청을 구분하며, Phase 시작 요청만으로 아직 제시하지 않은 상세 계획의 승인을 대신하지 않는다.
 22. 하네스는 컴퓨터의 사용자 환경에 한 번 설치하고, 사용할 프로젝트마다 `devh init`으로 초기화한다.
 23. `/development` 연결은 사용하는 AI 도구에서 별도로 설정하며, 연결하지 않아도 Core CLI를 사용할 수 있다.
@@ -1623,5 +1605,20 @@ Phase 1 착수 전에 Work Item 계약, 규칙 참조, Workflow별 완료 조건
 25. Work Item은 완료 기준, 요구사항·규칙 참조, Risk Tag와 의존성을 담는 실행 계약이다.
 26. Domain Rule은 ID와 원문 출처로 관리하고, 공통 규칙과 Task별 규칙을 같은 계획 revision에서 전달한다.
 27. Workflow별 필수 Review·Validation을 최종 코드 Revision과 연결하여 완료를 판정한다.
-28. Resume는 실제 저장소와 저장된 실행 상태를 대조하고, 이미 성공한 Commit을 확인하여 중단된 완료 기록을 복구한다.
+28. Resume는 실제 프로젝트 파일과 저장된 실행 상태를 대조하고, 유효한 최종 Revision·검사 결과·승인을 확인하여 중단된 완료 기록을 복구한다.
 29. AI는 위험을 제안·갱신하고 Orchestrator가 Workflow를 결정한다. 자동 강화는 허용하고 자동 하향은 지원하지 않는다.
+
+
+---
+
+## 20. 기획 변경 이력
+
+이 절은 기존 계획이 무엇에서 무엇으로 바뀌었는지 추적한다. 현재 요구사항은 본문을 기준으로 하며 과거 내용은 변경 이력으로만 남긴다. 후속 제안은 채택 전까지 확정 변경으로 기록하지 않는다.
+
+| 변경 ID | 날짜 | 버전 | 기존 계획 | 변경한 계획 | 이유·결정 근거 | 영향 범위 |
+|---|---|---|---|---|---|---|
+| CHG-001 | 2026-09-14 | 0.4 → 0.5 | Phase Branch·Task Commit·Phase PR 자동 관리, Push·Merge는 사용자 승인 후 처리 | Git 쓰기 자동화 전부 제외. Git 사용과 commit·push 등은 사용자가 수동 결정·수행하고 하네스는 산출물과 검증 근거까지 제공 | 사용자의 Git 자동화 삭제 요청 | 실행 흐름, 구조, 설정, 승인 정책, Git 경계, 예시, 구현 Phase, 완료 기준 |
+| CHG-002 | 2026-09-14 | 0.4 → 0.5 | Task Commit 생성·확인 후 COMPLETED, COMMIT_PENDING 복구 | 파일 내용 기반 Revision·검사 근거·승인을 확인해 SQLite에 완료 기록. 중단 시 저장된 증거와 현재 파일을 대조 | CHG-001에 따른 완료·재개 기준 정합성 보완 | 5장, 8.6절, 12.3절, 13장, 16~17장, 19장 |
+| CHG-003 | 2026-09-14 | 0.4 → 0.5 | Git 루트를 기준으로 프로젝트 탐색, Git·Commit 중심 보고 | project.yaml이 있는 폴더를 루트로 식별하며 Git 없이 동작. 보고서는 파일 변경 내역·검증 기록에서 생성 | Git 사용을 선택 사항으로 만들기 위한 연관 수정. 신규·기존 프로젝트 상세 진입 정책은 별도 제안 대상 | 4.4절, 5장, 13장 |
+
+Fast 검증 세부 기준, Phase 인수 보고서 보강, 신규·기존 프로젝트 진입 절차, 위험 작업 통제의 구체적 구현 방식은 이번 개정에서 새 확정 사항으로 추가하지 않았다. 기존 본문을 유지한 상태에서 후속 논의 대상으로 검토한다.
