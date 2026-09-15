@@ -1,0 +1,19 @@
+{
+  "phase": "example-change",
+  "max_corrections": 2,
+  "tasks": [
+    {
+      "id": "change-value",
+      "writes": [
+        {
+          "value.py": "VALUE = 1\n",
+          "test_value.py": "from value import VALUE\n\ndef test_value():\n    assert VALUE == 1\n"
+        }
+      ],
+      "review": ["pass"]
+    }
+  ],
+  "validation": [
+    {"argv": ["{python}", "-m", "pytest", "-q"], "kind": "pytest", "timeout": 30}
+  ]
+}

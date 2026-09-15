@@ -8,9 +8,45 @@ Markdown 기획서를 단계별 개발 계획으로 바꾸고, 승인된 작업�
 
 ## 현재 상태
 
-**기획 단계입니다.** 현재 저장소에는 기획 문서만 있으며, 실행 가능한 하네스·패키지 매니페스트·자동 테스트는 아직 없습니다. 설치와 실행 방법은 구현이 준비되면 추가합니다.
+**Phase 1 실행 기반 구현 완료, 사용자 인수 대기입니다.** Windows/Python 3.12 CLI에서 명시적인 가짜 Adapter 계획을 실제 pytest 검증, SQLite 기록, 버전별 승인, 파일 보존, 중단·재개와 함께 실행합니다. 테스트 43개가 통과했습니다. 실제 AI 계획·구현과 실행 권한 분리는 후속 Phase 범위입니다.
 
-이 README는 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. 계획서는 개발 범위 제안이며, 이 요약 자체가 구현 착수를 승인하지는 않습니다. 아래 내용은 모두 현재 제공되는 기능이 아닌 구현 예정 동작입니다.
+아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. Phase 1 사용 안내에 명시한 기능 외의 전체 제품 기능은 구현 예정입니다.
+
+## Phase 1 설치와 예제
+
+Windows, Python 3.12.10, pytest 9.1.1에서 검증했습니다. 저장소 루트의 PowerShell에서 실행하며 환경과 실행 기록은 OneDrive 밖에 둡니다.
+
+```powershell
+py -3.12 -m venv "$env:LOCALAPPDATA\development-tools-harness\venv"
+$harnessPython = "$env:LOCALAPPDATA\development-tools-harness\venv\Scripts\python.exe"
+& $harnessPython -m pip install -r requirements-dev.lock
+& $harnessPython -m pip install --no-build-isolation -e .
+& $harnessPython -m pytest
+& $harnessPython -m development_harness --help
+```
+
+예제를 새 폴더에 복사한 뒤 명시적인 JSON 계획을 실행합니다.
+
+```powershell
+$demoProject = Join-Path $env:TEMP ('harness-example-' + [guid]::NewGuid().ToString('N'))
+Copy-Item -LiteralPath tests/fixtures/minimal_project -Destination $demoProject -Recurse
+& $harnessPython -m development_harness --project $demoProject prepare --plan tests/fixtures/fake-plan.json
+& $harnessPython -m development_harness --project $demoProject approve
+& $harnessPython -m development_harness --project $demoProject run --steps 1
+& $harnessPython -m development_harness --project $demoProject resume
+& $harnessPython -m development_harness --project $demoProject status
+```
+
+마지막 상태는 `awaiting_acceptance`여야 합니다. 변경 파일, 검증 결과와 JSON 출력의 로그 경로를 확인합니다. 결과를 검토한 뒤 같은 프로젝트 인수로 `accept`를 실행합니다. `cancel`은 파일·근거를 보존하면서 새 Run을 준비할 수 있게 합니다. 동일한 승인 계획은 재승인이 필요 없습니다. 계획이나 예상 파일 내용이 바뀌면 실행을 멈추며, 내용을 확인하고 의도한 입력을 복원하거나 취소 후 새 Run을 준비합니다.
+
+- `prepare`는 파일 기준선과 승인할 명령 후보를 기록하며 Phase 2의 기본 테스트 통과 후 진입 검사는 아직 수행하지 않습니다. `approve` 전의 `run`은 승인 대기를 유지합니다.
+- [예제 입력](tests/fixtures/fake-plan.json)은 Phase, 순차 Task, 시도별 `writes`와 가짜 `review` 결과, 검증 명령 `argv` 배열을 지정합니다. `{python}`은 하네스 인터프리터로 치환합니다. `kind: "pytest"` 명령이 하나 이상 필요하며 기본 수정 한도는 2회입니다.
+- Developer·Reviewer 결과는 가짜이며 실제 AI 호출은 0회입니다. 검증 명령은 사용자 권한으로 실행하므로 신뢰하는 명령이어야 합니다. Windows Job은 자식 프로세스 수명을 관리하며 계획된 권한 샌드박스가 아닙니다.
+- 실행 DB·명령 로그·pytest XML은 `%LOCALAPPDATA%/development-tools-harness/runtime/` 아래에 저장합니다. `--state-dir`로 프로젝트와 OneDrive 밖의 다른 로컬 폴더를 지정해도 프로젝트 실행 소유권은 함께 적용됩니다.
+- 기준선은 `.git`, `.venv`, `__pycache__`, `.pytest_cache`, `.harness-output`을 제외한 일반 파일 내용을 해시합니다. 링크 경로는 지원하지 않습니다. 기존 변경을 포함하고 예상 밖 변경은 보존합니다.
+- 검사 실패·미실행·시간 초과·테스트 0개·필수 검사 생략은 통과하지 않습니다. 중단 검사는 기록된 프로세스 식별 정보를 확인한 뒤 다시 실행합니다. 알 수 없는 부분 파일 내용은 확인을 위해 중단합니다.
+
+구현·검증 상세는 [Phase 1](Phase/Phase1_Foundation.md)에 기록했습니다. 위 editable 설치는 개발용이며 dogfooding에 필요한 고정 실행본은 Phase 3에서 준비합니다.
 
 ## 목표 사용 흐름
 
@@ -31,7 +67,7 @@ Markdown 기획서를 단계별 개발 계획으로 바꾸고, 승인된 작업�
 
 ## 첫 MVP 범위
 
-첫 MVP는 한 번에 한 프로젝트에서 Task를 순차 실행하며, 검증 대상 기술 구성을 한 종류로 제한합니다. 최초 기술 구성과 AI 실행 도구는 선정과 검증이 필요합니다.
+첫 MVP는 한 번에 한 프로젝트에서 Task를 순차 실행하며, 검증 대상 기술 구성을 한 종류로 제한합니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1을 사용합니다. 실제 외부 예제 구성과 AI 실행 도구는 선정·검증이 필요합니다.
 
 | 영역 | P0 구현 예정 동작 |
 | --- | --- |
@@ -116,6 +152,8 @@ P0·P1·P2는 우선순위이며, **MVP2는 후속 제품 범위**입니다. 모
 
 ## 기획 문서
 
+- [전체 개발 Phase 개요](Phase/Overview.md): 4개 개발 Phase, 요구사항 대응표, dogfooding 진입 조건. 각 문서에 영문·국문 전체 내용을 함께 제공합니다.
+- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): Task 7개 기술 검증 완료, 사용자 인수 대기. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md), [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md), [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md)는 착수 전에 보완할 미시작 개요입니다.
 - [축소 MVP 계획서 — 0.4](Draft/ai-development-harness-lean-mvp-plan.md): 범위, 우선순위, 인수 규칙, 개발 단계, dogfooding, MVP2, 기획 변경 이력. 이 문서부터 확인하세요.
 - [과거 기획 문서](Draft/archive/): 이전 설계와 결정 기록입니다. 과거 문서의 더 넓은 범위가 축소 MVP에도 적용된다고 가정하지 않습니다.
 
@@ -123,9 +161,22 @@ P0·P1·P2는 우선순위이며, **MVP2는 후속 제품 범위**입니다. 모
 development-tools-harness/
 ├── README.md
 ├── README_ko.md
+├── pyproject.toml
+├── requirements-dev.lock
+├── src/development_harness/
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── fixtures/
+├── Phase/
+│   ├── Overview.md
+│   ├── Phase1_Foundation.md
+│   ├── Phase2_Planning.md
+│   ├── Phase3_Workflow.md
+│   └── Phase4_Dogfooding.md
 └── Draft/
     ├── ai-development-harness-lean-mvp-plan.md
     └── archive/
 ```
 
-구현 전에 P0 범위를 확인하고, 최초로 사용할 준비된 프로젝트·시험 Phase·기술 구성·AI Adapter를 선정합니다. 첫 Adapter 연결에서는 실제로 집행할 수 있는 실행 권한을 확인해야 합니다.
+다음 단계는 Phase 1 결과 확인과 실행 기반 인수입니다. Phase 2에서는 AI Adapter와 준비된 예제를 선정해야 합니다. 첫 Adapter 연결에서는 실제로 집행할 수 있는 실행 권한을 확인해야 합니다.

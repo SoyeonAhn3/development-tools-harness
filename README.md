@@ -8,9 +8,45 @@ A planned local CLI for semi-automated development: turn a Markdown specificatio
 
 ## Current status
 
-**Planning stage.** This repository currently contains planning documents, with no runnable harness, package manifest, or automated test suite. Installation and execution instructions will be added when the implementation is available.
+**Phase 1 foundation implemented; user acceptance pending.** A Windows/Python 3.12 CLI now runs explicit fake-Adapter plans with real pytest validation, SQLite records, versioned approvals, file preservation and interruption/resume. The 43-test suite passes. Live AI planning/implementation and execution permission isolation are later-Phase work.
 
-This README summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md) (Korean). The plan is a scope proposal; this summary does not constitute implementation approval. All capabilities below describe intended behavior, not shipped functionality.
+The roadmap below summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md) (Korean). Full-product capabilities remain planned unless explicitly listed in the Phase 1 usage section.
+
+## Phase 1 setup and example
+
+Verified with Windows, Python 3.12.10 and pytest 9.1.1. Run these commands from the repository root in PowerShell; the environment and runtime records stay outside OneDrive.
+
+```powershell
+py -3.12 -m venv "$env:LOCALAPPDATA\development-tools-harness\venv"
+$harnessPython = "$env:LOCALAPPDATA\development-tools-harness\venv\Scripts\python.exe"
+& $harnessPython -m pip install -r requirements-dev.lock
+& $harnessPython -m pip install --no-build-isolation -e .
+& $harnessPython -m pytest
+& $harnessPython -m development_harness --help
+```
+
+Copy the example to a fresh folder and run its explicit JSON plan:
+
+```powershell
+$demoProject = Join-Path $env:TEMP ('harness-example-' + [guid]::NewGuid().ToString('N'))
+Copy-Item -LiteralPath tests/fixtures/minimal_project -Destination $demoProject -Recurse
+& $harnessPython -m development_harness --project $demoProject prepare --plan tests/fixtures/fake-plan.json
+& $harnessPython -m development_harness --project $demoProject approve
+& $harnessPython -m development_harness --project $demoProject run --steps 1
+& $harnessPython -m development_harness --project $demoProject resume
+& $harnessPython -m development_harness --project $demoProject status
+```
+
+The final state should be `awaiting_acceptance`. Inspect the changed files, validation outcomes and log paths in the JSON output. After reviewing the result, run `accept` with the same project arguments. `cancel` preserves files and evidence while allowing a new run. Unchanged approved plans need no repeated approval. Changed plans or unexpected file contents stop execution; restore the intended input or cancel and prepare a new run after inspection.
+
+- `prepare` records the file baseline and approved-command candidates; it does not yet perform Phase 2's baseline-test admission check. `run` before `approve` stays in approval waiting.
+- The [example input](tests/fixtures/fake-plan.json) specifies a Phase, sequential Tasks, per-attempt `writes` and fake `review` outcomes, plus registered validation `argv` arrays. `{python}` resolves to the harness interpreter. At least one `kind: "pytest"` command is required; default correction limit is two.
+- Developer/Reviewer output is synthetic; real AI calls are zero. Validation commands run with the user's permissions and must be trusted. Windows Job containment manages child-process lifetime; it is not the planned permission sandbox.
+- Runtime DB, command logs and pytest XML live under `%LOCALAPPDATA%/development-tools-harness/runtime/`. `--state-dir` can choose another local directory outside the project and OneDrive; project ownership still applies across state directories.
+- Baselines hash ordinary files, excluding `.git`, `.venv`, `__pycache__`, `.pytest_cache` and `.harness-output`. Linked paths are unsupported. Existing edits are included and unexpected changes are preserved.
+- Tests that fail, do not execute, time out, discover zero tests or skip required cases do not pass. Interrupted checks are rerun after checking recorded process identities. Unknown partial file content stops for inspection.
+
+Implementation and verification details are in [Phase 1](Phase/Phase1_Foundation.md). The editable installation above is a development setup; the fixed runtime required for dogfooding is prepared in Phase 3.
 
 ## Intended workflow
 
@@ -31,7 +67,7 @@ Approvals cover the overall plan, the current Phase, significant scope or risk c
 
 ## First MVP scope
 
-The first MVP focuses on one project at a time, sequential tasks, and one technology configuration for validation. The initial technology configuration and AI execution tool still need to be selected and verified.
+The first MVP focuses on one project at a time, sequential tasks, and one technology configuration for validation. Harness development uses Python 3.12.10 + pytest 9.1.1. The real external example configuration and AI execution tool still need to be selected and verified.
 
 | Area | Planned P0 behavior |
 | --- | --- |
@@ -116,6 +152,8 @@ P0/P1/P2 express priority; **MVP2 is a later product scope**, not a commitment t
 
 ## Planning documents
 
+- [Development Phase overview](Phase/Overview.md): four development Phases, requirements mapping, and dogfooding entry conditions. Each document contains full English and Korean sections.
+- [Phase 1 — Foundation](Phase/Phase1_Foundation.md): seven Tasks technically verified; user acceptance pending. [Phase 2 — Planning](Phase/Phase2_Planning.md), [Phase 3 — Workflow](Phase/Phase3_Workflow.md), and [Phase 4 — Dogfooding](Phase/Phase4_Dogfooding.md) are unstarted outlines to refine before implementation.
 - [Lean MVP plan — revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md): scope, priorities, acceptance rules, development stages, dogfooding, MVP2, and planning change history. Start here.
 - [Earlier planning documents](Draft/archive/): historical designs and decisions. Their broader scope should not be assumed to apply to the lean MVP.
 
@@ -123,9 +161,22 @@ P0/P1/P2 express priority; **MVP2 is a later product scope**, not a commitment t
 development-tools-harness/
 ├── README.md
 ├── README_ko.md
+├── pyproject.toml
+├── requirements-dev.lock
+├── src/development_harness/
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── fixtures/
+├── Phase/
+│   ├── Overview.md
+│   ├── Phase1_Foundation.md
+│   ├── Phase2_Planning.md
+│   ├── Phase3_Workflow.md
+│   └── Phase4_Dogfooding.md
 └── Draft/
     ├── ai-development-harness-lean-mvp-plan.md
     └── archive/
 ```
 
-Before implementation, confirm the P0 scope and select the initial prepared project, trial Phase, technology configuration, and AI adapter. The first adapter integration must establish which execution permissions can actually be enforced.
+Next, review the Phase 1 results and accept the foundation. Phase 2 requires selection of the AI adapter and prepared example. The first adapter integration must establish which execution permissions can actually be enforced.
