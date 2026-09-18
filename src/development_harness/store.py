@@ -77,7 +77,7 @@ class Store:
     def save(self, run, kind, detail=None, *, new=False):
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
-            active = int(run["stage"] not in {"accepted", "cancelled"})
+            active = int(run["stage"] not in {"accepted", "cancelled", "plan_approved"})
             data = json.dumps(run, ensure_ascii=True)
             if new:
                 db.execute("INSERT INTO runs VALUES (?, ?, ?)", (run["id"], active, data))

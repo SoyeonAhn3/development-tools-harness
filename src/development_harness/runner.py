@@ -18,6 +18,12 @@ class Harness:
         self.store = Store(project, home)
         self.project = self.store.project
 
+    def _execution_run(self):
+        run = self.store.get()
+        if run.get("kind") == "planning":
+            raise HarnessError("This is a planning-only run. Use plan-status/plan-approve/plan-cancel; real implementation is Phase 3.")
+        return run
+
     def prepare(self, plan_path):
         with ProjectLock(self.store):
             if self.store.active():
@@ -76,7 +82,7 @@ class Harness:
 
     def approve(self):
         with ProjectLock(self.store):
-            run = self.store.get()
+            run = self._execution_run()
             self._check(run)
             if run["approval"]:
                 return run
@@ -96,7 +102,7 @@ class Harness:
 
     def cancel(self):
         with ProjectLock(self.store):
-            run = self.store.get()
+            run = self._execution_run()
             for attempt in run["attempts"]:
                 if alive(attempt.get("process")) and attempt["outcome"] in {"running", "launching"}:
                     raise HarnessError("A validation worker is still active; cannot cancel yet.")
@@ -110,7 +116,7 @@ class Harness:
 
     def accept(self):
         with ProjectLock(self.store):
-            run = self.store.get()
+            run = self._execution_run()
             self._check(run)
             if run["stage"] != "awaiting_acceptance":
                 raise HarnessError("Required work is not complete; result acceptance is unavailable.")
@@ -130,7 +136,7 @@ class Harness:
 
     def execute(self, steps=None):
         with ProjectLock(self.store):
-            run = self.store.get()
+            run = self._execution_run()
             if run["stage"] in {"accepted", "cancelled", "failed", "awaiting_approval", "awaiting_acceptance"}:
                 return run
             if not run["approval"]:
@@ -285,7 +291,7 @@ class Harness:
             self.store.save(run, "review_passed", {"attempt_id": attempt["id"]})
 
     def status(self):
-        run = self.store.get()
+        run = self._execution_run()
         result = {key: run[key] for key in ("id", "project_id", "phase_id", "stage", "task_index", "corrections", "reason")}
         result.update(plan_hash=run["plan_hash"], code_hash=digest(run["expected"]),
                       approval=run["approval"], database=str(self.store.path),

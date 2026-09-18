@@ -75,6 +75,12 @@ def load_plan(path):
         if not isinstance(review, list) or not review or any(not isinstance(x, str) or x not in {"pass", "changes"} for x in review):
             raise HarnessError("review must be a list containing pass or changes.")
     checks = plan.get("validation")
+    validate_checks(checks)
+    return plan, hashlib.sha256(raw).hexdigest()
+
+
+def validate_checks(checks):
+    """Shared command contract for fake execution and real project admission."""
     if not isinstance(checks, list) or not checks:
         raise HarnessError("At least one registered validation command is required.")
     has_tests = False
@@ -98,4 +104,4 @@ def load_plan(path):
             raise HarnessError("Validation timeout must be between 0 and 3600 seconds.")
     if not has_tests:
         raise HarnessError("At least one actual pytest check is required.")
-    return plan, hashlib.sha256(raw).hexdigest()
+    return checks
