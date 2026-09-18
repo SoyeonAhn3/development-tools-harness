@@ -5,7 +5,9 @@ from ctypes import wintypes
 import json
 import msvcrt
 import os
+from pathlib import Path
 import sqlite3
+import tempfile
 
 import psutil
 
@@ -30,6 +32,30 @@ def alive(record):
         raise HarnessError("Cannot inspect a recorded process; unsafe to resume.") from exc
 
 
+def _ownership_record(raw, path):
+    try:
+        record = json.loads(raw)
+    except (ValueError, UnicodeError) as exc:
+        raise HarnessError(f"Invalid ownership metadata; inspect before continuing: {path}") from exc
+    if not isinstance(record, dict) or not isinstance(record.get("database"), str) or not record["database"]:
+        raise HarnessError(f"Invalid ownership metadata; inspect before continuing: {path}")
+    return record
+
+
+def _write_ownership(path, record):
+    # Replace only the metadata. Replacing the locked file would let another
+    # process lock a different file object and bypass the existing OS lock.
+    fd, temporary = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=path.parent)
+    try:
+        with os.fdopen(fd, "wb") as output:
+            output.write(json.dumps(record).encode())
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(temporary, path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
 class ProjectLock:
     def __init__(self, store):
         self.store = store
@@ -48,12 +74,18 @@ class ProjectLock:
             self.file.close()
             raise HarnessError("Another process owns this project; retry after it stops.") from exc
         try:
-            self.file.seek(1)
-            raw = self.file.read()
-            previous = json.loads(raw) if raw else {}
+            record_path = directory / (self.store.project_id + ".json")
+            try:
+                raw = record_path.read_bytes()
+            except FileNotFoundError:
+                # Read the original inline format without destroying it during migration.
+                self.file.seek(1)
+                raw = self.file.read()
+                previous = _ownership_record(raw, self.file.name) if raw else {}
+            else:
+                previous = _ownership_record(raw, record_path)
             previous_db = previous.get("database")
             if previous_db and previous_db != str(self.store.path):
-                from pathlib import Path
                 path = Path(previous_db)
                 if path.exists():
                     db = sqlite3.connect(path.as_uri() + "?mode=ro", uri=True)
@@ -62,11 +94,7 @@ class ProjectLock:
                             raise HarnessError("An unfinished run exists in another state directory: " + previous_db)
                     finally:
                         db.close()
-            self.file.seek(1)
-            self.file.truncate()
-            self.file.write(json.dumps({"database": str(self.store.path), "owner": identity()}).encode())
-            self.file.flush()
-            os.fsync(self.file.fileno())
+            _write_ownership(record_path, {"database": str(self.store.path), "owner": identity()})
         except BaseException:
             self.__exit__(None, None, None)
             raise

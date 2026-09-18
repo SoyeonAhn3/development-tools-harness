@@ -8,7 +8,7 @@ A planned local CLI for semi-automated development: turn a Markdown specificatio
 
 ## Current status
 
-**Phase 1 foundation implemented; user acceptance pending.** A Windows/Python 3.12 CLI now runs explicit fake-Adapter plans with real pytest validation, SQLite records, versioned approvals, file preservation and interruption/resume. The 43-test suite passes. Live AI planning/implementation and execution permission isolation are later-Phase work.
+**Phase 1 foundation completed and accepted by the user on 2026-09-18.** A Windows/Python 3.12 CLI now runs explicit fake-Adapter plans with real pytest validation, SQLite records, versioned approvals, file preservation and interruption/resume. The 63-test suite passes, including regressions for three review fixes recorded in Phase 1. Live AI planning/implementation and execution permission isolation are later-Phase work.
 
 The roadmap below summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md) (Korean). Full-product capabilities remain planned unless explicitly listed in the Phase 1 usage section.
 
@@ -153,7 +153,7 @@ P0/P1/P2 express priority; **MVP2 is a later product scope**, not a commitment t
 ## Planning documents
 
 - [Development Phase overview](Phase/Overview.md): four development Phases, requirements mapping, and dogfooding entry conditions. Each document contains full English and Korean sections.
-- [Phase 1 — Foundation](Phase/Phase1_Foundation.md): seven Tasks technically verified; user acceptance pending. [Phase 2 — Planning](Phase/Phase2_Planning.md), [Phase 3 — Workflow](Phase/Phase3_Workflow.md), and [Phase 4 — Dogfooding](Phase/Phase4_Dogfooding.md) are unstarted outlines to refine before implementation.
+- [Phase 1 — Foundation](Phase/Phase1_Foundation.md): seven Tasks and three review fixes verified; user acceptance complete. [Phase 2 — Planning](Phase/Phase2_Planning.md), [Phase 3 — Workflow](Phase/Phase3_Workflow.md), and [Phase 4 — Dogfooding](Phase/Phase4_Dogfooding.md) are unstarted outlines to refine before implementation.
 - [Lean MVP plan — revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md): scope, priorities, acceptance rules, development stages, dogfooding, MVP2, and planning change history. Start here.
 - [Earlier planning documents](Draft/archive/): historical designs and decisions. Their broader scope should not be assumed to apply to the lean MVP.
 
@@ -179,4 +179,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Next, review the Phase 1 results and accept the foundation. Phase 2 requires selection of the AI adapter and prepared example. The first adapter integration must establish which execution permissions can actually be enforced.
+Next, detail Phase 2 and select the AI adapter and prepared example. The first adapter integration must establish which execution permissions can actually be enforced. Phase 2 implementation has not started.

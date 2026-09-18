@@ -12,6 +12,11 @@ def is_link(path):
     return path.is_symlink() or path.is_junction()
 
 
+def require_single_link(path, metadata):
+    if metadata.st_nlink > 1:
+        raise HarnessError(f"Hard-linked files are not supported; preserved: {path}")
+
+
 def target(root, name):
     relative_path(name)
     path = root / name
@@ -37,8 +42,10 @@ def snapshot(root):
         for name in sorted(files):
             path = base / name
             before = path.stat()
+            require_single_link(path, before)
             content = path.read_bytes()
             after = path.stat()
+            require_single_link(path, after)
             if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
                 raise HarnessError(f"File changed while reading the baseline: {path}")
             result[path.relative_to(root).as_posix()] = hashlib.sha256(content).hexdigest()
@@ -88,6 +95,8 @@ def apply_write(root, name, content, expected):
         current = stream.read()
         if expected is not None and hashlib.sha256(current).hexdigest() != expected:
             raise HarnessError(f"File changed before write; preserved: {name}")
+        # Inspect the opened file, including links introduced after path inspection.
+        require_single_link(path, os.fstat(stream.fileno()))
         stream.seek(0)
         stream.write(content.encode("utf-8"))
         stream.truncate()

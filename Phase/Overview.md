@@ -1,6 +1,6 @@
 # Development Phases — Lean MVP
 
-**Revision**: 0.2 · **Date**: 2026-09-15 · **Status**: Phase 1 technically verified; user acceptance pending. Phases 2–4 not started.
+**Revision**: 0.4 · **Date**: 2026-09-18 · **Status**: Phase 1, including review fixes, accepted by the user and completed. Phases 2–4 not started.
 
 ## Goal & Decisions
 
@@ -9,14 +9,14 @@ Build the P0 local CLI described in the [lean MVP plan 0.4](../Draft/ai-developm
 - **Decided**: Windows/Python 3.12.10 + pytest 9.1.1 for harness development; SQLite for execution state, psutil 7.2.2 for process identity. Versions are recorded in `.python-version` and `requirements-dev.lock`. Phase documents contain complete English and Korean sections.
 - **Proposed**: use Python + pytest for the separate real validation examples as well. The Phase 1 fake-Adapter fixture already uses this configuration.
 - **Pending before Phase 2 integration**: select one AI execution tool, authentication method, and enforceable permission boundary. The current coding environment does not automatically determine the product's Adapter.
-- **Current repository**: Phase 1 package/CLI, transactional SQLite state, fake Adapter, actual command validation, approval/file protection and resume are implemented. All 43 tests and a separate CLI demonstration passed. Real AI integration and permission isolation remain unimplemented.
+- **Current repository**: Phase 1 package/CLI, transactional SQLite state, fake Adapter, actual command validation, approval/file protection and resume are implemented. Review fixes cover hard links, interrupted ownership metadata updates and missing pytest. All 63 tests passed; the initial separate CLI demonstration is also recorded in Phase 1. The user accepted Phase 1 on 2026-09-18. Real AI integration and permission isolation remain unimplemented.
 - **Development method**: use existing coding tools for the initial foundation, then progressively use the harness. Refine these Phase documents during development; keep the `phase-doc` skill and template stable unless a necessary correction is demonstrated.
 
 ## Phase Plan
 
 | Phase | Goal & Main Deliverables | Prerequisite | Exit Condition |
 |---|---|---|---|
-| [1 — Foundation](Phase1_Foundation.md) | Python/test setup, SQLite state, versioned approvals, fake Adapter, validation runner, ownership and resume | Review the overall plan and Phase 1 scope | Core failure/preservation scenarios pass and the user accepts the foundation |
+| [1 — Foundation](Phase1_Foundation.md) ✅ | Python/test setup, SQLite state, versioned approvals, fake Adapter, validation runner, ownership and resume | Review the overall plan and Phase 1 scope | Met: 63 tests passed and the user accepted the foundation on 2026-09-18 |
 | [2 — Planning](Phase2_Planning.md) | One real Adapter and permission checks; project registration, baseline checks, plans, requirements mapping and code summary | Phase 1 accepted; AI tool selected | A prepared project yields a reviewable plan; unapproved execution and unsupported risky actions are blocked |
 | [3 — Workflow](Phase3_Workflow.md) | Developer → validation → separate Reviewer, bounded corrections, records, minimum reporting and acceptance | Phase 2 accepted | A separate example completes a small Phase including interruption/resume; runner A is verified and frozen |
 | [4 — Dogfooding](Phase4_Dogfooding.md) | One small P0 self-development Phase, final report summaries, new/existing project acceptance and regressions | Phase 3 accepted; A/B isolation verified | Self-development is accepted and all MVP section 11 criteria have evidence |
@@ -56,12 +56,14 @@ Preserve pre-existing changes, stop on unexpected file differences, and keep run
 |---|---|
 | 2026-09-15 | Created four development Phases from lean MVP 0.4 and the agreed Python + pytest choice. No implementation or product verification performed. |
 | 2026-09-15 | Phase 1 authorized and implemented; 43 tests passed. Recorded concrete environment and remaining acceptance/real-integration boundaries. |
+| 2026-09-18 | Fixed Phase 1 review findings R1–R3 and verified 63 tests. User acceptance remains pending. |
+| 2026-09-18 | User explicitly accepted Phase 1, including review fixes. Marked Phase 1 completed; Phases 2–4 remain not started. |
 
 ---
 
 # 개발 Phase — 축소 MVP
 
-**문서 버전**: 0.2 · **작성일**: 2026-09-15 · **상태**: Phase 1 기술 검증 완료·사용자 인수 대기. Phase 2–4 미시작.
+**문서 버전**: 0.4 · **작성일**: 2026-09-18 · **상태**: 리뷰 보완을 포함한 Phase 1 사용자 인수·완료. Phase 2–4 미시작.
 
 ## 목표와 결정 사항
 
@@ -70,14 +72,14 @@ Preserve pre-existing changes, stop on unexpected file differences, and keep run
 - **확정**: 하네스 개발은 Windows/Python 3.12.10 + pytest 9.1.1, 실행 상태는 SQLite, 프로세스 식별은 psutil 7.2.2를 사용한다. 버전은 `.python-version`과 `requirements-dev.lock`에 기록했다. Phase 문서는 영문·국문 전체 내용을 함께 작성한다.
 - **제안**: 별도 실제 검증 예제도 Python + pytest로 통일한다. Phase 1 가짜 Adapter 예제는 이미 이 구성을 사용한다.
 - **Phase 2 연결 전 결정**: AI 실행 도구 한 개, 인증 방식, 실제로 집행 가능한 권한 경계. 현재 사용하는 코딩 환경이 제품의 Adapter 선택을 자동으로 결정하지 않는다.
-- **현재 저장소**: Phase 1 패키지·CLI, 트랜잭션 기반 SQLite 상태, 가짜 Adapter, 실제 명령 검증, 승인·파일 보호와 재개를 구현했다. 검사 43개와 별도 CLI 시연이 통과했다. 실제 AI 연결과 권한 분리는 미구현이다.
+- **현재 저장소**: Phase 1 패키지·CLI, 트랜잭션 기반 SQLite 상태, 가짜 Adapter, 실제 명령 검증, 승인·파일 보호와 재개를 구현했다. 하드링크, 소유권 정보 갱신 중단, pytest 미설치 관련 리뷰 보완을 마쳤다. 검사 63개가 통과했으며 최초 별도 CLI 시연도 Phase 1에 기록했다. 사용자는 2026-09-18 Phase 1을 인수했다. 실제 AI 연결과 권한 분리는 미구현이다.
 - **개발 방식**: 초기 기반은 기존 코딩 도구로 만들고 하네스 사용 범위를 점진적으로 넓힌다. 개발 중에는 Phase 문서를 보완하며, 필요한 수정 근거가 있는 경우 외에는 `phase-doc` 스킬과 템플릿을 유지한다.
 
 ## 전체 Phase 계획
 
 | Phase | 목표와 주요 산출물 | 선행 조건 | 종료 조건 |
 |---|---|---|---|
-| [1 — 실행 기반](Phase1_Foundation.md) | Python·테스트 환경, SQLite 상태, 버전에 연결된 승인, 가짜 Adapter, 검사 실행, 실행 소유권·재개 | 전체 계획과 Phase 1 범위 검토 | 핵심 실패·파일 보존 시나리오 검증 및 사용자 인수 |
+| [1 — 실행 기반](Phase1_Foundation.md) ✅ | Python·테스트 환경, SQLite 상태, 버전에 연결된 승인, 가짜 Adapter, 검사 실행, 실행 소유권·재개 | 전체 계획과 Phase 1 범위 검토 | 충족: 검사 63개 통과, 2026-09-18 사용자 인수 |
 | [2 — 실제 연결과 계획](Phase2_Planning.md) | 실제 Adapter 한 개와 권한 확인, 프로젝트 등록·기본 검사·계획·대응표·코드 요약 | Phase 1 인수, AI 도구 선정 | 준비된 프로젝트에서 검토 가능한 계획 생성, 미승인 실행·지원하지 않는 위험 동작 차단 |
 | [3 — 전체 실행 흐름](Phase3_Workflow.md) | 구현 → 검증 → 별도 리뷰, 제한된 수정, 실행 기록, 최소 보고·인수 | Phase 2 인수 | 별도 예제의 작은 Phase를 중단·재개 포함 완료하고 실행용 A 검증·고정 |
 | [4 — 자체 개발과 MVP 인수](Phase4_Dogfooding.md) | 작은 P0 자체 기능 개발, 최종 보고서 집계, 신규·기존 프로젝트 인수·회귀 검증 | Phase 3 인수, A/B 분리 검증 | 자체 개발 인수 및 기획서 11장 전체 완료 기준의 근거 확보 |
@@ -117,3 +119,5 @@ P1 기획 검토·배포용 템플릿, MVP2 독립 수정 요청 및 나머지 P
 |---|---|
 | 2026-09-15 | 축소 MVP 0.4와 합의한 Python + pytest를 바탕으로 4개 개발 Phase 작성. 구현·제품 검증은 수행하지 않음. |
 | 2026-09-15 | Phase 1 승인·구현, 검사 43개 통과. 실제 개발 환경과 남은 사용자 인수·실제 연결 경계를 기록. |
+| 2026-09-18 | Phase 1 리뷰 결함 R1–R3 수정과 검사 63개를 검증했다. 사용자 인수 대기는 유지한다. |
+| 2026-09-18 | 사용자가 리뷰 보완을 포함한 Phase 1을 명시적으로 인수했다. Phase 1 완료 처리, Phase 2–4 미시작 상태 유지. |

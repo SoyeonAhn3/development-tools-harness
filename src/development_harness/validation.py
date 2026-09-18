@@ -68,9 +68,19 @@ def validate(check, project, directory, attempt, launched):
                 elif check["kind"] == "pytest" and result["exit_code"] == 5:
                     attempt.update(outcome="no_tests", tests=0)
                 elif result["exit_code"] != 0:
-                    # pytest usage/internal errors are environment problems, not code retries.
-                    attempt["outcome"] = ("failed" if check["kind"] == "command" or result["exit_code"] == 1
-                                          else "unverified")
+                    if check["kind"] == "command":
+                        attempt["outcome"] = "failed"
+                    else:
+                        outcome, tests = pytest_result(junit)
+                        # Python also exits with 1 when pytest is unavailable. Only
+                        # confirmed test failures authorize implementation retries.
+                        if result["exit_code"] == 1 and outcome == "failed":
+                            attempt.update(outcome="failed", tests=tests)
+                        else:
+                            attempt.update(outcome="unverified", reason=(
+                                "pytest ended without confirmed test-failure evidence; "
+                                "check the registered Python/pytest environment and command log before resuming."
+                            ))
                 elif check["kind"] == "pytest":
                     attempt["outcome"], attempt["tests"] = pytest_result(junit)
                 else:

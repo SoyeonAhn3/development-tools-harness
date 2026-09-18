@@ -8,7 +8,7 @@ Markdown 기획서를 단계별 개발 계획으로 바꾸고, 승인된 작업�
 
 ## 현재 상태
 
-**Phase 1 실행 기반 구현 완료, 사용자 인수 대기입니다.** Windows/Python 3.12 CLI에서 명시적인 가짜 Adapter 계획을 실제 pytest 검증, SQLite 기록, 버전별 승인, 파일 보존, 중단·재개와 함께 실행합니다. 테스트 43개가 통과했습니다. 실제 AI 계획·구현과 실행 권한 분리는 후속 Phase 범위입니다.
+**Phase 1 실행 기반은 2026-09-18 사용자 인수를 받아 완료했습니다.** Windows/Python 3.12 CLI에서 명시적인 가짜 Adapter 계획을 실제 pytest 검증, SQLite 기록, 버전별 승인, 파일 보존, 중단·재개와 함께 실행합니다. Phase 1에 기록한 리뷰 보완 3건의 회귀 검사를 포함해 테스트 63개가 통과했습니다. 실제 AI 계획·구현과 실행 권한 분리는 후속 Phase 범위입니다.
 
 아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. Phase 1 사용 안내에 명시한 기능 외의 전체 제품 기능은 구현 예정입니다.
 
@@ -153,7 +153,7 @@ P0·P1·P2는 우선순위이며, **MVP2는 후속 제품 범위**입니다. 모
 ## 기획 문서
 
 - [전체 개발 Phase 개요](Phase/Overview.md): 4개 개발 Phase, 요구사항 대응표, dogfooding 진입 조건. 각 문서에 영문·국문 전체 내용을 함께 제공합니다.
-- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): Task 7개 기술 검증 완료, 사용자 인수 대기. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md), [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md), [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md)는 착수 전에 보완할 미시작 개요입니다.
+- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): Task 7개와 리뷰 보완 3건 검증, 사용자 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md), [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md), [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md)는 착수 전에 보완할 미시작 개요입니다.
 - [축소 MVP 계획서 — 0.4](Draft/ai-development-harness-lean-mvp-plan.md): 범위, 우선순위, 인수 규칙, 개발 단계, dogfooding, MVP2, 기획 변경 이력. 이 문서부터 확인하세요.
 - [과거 기획 문서](Draft/archive/): 이전 설계와 결정 기록입니다. 과거 문서의 더 넓은 범위가 축소 MVP에도 적용된다고 가정하지 않습니다.
 
@@ -179,4 +179,4 @@ development-tools-harness/
     └── archive/
 ```
 
-다음 단계는 Phase 1 결과 확인과 실행 기반 인수입니다. Phase 2에서는 AI Adapter와 준비된 예제를 선정해야 합니다. 첫 Adapter 연결에서는 실제로 집행할 수 있는 실행 권한을 확인해야 합니다.
+다음 단계는 Phase 2 상세화와 AI Adapter·준비된 예제 선정입니다. 첫 Adapter 연결에서는 실제로 집행할 수 있는 실행 권한을 확인해야 합니다. Phase 2 구현은 아직 시작하지 않았습니다.

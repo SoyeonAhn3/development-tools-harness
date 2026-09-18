@@ -1,4 +1,4 @@
-# Phase 1 — Foundation `🚧 In Progress`
+# Phase 1 — Foundation `✅ Completed`
 
 > Establish an execution foundation that preserves approvals, results and files across interruption.
 
@@ -6,7 +6,9 @@
 
 **Technology**: Windows, Python 3.12.10, pytest 9.1.1, SQLite, psutil 7.2.2.
 
-**Plan status**: Implementation authorized by “Phase1 시작해보자” on 2026-09-15. Tasks technically verified; user result acceptance pending.
+**Plan status**: Initial implementation authorized on 2026-09-15. On 2026-09-18 the user authorized recording and fixing three review findings. R1–R3 are implemented and technically verified with 63 passing tests; user result acceptance is complete.
+
+**User acceptance (2026-09-18)**: The user stated “이해 했고 phase1 인수한다” after reviewing the implementation, review fixes and verification results. Tasks 1.1–1.7 and R1–R3 are accepted, completing Phase 1. Phases 2–4 remain not started.
 
 ## Overview
 
@@ -37,7 +39,23 @@ Tasks were implemented in the order below; Task 1.7 integrates the preceding Tas
 
 **Results (2026-09-15)**: 43 pytest tests passed in 12.98 seconds; `pip check` reported no broken requirements. Real subprocess tests covered CLI execution, test failure/correction, mandatory review correction, zero/skipped tests, missing commands, timeout, competing runners, force-killed parent/descendants, resume and final acceptance. Unit tests covered transaction rollback, approval invalidation, partial writes, file preservation and case aliases. These exercise the fake Adapter foundation, not live AI or a permission sandbox.
 
-The initial test run found an interrupted implementation incorrectly receiving an exact duration on resume; this was fixed and regressed. A separate CLI demonstration completed prepare → approve → one-stage pause → resume → awaiting acceptance. Local evidence: `%LOCALAPPDATA%/development-tools-harness/phase1-tests.xml` and `phase1-demo.json`; command logs and SQLite evidence are in the runtime directory linked by `status`. User result acceptance remains pending.
+The initial test run found an interrupted implementation incorrectly receiving an exact duration on resume; this was fixed and regressed. A separate CLI demonstration completed prepare → approve → one-stage pause → resume → awaiting acceptance. Local evidence: `%LOCALAPPDATA%/development-tools-harness/phase1-tests.xml` and `phase1-demo.json`; command logs and SQLite evidence are in the runtime directory linked by `status`. User result acceptance was pending at the time of this initial demonstration.
+
+## Review Follow-up — 2026-09-18
+
+The review reran the original suite: 43 tests passed in 12.33 seconds and `pip check` passed. Three additional temporary-project experiments exposed gaps not covered by that suite. The original checkmarks above describe the initial verification; technical completion now also requires the following fixes and regressions.
+
+| ID / Related Tasks | Reproduced Finding | Authorized Fix and Acceptance Criteria | Verification | Status |
+|---|---|---|---|---|
+| R1 / 1.3, 1.6 | A hard-linked project file changed an external file and still reached result acceptance waiting. | Reject hard-linked files during baseline inspection and before writing through the opened file handle; preserve external contents. | Real hard links present before prepare, introduced after approval and introduced between path inspection and opening. | ✅ |
+| R2 / 1.2, 1.6 | Process termination between truncating and rewriting ownership metadata allowed another state directory to prepare a second active Run. | Preserve the previous DB reference throughout ownership updates; retain the stable OS lock and stop on malformed metadata. Preserve valid legacy ownership records. | Subprocess termination during metadata updates, alternate state-directory contention, malformed records and legacy-record compatibility. | ✅ |
+| R3 / 1.4, 1.5 | Python without pytest returned exit code 1, triggering three Developer attempts and exhausting two corrections. | Treat unavailable pytest as an environment problem without consuming corrections; real test failures must still trigger bounded correction. | An isolated Python environment without pytest, followed by environment repair and resume; existing failure/correction integration tests. | ✅ |
+
+**Implementation**: `files.require_single_link` checks the baseline's file metadata and `os.fstat` on the opened write handle. `processes.ProjectLock` retains the original `.lock` file and reads valid legacy inline records; new ownership metadata uses a separate `.json` file written to a flushed/fsynced temporary file and replaced under the same lock. Invalid metadata stops execution without overwriting the evidence. `validation.validate` requires both pytest exit code 1 and JUnit failure evidence before consuming a correction; missing pytest leaves the attempt `unverified`, with an environment/log diagnostic and unchanged correction count.
+
+**Verification (2026-09-18)**: The six initial regression cases failed before the fixes and passed afterward. Added 20 cases in total, including forced subprocess exits before/after metadata replacement in both current and legacy formats, malformed metadata preservation and environment repair followed by CLI resume without another Developer attempt. The full suite passed **63 tests in 16.71 seconds**; `pip check` passed. Evidence: `%LOCALAPPDATA%/development-tools-harness/phase1-remediation-tests.xml`. Tests are in [file protection regressions](../tests/unit/test_inputs.py), [ownership regressions](../tests/unit/test_ownership.py), and [CLI/process integration tests](../tests/integration/test_cli.py).
+
+This follow-up stays within the Phase 1 fake-Adapter foundation; it does not introduce the Phase 2 baseline admission gate or permission sandbox. The user accepted the foundation and review fixes on 2026-09-18. No separate dev-log skill is installed; this document's change log records the work.
 
 ## Runner Foundation
 
@@ -89,10 +107,13 @@ Exit requires all above Tasks and final Phase checks to pass with evidence, foll
 |---|---|
 | 2026-09-15 | Created the initial detailed foundation plan with Python + pytest, seven Tasks and explicit verification criteria. |
 | 2026-09-15 | User authorized Phase 1; implemented Tasks 1.1–1.7 and verified 43 tests plus a separate CLI demonstration. Technical work complete; user acceptance pending. |
+| 2026-09-18 | Recorded review findings R1–R3 and user-authorized remediation criteria before starting the fixes. Technical completion reopened; user acceptance remains pending. |
+| 2026-09-18 | Fixed R1–R3, added 20 regression cases and passed all 63 tests plus `pip check`. Recorded implementation and evidence; user acceptance remains pending. |
+| 2026-09-18 | Recorded explicit user acceptance: “이해 했고 phase1 인수한다”. Marked Phase 1 completed, including Tasks 1.1–1.7 and review fixes R1–R3; Phases 2–4 remain not started. |
 
 ---
 
-# Phase 1 — 실행 기반 `🚧 진행 중`
+# Phase 1 — 실행 기반 `✅ 완료`
 
 > 중단 후에도 승인·검사 결과·파일을 보존하는 실행 기반을 만든다.
 
@@ -100,7 +121,9 @@ Exit requires all above Tasks and final Phase checks to pass with evidence, foll
 
 **기술 구성**: Windows, Python 3.12.10, pytest 9.1.1, SQLite, psutil 7.2.2.
 
-**계획 상태**: 2026-09-15 사용자 “Phase1 시작해보자”로 구현 승인. Task 기술 검증 완료, 사용자 결과 인수 대기.
+**계획 상태**: 2026-09-15 최초 구현 승인. 2026-09-18 사용자가 리뷰 결함 3건의 기록과 수정을 승인했다. R1–R3 보완 구현과 검사 63개를 통한 기술 검증 및 사용자 결과 인수를 완료했다.
+
+**사용자 인수(2026-09-18)**: 사용자가 구현 내용·리뷰 보완·검증 결과를 확인한 뒤 “이해 했고 phase1 인수한다”라고 명시했다. Task 1.1–1.7과 R1–R3을 인수해 Phase 1을 완료한다. Phase 2–4는 미시작 상태를 유지한다.
 
 ## 개요
 
@@ -131,7 +154,23 @@ Exit requires all above Tasks and final Phase checks to pass with evidence, foll
 
 **결과(2026-09-15)**: pytest 43개가 12.98초에 통과했고 `pip check`에서 의존성 문제가 없었다. 실제 하위 프로세스 검사로 CLI 실행, 테스트 실패·수정, 필수 리뷰 수정, 테스트 0개·생략, 명령 누락, 시간 초과, 실행 경쟁, 부모·자손 프로세스 강제 종료, 재개·최종 인수를 확인했다. 단위 검사로 트랜잭션 롤백, 승인 무효화, 부분 파일 작성, 파일 보존과 대소문자 별칭을 확인했다. 가짜 Adapter 기반 검증이며 실제 AI·권한 샌드박스 검증은 아니다.
 
-첫 검사에서 중단된 구현을 재개할 때 정확한 실행 시간이 있는 것으로 기록하는 결함을 발견해 수정하고 회귀 검사했다. 별도 CLI 시연에서 준비 → 승인 → 한 단계 후 일시 중단 → 재개 → 인수 대기까지 확인했다. 로컬 근거는 `%LOCALAPPDATA%/development-tools-harness/phase1-tests.xml`과 `phase1-demo.json`이며, 명령 로그·SQLite 기록은 `status`에 표시되는 실행 폴더에 있다. 사용자 결과 인수는 대기 중이다.
+첫 검사에서 중단된 구현을 재개할 때 정확한 실행 시간이 있는 것으로 기록하는 결함을 발견해 수정하고 회귀 검사했다. 별도 CLI 시연에서 준비 → 승인 → 한 단계 후 일시 중단 → 재개 → 인수 대기까지 확인했다. 로컬 근거는 `%LOCALAPPDATA%/development-tools-harness/phase1-tests.xml`과 `phase1-demo.json`이며, 명령 로그·SQLite 기록은 `status`에 표시되는 실행 폴더에 있다. 이 최초 시연 당시 사용자 결과 인수는 대기 중이었다.
+
+## 리뷰 후속 보완 — 2026-09-18
+
+리뷰에서 기존 검사를 다시 실행해 43개가 12.33초에 통과했고 `pip check`도 통과했다. 별도 임시 프로젝트 실험 3건에서는 기존 검사가 다루지 않은 결함을 재현했다. 위 기존 체크는 최초 검증 결과이며, 기술적 완료를 위해 아래 보완과 회귀 검증이 추가로 필요하다.
+
+| ID / 관련 Task | 재현한 결함 | 승인된 보완 내용과 완료 기준 | 검증 방법 | 상태 |
+|---|---|---|---|---|
+| R1 / 1.3, 1.6 | 프로젝트의 하드링크 파일 수정으로 외부 파일도 변경됐는데 결과 인수 대기에 도달했다. | 기준선 검사와 열린 파일 핸들을 통한 쓰기 전에 하드링크를 거부하고 외부 파일 내용을 보존한다. | 준비 전 존재한 링크, 승인 후 추가된 링크, 경로 검사와 파일 열기 사이에 추가된 실제 하드링크 검사. | ✅ |
+| R2 / 1.2, 1.6 | 소유권 정보를 지우고 다시 쓰는 사이에 종료되면 다른 상태 폴더에서 두 번째 활성 Run을 준비할 수 있었다. | 소유권 갱신 중 이전 DB 연결 정보를 보존하고 고정된 OS 잠금을 유지한다. 손상된 기록에서는 중단하며 정상적인 기존 형식도 보존한다. | 정보 갱신 중 하위 프로세스 종료, 다른 상태 폴더 경쟁, 손상된 기록과 기존 형식 호환성 검사. | ✅ |
+| R3 / 1.4, 1.5 | pytest 없는 Python의 종료 코드 1을 코드 실패로 판단해 Developer 3회 실행·수정 2회 소진으로 끝났다. | pytest 실행 불가를 수정 횟수를 소모하지 않는 환경 문제로 처리하고 실제 테스트 실패의 제한된 수정은 유지한다. | pytest 없는 독립 Python 환경에서 중단 후 환경 보완·재개, 기존 실패·수정 통합 검사. | ✅ |
+
+**구현 내용**: `files.require_single_link`로 기준선의 파일 메타데이터와 열린 쓰기 핸들의 `os.fstat`을 검사한다. `processes.ProjectLock`은 기존 `.lock` 파일을 유지하고 정상적인 기존 내부 기록을 읽는다. 새 소유권 정보는 별도 `.json` 파일을 사용하며 동일한 잠금 안에서 임시 파일 쓰기·flush·fsync 후 교체한다. 손상된 기록은 덮어쓰지 않고 중단한다. `validation.validate`는 pytest 종료 코드 1과 JUnit 실패 근거가 모두 있을 때만 수정 횟수를 소모한다. pytest 미설치는 `unverified`로 남기고 환경·로그 확인 사유를 표시하며 수정 횟수를 유지한다.
+
+**검증 결과(2026-09-18)**: 최초 회귀 사례 6개는 수정 전 실패하고 수정 후 통과했다. 총 20개를 추가했으며 기존·새 형식에서 소유권 정보 교체 직전·직후 프로세스 강제 종료, 손상된 기록 보존, 환경 보완 후 Developer 추가 실행 없이 CLI 재개를 포함한다. 전체 **63개 검사가 16.71초에 통과**했고 `pip check`도 통과했다. 근거: `%LOCALAPPDATA%/development-tools-harness/phase1-remediation-tests.xml`. 검사는 [파일 보호 회귀 검사](../tests/unit/test_inputs.py), [소유권 회귀 검사](../tests/unit/test_ownership.py), [CLI·프로세스 통합 검사](../tests/integration/test_cli.py)에 있다.
+
+범위는 Phase 1 가짜 Adapter 기반을 유지하며 Phase 2의 기본 검사 진입 조건이나 권한 샌드박스를 추가하지 않는다. 사용자는 2026-09-18 실행 기반과 리뷰 보완을 인수했다. 별도 dev-log 스킬은 설치되지 않아 이 문서의 변경 이력에 기록했다.
 
 ## 실행 기반
 
@@ -183,3 +222,6 @@ Exit requires all above Tasks and final Phase checks to pass with evidence, foll
 |---|---|
 | 2026-09-15 | Python + pytest, Task 7개와 명시적인 검증 기준을 포함한 실행 기반 상세 계획 최초 작성. |
 | 2026-09-15 | 사용자 Phase 1 착수 승인. Task 1.1–1.7 구현, 43개 검사와 별도 CLI 시연 검증. 기술 작업 완료, 사용자 인수 대기. |
+| 2026-09-18 | 수정 착수 전에 리뷰 결함 R1–R3과 사용자가 승인한 보완 기준을 기록했다. 기술적 완료를 재검토하며 사용자 인수 대기는 유지한다. |
+| 2026-09-18 | R1–R3 수정, 회귀 사례 20개 추가, 전체 63개 검사와 `pip check` 통과. 구현과 근거를 기록했으며 사용자 인수 대기는 유지한다. |
+| 2026-09-18 | 사용자 “이해 했고 phase1 인수한다”를 인수 근거로 기록했다. Task 1.1–1.7과 리뷰 보완 R1–R3을 포함해 Phase 1을 완료 처리했으며 Phase 2–4는 미시작 상태를 유지한다. |

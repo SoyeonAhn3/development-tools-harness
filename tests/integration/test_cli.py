@@ -3,7 +3,9 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import sysconfig
 import time
+import venv
 
 import psutil
 import pytest
@@ -213,3 +215,100 @@ def test_alternate_state_directory_does_not_bypass_active_run(workspace, tmp_pat
     alternate = Harness(harness.project, tmp_path / "other-state")
     with pytest.raises(HarnessError, match="another state directory"):
         alternate.prepare(path)
+
+
+def test_ownership_record_survives_exit_while_collecting_new_owner(workspace, tmp_path):
+    harness, _, path, _ = workspace
+    harness.prepare(path)
+    source = (
+        "import os, sys\n"
+        "from development_harness.runner import Harness\n"
+        "from development_harness import processes\n"
+        "h = Harness(sys.argv[1], sys.argv[2])\n"
+        "processes.identity = lambda: os._exit(99)\n"
+        "h.approve()\n"
+    )
+    crashed = subprocess.run(
+        [sys.executable, "-c", source, str(harness.project), str(harness.store.home)],
+        capture_output=True, timeout=15, creationflags=subprocess.CREATE_NO_WINDOW,
+    )
+    assert crashed.returncode == 99, crashed.stdout + crashed.stderr
+    alternate = Harness(harness.project, tmp_path / "other-state")
+    with pytest.raises(HarnessError, match="another state directory"):
+        alternate.prepare(path)
+    assert alternate.store.active() is None
+    assert cli(harness, "approve")["stage"] == "implementing"
+
+
+@pytest.mark.parametrize("after_replace", [False, True])
+@pytest.mark.parametrize("legacy", [False, True])
+def test_ownership_survives_process_exit_at_atomic_replace(workspace, tmp_path, after_replace, legacy):
+    from development_harness.processes import default_home
+
+    harness, _, path, _ = workspace
+    harness.prepare(path)
+    directory = default_home() / "ownership"
+    lock = directory / (harness.store.project_id + ".lock")
+    record = directory / (harness.store.project_id + ".json")
+    if legacy:
+        lock.write_bytes(b"\0" + record.read_bytes())
+        record.unlink()
+    stable_lock = lock.read_bytes()
+    source = (
+        "import os, sys\n"
+        "from development_harness.runner import Harness\n"
+        "from development_harness import processes\n"
+        "h = Harness(sys.argv[1], sys.argv[2])\n"
+        "replace = processes.os.replace\n"
+        "def interrupted_replace(source, target):\n"
+        "    if sys.argv[3] == 'after':\n"
+        "        replace(source, target)\n"
+        "    os._exit(99)\n"
+        "processes.os.replace = interrupted_replace\n"
+        "h.approve()\n"
+    )
+    crashed = subprocess.run(
+        [sys.executable, "-c", source, str(harness.project), str(harness.store.home),
+         "after" if after_replace else "before"],
+        capture_output=True, timeout=15, creationflags=subprocess.CREATE_NO_WINDOW,
+    )
+    assert crashed.returncode == 99, crashed.stdout + crashed.stderr
+    assert lock.read_bytes() == stable_lock
+    assert harness.store.get()["stage"] == "awaiting_approval"
+    alternate = Harness(harness.project, tmp_path / "other-state")
+    error = cli(alternate, "prepare", "--plan", str(path), expected=2)
+    assert "another state directory" in error["error"]
+    assert alternate.store.active() is None
+    assert cli(harness, "approve")["stage"] == "implementing"
+
+
+def test_missing_pytest_stops_without_corrections_and_resumes_after_environment_repair(workspace, tmp_path):
+    harness, plan, path, save = workspace
+    environment = tmp_path / "python without pytest"
+    venv.EnvBuilder(with_pip=False).create(environment)
+    plan["validation"][0]["argv"][0] = str(environment / "Scripts" / "python.exe")
+    save()
+    cli(harness, "prepare", "--plan", str(path))
+    cli(harness, "approve")
+    stopped = cli(harness, "run", expected=1)
+    assert stopped["stage"] == "validating"
+    assert stopped["corrections"] == 0
+    assert len([a for a in stopped["attempts"] if a["role"] == "developer"]) == 1
+    attempt = stopped["attempts"][-1]
+    assert attempt["outcome"] == "unverified"
+    assert attempt["exit_code"] == 1
+    assert "environment" in stopped["reason"]
+    assert "No module named pytest" in Path(attempt["log"]).read_text()
+    assert "not complete" in cli(harness, "accept", expected=2)["error"]
+
+    # Reuse the installed test dependencies without network access or changing the plan/project.
+    (environment / "Lib" / "site-packages" / "test-dependencies.pth").write_text(
+        sysconfig.get_path("purelib") + "\n", encoding="utf-8",
+    )
+    resumed = cli(harness, "resume")
+    assert resumed["stage"] == "awaiting_acceptance"
+    assert resumed["corrections"] == 0
+    assert len([a for a in resumed["attempts"] if a["role"] == "developer"]) == 1
+    assert resumed["approval"] == stopped["approval"]
+    old = next(a for a in resumed["attempts"] if a["id"] == attempt["id"])
+    assert old["outcome"] == "unverified"
