@@ -1,0 +1,95 @@
+{
+  "date": "2026-09-21",
+  "purpose": "Planning-only Task 2.6; not Phase 3 implementation or runner A isolation",
+  "runtime_root": "%LOCALAPPDATA%/development-tools-harness/phase2-dogfood/d8b4b48e8c9047d1a21ae17c93eee60f",
+  "run_id": "45e4c4397c42468e87d9dad81d7b9ce9",
+  "input_hash": "ecb95e48d0319286365148235eab30c9eab971abf52d2d9a038ef2b9c84eedbb",
+  "snapshot_source_head": "4df134e41d82f1d3fe6c7c915b3af8e5cb783e33",
+  "snapshot_includes_uncommitted_changes": true,
+  "copied_files": 41,
+  "selected_files": 32,
+  "selected_input_bytes": 276144,
+  "unchanged_snapshot_files": 41,
+  "original_inputs_unchanged_before_documentation": 41,
+  "tests": {
+    "total": 156,
+    "failed": 0,
+    "skipped": 0
+  },
+  "baseline": {
+    "id": "17c0288b74034352a1aa1c2c3e0f0912",
+    "duration": 32.69042372703552,
+    "outcome": "passed",
+    "tests": 156
+  },
+  "planner": {
+    "id": "e07c878c099b46668e921f2cb02d1d9a",
+    "duration": 328.6841859817505,
+    "outcome": "passed",
+    "model": "gpt-6-astra"
+  },
+  "cli_version": "codex-cli 0.155.1",
+  "permission_probe": {
+    "requests": 8,
+    "actual_ai_calls": 0,
+    "tool_manifest": [],
+    "rejected_tools": [
+      "exec_command",
+      "shell",
+      "apply_patch",
+      "view_image",
+      "web.run",
+      "mcp__probe__send",
+      "spawn_agent"
+    ],
+    "stdin_verified": true,
+    "output_schema_verified": true,
+    "json_response_verified": true
+  },
+  "call_directory_characters": 217,
+  "schema_path_characters": 229,
+  "actual_ai_call_attempts": 1,
+  "versions": [
+    {
+      "version": 1,
+      "plan_hash": "6304f06594b48e5a459e2a4db968b663bc6ca4aa89628eb140b479d5fd818e32",
+      "input_hash": "ecb95e48d0319286365148235eab30c9eab971abf52d2d9a038ef2b9c84eedbb",
+      "artifacts": {
+        "Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v1/plan.json": "aa2556814731b9f5f1eea579de8d9904f942640b673a06303c23b20ca1a7aa8c",
+        "Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v1/Plan.md": "39394e8287a2e9046514221e85b481aa5b6a802787d20679c7a83b0f50ed56c8",
+        "Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v1/Plan_ko.md": "06554c958a6acd1bcc6cb0fd2a1869518e4acc673866494c55d8dbaa86a3f79b"
+      },
+      "source": "planner",
+      "attempt_id": "e07c878c099b46668e921f2cb02d1d9a",
+      "created": 1789956615.6187005
+    },
+    {
+      "version": 2,
+      "plan_hash": "297990146a09399602cf1a0d8648d1d797bde1e5835928c83864f435051ca305",
+      "input_hash": "ecb95e48d0319286365148235eab30c9eab971abf52d2d9a038ef2b9c84eedbb",
+      "artifacts": {
+        "Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/plan.json": "c0593a880c52b33a0ed1ab4f98a37258922a96ca940babbaaeccc559bf6be780",
+        "Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md": "7fa397aaaea25438181583f301e0320aa3b5750d079f33daa0a3a922818a7268",
+        "Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md": "d7ef66765edf99e3f382dc62ecfb8bd6749967304fcc3f13b07ef31b8a9ccc79"
+      },
+      "source": "manual_revision",
+      "attempt_id": null,
+      "created": 1789956782.0659437
+    }
+  ],
+  "stage": "awaiting_plan_approval",
+  "approval": null,
+  "inspection_error": null,
+  "phase2_user_acceptance": "pending",
+  "phase3_implementation": "not_started",
+  "reviewed_plan": {
+    "version": 2,
+    "tasks": 8,
+    "requirements": 18,
+    "code_context_files": 11,
+    "blocking_items": [
+      "Phase 2 user acceptance",
+      "Windows worker/test permission mechanism verification"
+    ]
+  }
+}

@@ -29,6 +29,9 @@ SCHEMA = obj(
     questions=array(obj(id=TEXT, text=WORDS, blocking={"type": "boolean"})),
 )
 
+# Existing recorded Runs retain SCHEMA; newly registered Runs use the pinned skill.
+SKILL_SCHEMA = obj(**SCHEMA["properties"], technology=WORDS)
+
 
 def check_shape(value, schema, where="plan"):
     kind = schema["type"]
@@ -59,8 +62,8 @@ def unique(items, label):
     return set(ids)
 
 
-def validate_plan(plan, files):
-    check_shape(plan, SCHEMA)
+def validate_plan(plan, files, *, skill=False):
+    check_shape(plan, SKILL_SCHEMA if skill else SCHEMA)
     phases = unique(plan["phases"], "Phase")
     tasks = unique(plan["tasks"], "Task")
     requirements = unique(plan["requirements"], "requirement")

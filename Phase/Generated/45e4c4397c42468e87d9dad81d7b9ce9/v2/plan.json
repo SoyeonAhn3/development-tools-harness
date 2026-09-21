@@ -1,0 +1,742 @@
+{
+  "overview": {
+    "en": "Detail Phase 3's real sequential workflow, evidence, correction/resume, minimum results and external-example gate to frozen runner A. This planning-only run passed 156 baseline tests and generated v1 with one real Planner call; v2 contains recorded manual review corrections. Phase 2 user acceptance is still pending. Select and probe the worker permission mechanism before live worker integration; safe controller development and disposable boundary experiments may prepare that evidence. Phase 3 implementation and acceptance are not established by this plan.",
+    "ko": "Phase 3의 실제 순차 흐름, 근거 기록, 수정·재개, 최소 결과 안내와 고정 실행본 A를 위한 외부 예제 통과 조건을 상세화한다. 이번 계획 기능 실행에서 기본 검사 156개가 통과하고 실제 Planner 호출 1회로 v1을 생성했다. v2는 기록된 수동 검토 보완을 포함한다. Phase 2 사용자 인수는 대기 중이다. 실제 작업 프로세스 연결 전에 권한 수단을 선정·시험하며, 제어 코드 개발과 임시 대상을 사용한 경계 실험으로 그 근거를 준비할 수 있다. 이 계획은 Phase 3 구현이나 인수 완료를 뜻하지 않는다."
+  },
+  "current_phase": "Phase3",
+  "phases": [
+    {
+      "id": "Phase2",
+      "title": {
+        "en": "Phase 2 — Planning prerequisite",
+        "ko": "Phase 2 — 계획 선행 조건"
+      },
+      "goal": {
+        "en": "Establish accepted planning and verified permissions before Phase 3 execution.",
+        "ko": "Phase 3 실행 전에 계획 기능 인수와 권한 검증을 확보한다."
+      },
+      "exit_criteria": {
+        "en": "Phase 2 acceptance evidence is available; its permission limits are explicit.",
+        "ko": "Phase 2 인수 근거가 있으며 검증된 권한의 한계가 명시되어 있다."
+      }
+    },
+    {
+      "id": "Phase3",
+      "title": {
+        "en": "Phase 3 — Workflow",
+        "ko": "Phase 3 — 전체 실행 흐름"
+      },
+      "goal": {
+        "en": "Connect real development, validation, independent review, bounded corrections, resume and minimum acceptance.",
+        "ko": "실제 구현·검증·독립 리뷰·제한된 수정·재개·최소 인수를 연결한다."
+      },
+      "exit_criteria": {
+        "en": "Integration/regression checks and an accepted external example demonstrate the flow, interruption recovery and actual process protections; independently frozen A is isolated from B and its tests.",
+        "ko": "통합·회귀 검사와 인수된 외부 예제로 전체 흐름·중단 복구·실제 프로세스 보호를 입증하고 별도로 고정한 A를 B 및 테스트와 분리한다."
+      }
+    },
+    {
+      "id": "Phase4",
+      "title": {
+        "en": "Phase 4 — Self-development and MVP acceptance",
+        "ko": "Phase 4 — 자체 개발과 MVP 인수"
+      },
+      "goal": {
+        "en": "Use verified A for one remaining small P0 report feature, complete report summaries and verify prepared new/existing external projects.",
+        "ko": "검증된 A로 남은 작은 P0 보고서 기능 하나를 개발하고 보고서 집계를 완성하며 준비된 신규·기존 외부 프로젝트를 검증한다."
+      },
+      "exit_criteria": {
+        "en": "Accepted self-development and one accepted Phase each on new/existing external projects, preserved core regressions and evidence for every lean-MVP section 11 criterion. A qualifying Phase 3 example may count when its evidence still matches. Detail later using Phase 3 results.",
+        "ko": "자체 개발 인수, 신규·기존 외부 프로젝트 각각의 Phase 인수, 핵심 회귀 검사와 축소 MVP 11장 전체 기준의 근거를 확보한다. Phase 3 예제는 근거가 일치할 때 해당 유형으로 인정할 수 있다. 상세 Task는 Phase 3 결과로 작성한다."
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "id": "P3-T1",
+      "title": {
+        "en": "Confirm prerequisites, investigate worker isolation and define the execution contract/example",
+        "ko": "선행 조건 확인·작업 권한 분리 검토·실행 계약과 예제 정의"
+      },
+      "requirements": [
+        "R1",
+        "R2",
+        "R12"
+      ],
+      "paths": [
+        "Phase/Phase3_Workflow.md",
+        "src/development_harness/model.py",
+        "src/development_harness/plan_schema.py",
+        "tests/fixtures/workflow_project/cli.py",
+        "tests/fixtures/workflow_project/test_cli.py",
+        "tests/fixtures/workflow_project/spec.md"
+      ],
+      "acceptance": {
+        "en": "Record Phase 2 user acceptance before Phase 3 starts. Investigate the available Windows permission mechanisms with disposable targets, select a mechanism and record its limitations; do not claim isolation before actual probes. Define current-Phase Tasks, checks and a configurable correction limit (proposed default: two). Q2 gates live worker integration, while safe controller code and disposable probe development may establish the missing evidence. Proposed workflow_project files define a CLI that doubles an integer, with positive/zero baseline tests; the bounded change rejects negative input with a nonzero exit and clear error while retaining normal output. Record commands and expected outputs before the live example.",
+        "ko": "Phase 3 착수 전에 Phase 2 사용자 인수를 기록한다. 임시 대상을 사용해 Windows 권한 수단을 조사·선정하고 한계를 기록하며 실제 시험 전에는 분리를 검증했다고 하지 않는다. 현재 Phase Task·검사·설정 가능한 수정 한도(제안 기본값 2회)를 정의한다. Q2는 실제 작업 프로세스 연결의 조건이며 제어 코드와 임시 대상 시험 개발로 필요한 근거를 확보할 수 있다. 제안 workflow_project 파일은 정수를 두 배로 출력하는 CLI와 양수·0 기본 검사다. 한정된 변경은 정상 출력을 유지하면서 음수에 명확한 오류와 0이 아닌 종료 코드를 반환한다. 실제 예제 전에 명령과 기대 출력을 기록한다."
+      },
+      "verification": {
+        "en": "Inspect Phase 2 user acceptance; document the proposed permission mechanism and disposable probe results or unresolved limitations. Run the prepared example baseline using python -m pytest -q in a temporary copy. Review the execution contract against Phase 3. Live target-modifying workers remain blocked until the permission evidence in P3-T2 passes.",
+        "ko": "Phase 2 사용자 인수를 확인하고 제안 권한 수단과 임시 대상 시험 결과 또는 미해결 한계를 기록한다. 임시 예제 복사본에서 python -m pytest -q로 기본 검사를 수행하고 실행 계약을 Phase 3와 대조한다. P3-T2 권한 근거가 통과하기 전에는 실제 대상을 수정하는 작업 프로세스를 실행하지 않는다."
+      },
+      "depends_on": []
+    },
+    {
+      "id": "P3-T2",
+      "title": {
+        "en": "Extend the single Adapter with verified worker boundaries",
+        "ko": "검증된 작업 경계로 단일 Adapter 확장"
+      },
+      "requirements": [
+        "R2",
+        "R3",
+        "R13"
+      ],
+      "paths": [
+        "src/development_harness/codex_adapter.py",
+        "src/development_harness/codex_probe.py",
+        "src/development_harness/processes.py",
+        "src/development_harness/gate.py",
+        "src/development_harness/validation.py",
+        "tests/integration/test_workflow_permissions.py"
+      ],
+      "acceptance": {
+        "en": "Using the resolved Q2 boundary, support real Developer and separately instantiated Reviewer sessions through the selected Adapter. Worker permissions limit modifications to approved target content and deny access to controller approval/policy storage; test descendants inherit the boundary. Preserve the existing text-only Planner boundary. The integration test path is proposed. No active runtime records are edited directly. The Reviewer is read-only. Developer writes stay within approved target paths. All roles and validation descendants must be denied writes to A, active policies/approval records, unrelated files and Git metadata, installation, and unapproved external transfer; allow only the selected AI service communication required by the role. Carry these existing lean-MVP constraints into the execution contract.",
+        "ko": "Q2에서 확정한 경계로 선정된 Adapter의 실제 Developer와 별도로 생성한 Reviewer 세션을 지원한다. 작업 권한은 승인된 대상 내용 수정으로 제한하고 제어 실행본의 승인·정책 저장소 접근을 차단하며 테스트 자손 프로세스에도 경계를 적용한다. 기존 텍스트 전용 Planner 경계를 유지한다. 통합 테스트 경로는 신규 제안이다. 활성 실행 기록을 직접 편집하지 않는다. Reviewer는 읽기 전용으로 둔다. Developer 쓰기는 승인된 대상 경로에 한정한다. 모든 역할과 검사 자손 프로세스의 A·활성 정책 및 승인 기록·무관한 파일·Git 메타데이터 쓰기, 설치와 승인되지 않은 외부 전송을 차단한다. 역할에 필요한 선정 AI 서비스 통신만 허용한다. 기존 축소 MVP의 이 제약을 실행 계약에 반영한다."
+      },
+      "verification": {
+        "en": "Use actual worker and descendant processes against disposable protected targets to prove permitted target changes and denied protected writes before effects. Verify the actual selected CLI role boundary, not just prompts or fake responses. Run Planner capability and compatibility regressions; a missing boundary blocks live workflow. Probe Reviewer writes, out-of-scope writes, Git-metadata writes, installation attempts and unapproved external endpoints in disposable fixtures; check absence of effects and inherited restrictions. Unsupported enforcement blocks that operation.",
+        "ko": "실제 작업·자손 프로세스와 폐기 가능한 보호 대상을 사용해 허용된 대상 변경과 보호 영역 쓰기의 사전 차단을 입증한다. 프롬프트나 가짜 응답만이 아니라 선정된 실제 CLI의 역할 경계를 검증한다. Planner 기능·호환성 회귀 검사를 수행하며 경계가 없으면 실제 흐름을 차단한다. 임시 예제에서 Reviewer 쓰기·범위 밖 쓰기·Git 메타데이터 쓰기·설치 시도·승인되지 않은 외부 연결을 시험하고 영향이 없으며 제약이 상속되는지 확인한다. 집행할 수 없는 동작은 실행을 막는다."
+      },
+      "depends_on": [
+        "P3-T1"
+      ]
+    },
+    {
+      "id": "P3-T3",
+      "title": {
+        "en": "Journal real calls, timings, findings and versioned execution admission",
+        "ko": "실제 호출·시간·지적과 버전별 실행 진입 기록"
+      },
+      "requirements": [
+        "R2",
+        "R6",
+        "R9"
+      ],
+      "paths": [
+        "src/development_harness/store.py",
+        "src/development_harness/planning.py",
+        "src/development_harness/runner.py",
+        "src/development_harness/cli.py",
+        "tests/unit/test_workflow_records.py"
+      ],
+      "acceptance": {
+        "en": "Add controller-owned execution admission referencing reviewed plan and starting content identities, with explicit execution authorization separate from planning-only approval. Persist unique role attempts, dispatch state, session IDs, completed/unknown time spans, approval waits and finding identities atomically. Link evidence to plan/code versions; report only observed usage. The unit test path is proposed. Finding records include severity, content, open/resolved/false-positive/deferred disposition and supporting evidence; preserve stable identities through re-review.",
+        "ko": "검토한 계획과 시작 내용 식별자를 참조하는 제어 실행본 소유의 실행 진입을 추가하고 계획 전용 승인과 명시적 실행 승인을 구분한다. 고유 역할 시도·실행 여부·세션 ID·확정 및 미확정 시간·승인 대기·지적 ID를 원자적으로 저장한다. 근거를 계획·코드 버전에 연결하며 사용량은 관측값만 기록한다. 단위 테스트 경로는 신규 제안이다. 지적 기록에는 중요도·내용·미해결/해결/오탐/보류 처리 상태와 근거를 포함하고 재검토에서도 식별자를 유지한다."
+      },
+      "verification": {
+        "en": "Inject crashes before dispatch, after dispatch and during state/event persistence in temporary stores. Assert rollback consistency, stable IDs, no duplicate counting on replay, null unknown durations/usage and stale-version rejection. Existing plan-approve must still dispatch no implementation.",
+        "ko": "임시 저장소에서 실행 전·후 및 상태·이벤트 저장 중 종료를 주입한다. 롤백 일관성·안정적인 ID·재처리 중복 집계 방지·미확정 시간과 사용량의 null 유지·오래된 버전 거부를 확인한다. 기존 plan-approve는 여전히 구현을 실행하지 않아야 한다."
+      },
+      "depends_on": [
+        "P3-T2"
+      ]
+    },
+    {
+      "id": "P3-T4",
+      "title": {
+        "en": "Connect sequential execution, evidence-based review and bounded corrections",
+        "ko": "순차 실행·근거 기반 리뷰·제한된 수정 연결"
+      },
+      "requirements": [
+        "R3",
+        "R4",
+        "R5",
+        "R9"
+      ],
+      "paths": [
+        "src/development_harness/runner.py",
+        "src/development_harness/model.py",
+        "src/development_harness/validation.py",
+        "tests/integration/test_workflow.py"
+      ],
+      "acceptance": {
+        "en": "Execute approved Tasks in dependency order through Developer, required validation and separate Reviewer sessions. Review compares requirements, actual files and tests. Required findings resolve only with matching follow-up review and validation; deferred mandatory findings block completion. Rerun checks after corrections and on final Phase content. Use a configurable limit with two as the proposed default; environment, permission and specification stops consume no code-fix retry. The integration test path is proposed.",
+        "ko": "승인된 Task를 의존 순서에 따라 Developer·필수 검증·별도 Reviewer 세션으로 실행한다. 리뷰는 요구사항·실제 파일·테스트를 대조한다. 필수 지적은 일치하는 후속 리뷰·검증으로만 해결하고 보류된 필수 지적도 완료를 막는다. 수정 후와 Phase 최종 내용에서 검사를 다시 수행한다. 설정 가능한 한도와 제안 기본값 2회를 사용하며 환경·권한·기획 문제 중단은 코드 수정 횟수를 소모하지 않는다. 통합 테스트 경로는 신규 제안이다."
+      },
+      "verification": {
+        "en": "Exercise two ordered Tasks, repeated findings, a falsely claimed fix, deferred mandatory findings, limits zero/two and limit exhaustion. Real pytest cases cover failure, skipped/mixed suites, no tests, timeout and missing tools. Assert no advancement on unmet checks and verify final evidence against final content. Verify severity/disposition history and require evidence for false-positive or resolved classifications; deferred mandatory findings still prevent completion.",
+        "ko": "순서가 있는 Task 2개·반복 지적·거짓 수정 보고·필수 지적 보류·한도 0회와 2회·한도 소진을 검사한다. 실제 pytest로 실패·생략 및 혼합 테스트·테스트 0개·시간 초과·도구 누락을 확인한다. 검사 미충족 시 진행하지 않고 최종 근거를 최종 내용과 대조한다. 중요도·처리 이력을 확인하고 오탐·해결 분류에 근거를 요구하며 보류된 필수 지적도 완료를 막는지 검증한다."
+      },
+      "depends_on": [
+        "P3-T3"
+      ]
+    },
+    {
+      "id": "P3-T5",
+      "title": {
+        "en": "Make real implementation and validation resume safely",
+        "ko": "실제 구현·검증의 안전한 재개 구현"
+      },
+      "requirements": [
+        "R7",
+        "R8",
+        "R9",
+        "R13"
+      ],
+      "paths": [
+        "src/development_harness/runner.py",
+        "src/development_harness/files.py",
+        "src/development_harness/processes.py",
+        "tests/integration/test_workflow_resume.py",
+        "tests/unit/test_state.py"
+      ],
+      "acceptance": {
+        "en": "Inspect partial real implementation before further changes, preserving ambiguous/user-edited content. Reconcile worker identities and descendants before rerunning interrupted required validation. Prevent concurrent or alternate-store unsafe ownership. Resume reuses existing records without duplicate calls/findings. The resume test path is proposed; metadata-only behavior is verified using disposable filesystem fixtures without Git operations.",
+        "ko": "추가 변경 전에 실제 구현의 부분 파일을 확인하고 모호한 내용·사용자 편집을 보존한다. 중단된 필수 검사를 다시 실행하기 전에 작업 프로세스 식별자와 자손을 확인한다. 동시 실행·다른 저장소를 통한 위험한 소유권 획득을 막는다. 재개는 호출·지적 중복 없이 기존 기록을 사용한다. 재개 테스트 경로는 신규 제안이며 Git 작업 없이 폐기 가능한 파일시스템 예제로 메타데이터 전용 변경 동작을 검증한다."
+      },
+      "verification": {
+        "en": "Kill real implementation and validation controllers at journal/launch boundaries; inspect partial files and prove descendant cleanup or blocked resume. Race an editor and a second runner, including alternate state directories. Compare before/after content and IDs; metadata-only fixture changes must permit unchanged runs.",
+        "ko": "기록·실행 경계에서 실제 구현·검증 제어 프로세스를 종료하고 부분 파일을 확인하며 자손 정리 또는 재개 차단을 입증한다. 다른 상태 디렉터리를 포함해 편집기·두 번째 실행본과 경쟁시킨다. 전후 내용과 ID를 비교하고 메타데이터 전용 예제 변경은 나머지가 동일한 실행의 재개를 허용해야 한다."
+      },
+      "depends_on": [
+        "P3-T4"
+      ]
+    },
+    {
+      "id": "P3-T6",
+      "title": {
+        "en": "Add minimum results, feedback and final reuse/acceptance gates",
+        "ko": "최소 결과·피드백·최종 재사용 및 인수 조건 추가"
+      },
+      "requirements": [
+        "R6",
+        "R10",
+        "R11",
+        "R14"
+      ],
+      "paths": [
+        "src/development_harness/results.py",
+        "src/development_harness/runner.py",
+        "src/development_harness/planning.py",
+        "src/development_harness/cli.py",
+        "tests/integration/test_workflow_results.py"
+      ],
+      "acceptance": {
+        "en": "Proposed results.py and test_workflow_results.py provide success/failure reports with delivered files, validation and reuse evidence, unresolved items, manual checks and detailed-record locations. Retain original feedback and outcome: same-scope defects reopen current-Phase correction; changed requirements require revised planning/approval. Recheck every current reused requirement at final content, including those without Tasks. Missing mandatory evidence blocks acceptance; technical completion and user acceptance remain distinct. Reserve the small summary presentation for Phase 4.",
+        "ko": "신규 제안 results.py와 test_workflow_results.py에서 성공·실패 보고서에 산출 파일·검증 및 재사용 근거·미해결 항목·수동 확인·상세 기록 위치를 제공한다. 피드백 원문과 처리 결과를 유지하며 같은 범위 결함은 현재 Phase 수정을 재개하고 요구사항 변경은 계획 갱신·승인을 요구한다. Task가 없는 항목을 포함해 현재 재사용 요구사항 모두를 최종 내용에서 재확인한다. 필수 근거 누락은 인수를 막고 기술적 완료와 사용자 인수를 구분한다. 작은 집계 표현은 Phase 4에 남긴다."
+      },
+      "verification": {
+        "en": "Test success, correction exhaustion, interruption and permission-failure reports; follow their evidence locations. Submit both feedback types and verify preserved history/version invalidation. Test missing/stale/failed reuse evidence and manual checks, acceptance before completion and final file edits. All must fail closed where mandatory criteria are unmet.",
+        "ko": "성공·수정 한도 소진·중단·권한 실패 보고서를 검사하고 근거 위치를 확인한다. 두 피드백 유형에서 이력 보존·버전 무효화를 검증한다. 누락·오래됨·실패 상태의 재사용 근거와 수동 확인, 완료 전 인수, 최종 파일 편집을 검사한다. 필수 조건 미충족 시 모두 인수를 차단해야 한다."
+      },
+      "depends_on": [
+        "P3-T5"
+      ]
+    },
+    {
+      "id": "P3-T7",
+      "title": {
+        "en": "Complete the external example with actual roles and user acceptance",
+        "ko": "실제 역할과 사용자 인수로 외부 예제 완료"
+      },
+      "requirements": [
+        "R1",
+        "R12",
+        "R13"
+      ],
+      "paths": [
+        "tests/fixtures/workflow_project/cli.py",
+        "tests/fixtures/workflow_project/test_cli.py",
+        "tests/fixtures/workflow_project/spec.md",
+        "tests/integration/test_workflow.py",
+        "Phase/Phase3_Workflow.md"
+      ],
+      "acceptance": {
+        "en": "Use a separate temporary copy of the proposed workflow_project fixture and prepared dependencies. Execute the specified bounded change through plan review, explicit execution approval, actual Developer/Reviewer calls, validation, one interruption, resume and minimum report. Obtain genuine user result acceptance only after mandatory checks. Record actual commands, IDs, evidence and any manual intervention; do not count this as self-development.",
+        "ko": "신규 제안 workflow_project 예제의 별도 임시 복사본과 준비된 의존성을 사용한다. 계획 검토·명시적 실행 승인·실제 Developer/Reviewer 호출·검증·한 차례 중단·재개·최소 보고서를 통해 정한 변경을 수행한다. 필수 검사 충족 후 실제 사용자 결과 인수를 받는다. 실제 명령·ID·근거·수동 개입을 기록하며 자체 개발 실적으로 계산하지 않는다."
+      },
+      "verification": {
+        "en": "Run the full pytest regression suite and inspect actual example normal/invalid-input outputs, distinct role sessions, final hashes, interruption evidence and acceptance. Record failures or pending acceptance honestly; automated fixture acceptance is insufficient.",
+        "ko": "전체 pytest 회귀 검사와 실제 예제의 정상·잘못된 입력 출력, 별도 역할 세션, 최종 해시, 중단 근거와 인수를 확인한다. 실패나 인수 대기는 그대로 기록하며 자동 예제 인수로 사용자 인수를 대체하지 않는다."
+      },
+      "depends_on": [
+        "P3-T6"
+      ]
+    },
+    {
+      "id": "P3-T8",
+      "title": {
+        "en": "Freeze and prove runner A isolation before promotion",
+        "ko": "승격 전 실행본 A 고정과 분리 입증"
+      },
+      "requirements": [
+        "R13",
+        "R15"
+      ],
+      "paths": [
+        "pyproject.toml",
+        "src/development_harness/processes.py",
+        "src/development_harness/store.py",
+        "tests/integration/test_workflow_permissions.py",
+        "Phase/Phase3_Workflow.md"
+      ],
+      "acceptance": {
+        "en": "Prepare A as a separate installation/copy with fixed code, dependencies and role/policy instructions, independent of editable B. Keep runtime records outside OneDrive; B tests use temporary records under limited permissions. Record installed module origins, version/content identities and actual isolation probe results. No promotion with permission/resume defects; record manual fixes and repeat affected checks. Do not edit active approval/policy records or begin self-development.",
+        "ko": "A를 코드·의존성·역할 및 정책 지침이 고정된 별도 설치·복사본으로 준비하고 수정 가능한 B와 독립시킨다. 실행 기록은 OneDrive 밖에 두고 B 테스트는 제한된 권한으로 임시 기록을 사용한다. 설치 모듈 위치·버전 및 내용 식별자·실제 분리 시험 결과를 기록한다. 권한·재개 결함이 있으면 승격하지 않고 수동 수정과 해당 재검사를 기록한다. 활성 승인·정책 기록을 편집하거나 자체 개발을 시작하지 않는다."
+      },
+      "verification": {
+        "en": "Verify A imports no module from B and its fixed artifacts retain their identities. Run real B workers and test descendants against disposable protected counterparts of A and its runtime/approval storage; prove denied writes and allowed temporary test records. Recheck installed A's CLI workflow/resume and inspect the external-example acceptance before Phase 3 exit.",
+        "ko": "A가 B의 모듈을 가져오지 않고 고정 산출물 식별자가 유지되는지 확인한다. 실제 B 작업·테스트 자손 프로세스로 A와 실행·승인 저장소의 폐기 가능한 보호 복제 대상을 시험해 쓰기 거부와 임시 테스트 기록 허용을 입증한다. Phase 3 종료 전에 설치된 A의 CLI 흐름·재개를 재검사하고 외부 예제 인수를 확인한다."
+      },
+      "depends_on": [
+        "P3-T7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "text": {
+        "en": "Require accepted Phase 2, verified permissions and a prepared example before execution.",
+        "ko": "실행 전에 Phase 2 인수·권한 검증·준비된 예제를 요구한다."
+      },
+      "source_quote": "**Prerequisites**: [Phase 2](Phase2_Planning.md) accepted, permissions verified and a prepared example available.",
+      "disposition": "reuse",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Inspect prerequisite acceptance and permission records and rerun the prepared baseline; supplied evidence does not establish readiness.",
+        "ko": "선행 인수·권한 기록을 확인하고 준비된 기본 검사를 다시 수행한다. 제공 자료만으로 준비 완료가 입증되지 않는다."
+      },
+      "rationale": {
+        "en": "Earlier work is a prerequisite, not work to restart under new Phase numbering.",
+        "ko": "이전 작업은 선행 조건이며 새로운 Phase 번호로 다시 시작할 작업이 아니다."
+      }
+    },
+    {
+      "id": "R2",
+      "text": {
+        "en": "Extend existing runner/storage and the single Adapter using Python, pytest and SQLite; place results in the package and temporary examples under tests.",
+        "ko": "Python·pytest·SQLite로 기존 Runner·저장 계층·단일 Adapter를 확장하고 패키지에 결과 생성, tests 아래에 임시 예제를 둔다."
+      },
+      "source_quote": "Extend the Phase 1 runner/storage and Phase 2 Adapter. Add result generation inside the existing package and temporary integration examples under tests; exact filenames are deferred.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Review package placement and run earlier component regressions with the selected stack.",
+        "ko": "패키지 배치를 확인하고 선정된 기술 구성으로 이전 구성요소 회귀 검사를 수행한다."
+      },
+      "rationale": {
+        "en": "Existing modules provide foundations but real execution is explicitly absent.",
+        "ko": "기존 모듈은 기반을 제공하지만 실제 실행은 명시적으로 부재한다."
+      }
+    },
+    {
+      "id": "R3",
+      "text": {
+        "en": "Run approved Tasks sequentially with separate-session review of requirements, implementation and tests; required fixes need independent follow-up evidence.",
+        "ko": "승인된 Task를 순차 실행하고 별도 세션에서 요구사항·구현·테스트를 리뷰하며 필수 수정에는 독립적인 후속 근거를 요구한다."
+      },
+      "source_quote": "An approved small Phase executes Tasks sequentially. The Reviewer uses a separate session and checks requirements, actual implementation and tests. Required findings must have follow-up review/validation evidence; Developer self-report is insufficient.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Inspect actual ordered role calls and test rejection of self-reported fixes without review/validation.",
+        "ko": "실제 역할 호출 순서를 확인하고 리뷰·검증 없는 수정 자기 보고의 거부를 검사한다."
+      },
+      "rationale": {
+        "en": "The supplied runner currently uses synthetic Developer and Reviewer outcomes.",
+        "ko": "제공된 Runner는 현재 합성 Developer·Reviewer 결과를 사용한다."
+      }
+    },
+    {
+      "id": "R4",
+      "text": {
+        "en": "Validate after changes and on final content; failed, skipped, interrupted and zero-test checks cannot pass.",
+        "ko": "변경 후와 최종 내용에서 검증하며 실패·생략·중단·테스트 0개는 통과로 처리하지 않는다."
+      },
+      "source_quote": "Required validation runs after changes and on final Phase content. Failed, skipped, interrupted and zero-test outcomes do not pass.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Run real outcome fixtures and verify final evidence hashes match final code.",
+        "ko": "실제 결과별 예제를 실행하고 최종 근거 해시가 최종 코드와 일치하는지 확인한다."
+      },
+      "rationale": {
+        "en": "Reuse validation classification while connecting it to real implementation and final gates.",
+        "ko": "검증 분류를 재사용하면서 실제 구현과 최종 완료 조건에 연결한다."
+      }
+    },
+    {
+      "id": "R5",
+      "text": {
+        "en": "Bound corrections by configuration, retaining the proposed two-correction default; stop environment, permission and specification problems without code-fix retries.",
+        "ko": "제안 기본값 2회를 유지하는 설정 한도로 수정을 제한하고 환경·권한·기획 문제는 코드 수정 횟수 소모 없이 중단한다."
+      },
+      "source_quote": "Corrections stop at the configured limit; environment/permission/specification problems stop without spending code-fix retries.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Test limit exhaustion and distinct non-code stop reasons; confirm the proposed default is recorded in the execution contract.",
+        "ko": "한도 소진과 코드 외 중단 사유를 검사하고 제안 기본값이 실행 계약에 기록되는지 확인한다."
+      },
+      "rationale": {
+        "en": "Real role failures require explicit classification beyond existing synthetic correction handling.",
+        "ko": "실제 역할 실패에는 기존 합성 수정 처리 외에 명시적인 분류가 필요하다."
+      }
+    },
+    {
+      "id": "R6",
+      "text": {
+        "en": "Bind approvals, evidence and acceptance to matching plan/code versions; preserve feedback and route defects versus requirement changes correctly.",
+        "ko": "승인·근거·인수를 일치하는 계획·코드 버전에 연결하고 피드백을 보존하며 결함과 요구사항 변경을 올바르게 처리한다."
+      },
+      "source_quote": "Approval/evidence/result acceptance reference matching plan and code versions. Same-scope defect feedback reopens correction in the current Phase; changed requirements update the plan and approval. Store the original feedback and outcome.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Test stale versions, both feedback routes and immutable original feedback with recorded outcomes.",
+        "ko": "오래된 버전·두 피드백 경로·피드백 원문 보존과 처리 결과 기록을 검사한다."
+      },
+      "rationale": {
+        "en": "Existing planning approval is planning-only; execution/result linkage and feedback need extension.",
+        "ko": "기존 계획 승인은 계획 전용이며 실행·결과 연결과 피드백은 확장이 필요하다."
+      }
+    },
+    {
+      "id": "R7",
+      "text": {
+        "en": "Inspect partial implementation and residual validation processes on resume; preserve unexpected user edits and prevent unsafe ownership.",
+        "ko": "재개 시 부분 구현·잔여 검사 프로세스를 확인하고 예상 밖 사용자 편집을 보존하며 위험한 소유권 획득을 막는다."
+      },
+      "source_quote": "Interrupted implementation inspects partial files; interrupted validation checks remaining processes and reruns required checks. Unexpected user edits stop without overwrite, and another runner cannot acquire unsafe ownership.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Use real process termination, editor races and competing runners with temporary stores.",
+        "ko": "임시 저장소에서 실제 프로세스 종료·편집 경쟁·실행본 경쟁을 검사한다."
+      },
+      "rationale": {
+        "en": "Known synthetic writes do not establish safe recovery for real worker changes.",
+        "ko": "알려진 합성 쓰기만으로 실제 작업 변경의 안전한 복구가 입증되지 않는다."
+      }
+    },
+    {
+      "id": "R8",
+      "text": {
+        "en": "Allow unchanged-content runs after metadata-only manual Git changes.",
+        "ko": "수동 Git 메타데이터만 바뀐 경우 내용이 동일한 실행을 허용한다."
+      },
+      "source_quote": "Metadata-only manual Git changes do not block an otherwise unchanged run.",
+      "disposition": "reuse",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Rerun metadata-directory and pointer-file fixture regressions with real workflow resume, without Git commands.",
+        "ko": "Git 명령 없이 실제 흐름 재개에서 메타데이터 디렉터리·포인터 파일 예제 회귀 검사를 다시 수행한다."
+      },
+      "rationale": {
+        "en": "Content snapshots already exclude .git; behavior still requires final regression evidence.",
+        "ko": "내용 스냅샷이 이미 .git을 제외하지만 최종 회귀 근거는 여전히 필요하다."
+      }
+    },
+    {
+      "id": "R9",
+      "text": {
+        "en": "Collect all real events now with stable call, time, wait and finding identities; avoid resume duplicates and unknown estimates; mandatory deferred findings still block completion.",
+        "ko": "실제 이벤트 전체를 지금 수집하고 호출·시간·대기·지적 ID를 안정적으로 유지하며 재개 중복·미확정 추정을 피하고 보류 필수 지적도 완료를 막는다."
+      },
+      "source_quote": "Actual role-call attempts, completed/incomplete times, approval waiting and findings have stable identities. Resume does not double-count calls or repeated findings. Confirmed fixes have evidence; deferred mandatory findings still block completion. Do not estimate unknown duration, tokens or money.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Reconcile event records after crashes and repeated reviews; inspect null unknowns, actual dispatch counts and fix evidence.",
+        "ko": "종료·반복 리뷰 후 이벤트 기록을 대조하고 미확정 null·실제 실행 횟수·수정 근거를 확인한다."
+      },
+      "rationale": {
+        "en": "Full collection is needed now even though a report summary remains for Phase 4.",
+        "ko": "보고서 집계 일부를 Phase 4에 남겨도 전체 수집은 지금 필요하다."
+      }
+    },
+    {
+      "id": "R10",
+      "text": {
+        "en": "Provide minimum success/failure reports and separate technical completion from user acceptance without bypassing mandatory criteria.",
+        "ko": "최소 성공·실패 보고서를 제공하고 필수 기준 우회 없이 기술적 완료와 사용자 인수를 구분한다."
+      },
+      "source_quote": "Minimum reports exist for success and failure and show delivered files, validation/reuse evidence, unresolved items, manual checks and detailed-record locations. User acceptance is separate from technical completion and cannot override unmet mandatory criteria.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Inspect every required report field for success/failure and reject acceptance with unmet mandatory criteria.",
+        "ko": "성공·실패 보고서의 필수 필드를 확인하고 필수 조건 미충족 인수를 거부한다."
+      },
+      "rationale": {
+        "en": "Current status output is not the required real-workflow results interface.",
+        "ko": "현재 상태 출력은 요구된 실제 흐름 결과 인터페이스가 아니다."
+      }
+    },
+    {
+      "id": "R11",
+      "text": {
+        "en": "Recheck reused requirements on final acceptance even when they have no implementation Task.",
+        "ko": "구현 Task가 없는 재사용 요구사항도 최종 인수에서 재확인한다."
+      },
+      "source_quote": "Recheck reused requirements at final acceptance even without an implementation Task.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Include a mandatory reuse-only requirement and prove missing or obsolete evidence prevents acceptance.",
+        "ko": "필수 재사용 전용 요구사항을 포함하고 근거 누락·오래됨이 인수를 막는지 입증한다."
+      },
+      "rationale": {
+        "en": "Requirement mapping alone is not final verification.",
+        "ko": "요구사항 대응표만으로 최종 검증이 되지 않는다."
+      }
+    },
+    {
+      "id": "R12",
+      "text": {
+        "en": "Complete a separate prepared Python CLI example with baseline tests, a bounded input-validation change, interruption/resume and real user acceptance.",
+        "ko": "기본 테스트와 한정된 입력 검증 변경을 갖춘 별도 Python CLI 예제에서 중단·재개와 실제 사용자 인수까지 완료한다."
+      },
+      "source_quote": "Use a prepared small Python CLI example with baseline tests, then request one bounded input-validation change with expected normal and invalid-input behavior. Review the generated Phase, approve, execute, interrupt once, resume, inspect review/validation evidence and accept.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Record actual commands, normal/invalid behavior, role evidence, interruption and user acceptance for the external copy.",
+        "ko": "외부 복사본의 실제 명령·정상 및 잘못된 입력 동작·역할 근거·중단·사용자 인수를 기록한다."
+      },
+      "rationale": {
+        "en": "The specification leaves example selection to Phase 3 detailing; the proposed fixture supplies a reviewable candidate.",
+        "ko": "기획서가 예제 선정을 Phase 3 상세화에 맡겼으므로 제안 예제를 검토 가능한 후보로 제공한다."
+      }
+    },
+    {
+      "id": "R13",
+      "text": {
+        "en": "Verify core protections with actual processes; block A promotion on permission/resume defects and record manual intervention.",
+        "ko": "실제 프로세스로 핵심 보호를 검증하고 권한·재개 결함 시 A 승격을 막으며 수동 개입을 기록한다."
+      },
+      "source_quote": "Core protections must work with actual worker processes, not only the fake Adapter. A permissions or resume defect blocks promotion to runner A. Existing coding tools may fix such defects; record that manual intervention.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Require actual-process permission/resume evidence and a defect/intervention record before promotion.",
+        "ko": "승격 전에 실제 프로세스 권한·재개 근거와 결함·개입 기록을 요구한다."
+      },
+      "rationale": {
+        "en": "Existing Job containment explicitly does not provide a permission sandbox.",
+        "ko": "기존 Job 제어는 명시적으로 권한 샌드박스를 제공하지 않는다."
+      }
+    },
+    {
+      "id": "R14",
+      "text": {
+        "en": "Provide minimum evidence access now while reserving a small report summary for Phase 4.",
+        "ko": "최소 근거 조회는 지금 제공하고 작은 보고서 집계는 Phase 4에 남긴다."
+      },
+      "source_quote": "Implement all event collection now. Provide minimum evidence access now; reserve a small remaining report summary for Phase 4 self-development.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Follow minimum-report references to complete event evidence and document the remaining summary boundary.",
+        "ko": "최소 보고서 참조에서 전체 이벤트 근거를 조회하고 남은 집계 경계를 문서화한다."
+      },
+      "rationale": {
+        "en": "Evidence accessibility cannot wait for presentation completion.",
+        "ko": "표현 완성을 기다리며 근거 접근을 미룰 수 없다."
+      }
+    },
+    {
+      "id": "R15",
+      "text": {
+        "en": "Freeze A independently with fixed dependencies/instructions, records outside OneDrive and restricted temporary B test records; prove B cannot modify A or its runtime/approval storage.",
+        "ko": "의존성·지침을 포함해 A를 독립 고정하고 기록은 OneDrive 밖에 두며 B 테스트는 제한된 임시 기록을 사용한다. B가 A와 실행·승인 저장소를 변경하지 못함을 입증한다."
+      },
+      "source_quote": "Freeze A as a separately installed/copied runtime, not an editable installation referencing B. Place runtime records outside OneDrive; B tests use temporary records and limited permissions. Record actual isolation probes.",
+      "disposition": "implement",
+      "phase_id": "Phase3",
+      "verification": {
+        "en": "Inspect installed origins and fixed identities, then record actual B/descendant isolation probes before promotion.",
+        "ko": "설치 위치·고정 식별자를 확인하고 승격 전에 실제 B·자손 분리 시험을 기록한다."
+      },
+      "rationale": {
+        "en": "Separate paths alone do not enforce the required write boundary.",
+        "ko": "경로 분리만으로 요구된 쓰기 경계가 집행되지 않는다."
+      }
+    },
+    {
+      "id": "R16",
+      "text": {
+        "en": "Finish report summary presentation through Phase 4 self-development.",
+        "ko": "Phase 4 자체 개발에서 보고서 집계 표현을 완성한다."
+      },
+      "source_quote": "reserve a small remaining report summary for Phase 4 self-development.",
+      "disposition": "defer",
+      "phase_id": "Phase4",
+      "verification": {
+        "en": "Later compare the summary with Phase 3 event records under the approved self-development plan.",
+        "ko": "후속 승인된 자체 개발 계획에서 집계를 Phase 3 이벤트 기록과 대조한다."
+      },
+      "rationale": {
+        "en": "Explicitly reserved later work; the external example is preparation, not the self-development milestone.",
+        "ko": "명시적으로 남긴 후속 작업이며 외부 예제는 자체 개발 실적이 아닌 준비다."
+      }
+    },
+    {
+      "id": "R17",
+      "text": {
+        "en": "Exclude workflow routing variants and parallel Tasks.",
+        "ko": "Workflow 분기와 병렬 Task를 제외한다."
+      },
+      "source_quote": "Keep one sequential workflow and the proposed two-correction default; no Fast/Standard/Strict routing or parallel Tasks.",
+      "disposition": "exclude",
+      "phase_id": "",
+      "verification": {
+        "en": "Review execution paths for a single sequential workflow.",
+        "ko": "실행 경로가 단일 순차 흐름인지 확인한다."
+      },
+      "rationale": {
+        "en": "The specification explicitly excludes these alternatives.",
+        "ko": "기획서가 해당 대안을 명시적으로 제외한다."
+      }
+    },
+    {
+      "id": "R18",
+      "text": {
+        "en": "Exclude a broad code-analysis or coverage engine.",
+        "ko": "범용 코드 분석·커버리지 엔진을 제외한다."
+      },
+      "source_quote": "No broad code-analysis or coverage engine is added.",
+      "disposition": "exclude",
+      "phase_id": "",
+      "verification": {
+        "en": "Review changes to ensure reuse verification remains scoped to mapped requirements.",
+        "ko": "변경 내용을 확인해 재사용 검증이 대응된 요구사항 범위에 머무르는지 확인한다."
+      },
+      "rationale": {
+        "en": "Explicit scope limit; evidence-based reuse checks suffice.",
+        "ko": "명시된 범위 제한이며 근거 기반 재사용 검사로 처리한다."
+      }
+    }
+  ],
+  "code_context": [
+    {
+      "path": "src/development_harness/runner.py",
+      "summary": {
+        "en": "Existing sequential runner is synthetic and rejects planning runs; real execution requires extension.",
+        "ko": "기존 순차 Runner는 합성이며 계획 실행을 거부하므로 실제 실행은 확장이 필요하다."
+      },
+      "evidence": "the only AI implementation here is synthetic.",
+      "kind": "explicit"
+    },
+    {
+      "path": "src/development_harness/planning.py",
+      "summary": {
+        "en": "Existing approval is explicitly planning-only and should remain separate from execution authorization.",
+        "ko": "기존 승인은 명시적으로 계획 전용이며 실행 승인과 구분해야 한다."
+      },
+      "evidence": "\"scope\": \"planning_only\"",
+      "kind": "explicit"
+    },
+    {
+      "path": "src/development_harness/codex_adapter.py",
+      "summary": {
+        "en": "The current Adapter enforces a text-only Planner profile, not Developer file access.",
+        "ko": "현재 Adapter는 Developer 파일 접근이 아닌 텍스트 전용 Planner 설정을 집행한다."
+      },
+      "evidence": "Project tools are disabled, not prompt-restricted.",
+      "kind": "explicit"
+    },
+    {
+      "path": "src/development_harness/processes.py",
+      "summary": {
+        "en": "Windows locks and process identities can be reused, but Job lifetime containment is not permission isolation.",
+        "ko": "Windows 잠금·프로세스 식별자는 재사용할 수 있지만 Job 수명 제어는 권한 분리가 아니다."
+      },
+      "evidence": "This is process lifetime containment, NOT the Phase 2 permission sandbox.",
+      "kind": "explicit"
+    },
+    {
+      "path": "src/development_harness/store.py",
+      "summary": {
+        "en": "SQLite state and event transitions share transactions; runtime location checks already exist.",
+        "ko": "SQLite 상태·이벤트 전이는 트랜잭션을 공유하며 실행 기록 위치 검사도 이미 있다."
+      },
+      "evidence": "each state/evidence transition is one transaction.",
+      "kind": "explicit"
+    },
+    {
+      "path": "src/development_harness/validation.py",
+      "summary": {
+        "en": "Validation persists process identity before allowing the project command; its existing outcome classification is a foundation to reverify with real workflow integration.",
+        "ko": "검증은 프로젝트 명령 실행 전에 프로세스 식별자를 저장한다. 기존 결과 분류는 실제 흐름 연결에서 재검증할 기반이다."
+      },
+      "evidence": "Persist PID identity BEFORE allowing any project command.",
+      "kind": "explicit"
+    },
+    {
+      "path": "src/development_harness/files.py",
+      "summary": {
+        "en": "Checked writes and content snapshots suggest reusable file-preservation primitives for real worker reconciliation.",
+        "ko": "검사된 쓰기·내용 스냅샷은 실제 작업 결과 대조에서 재사용할 파일 보존 기반으로 보인다."
+      },
+      "evidence": "Unexpected file changes; preserved without overwrite:",
+      "kind": "inferred"
+    },
+    {
+      "path": "tests/integration/test_cli.py",
+      "summary": {
+        "en": "Existing integration fixtures cover forced controller termination and descendant cleanup, providing regression candidates rather than current passing evidence.",
+        "ko": "기존 통합 예제는 제어 프로세스 강제 종료·자손 정리를 다루며 현재 통과 근거가 아닌 회귀 검사 후보를 제공한다."
+      },
+      "evidence": "def test_force_killed_harness_stops_descendants_and_resumes",
+      "kind": "inferred"
+    },
+    {
+      "path": "tests/unit/test_state.py",
+      "summary": {
+        "en": "Filesystem-only metadata fixtures can verify unchanged-content resume without Git operations.",
+        "ko": "파일시스템 전용 메타데이터 예제로 Git 작업 없이 동일 내용 재개를 검증할 수 있다."
+      },
+      "evidence": "def test_git_worktree_pointer_is_metadata_not_code",
+      "kind": "inferred"
+    },
+    {
+      "path": "pyproject.toml",
+      "summary": {
+        "en": "The existing package constrains Python to 3.12 and pins pytest and psutil; retain and verify these when freezing A.",
+        "ko": "기존 패키지는 Python 3.12로 제한하고 pytest·psutil을 고정하므로 A 고정 시 유지·검증한다."
+      },
+      "evidence": "requires-python = \">=3.12,<3.13\"",
+      "kind": "explicit"
+    },
+    {
+      "path": "Phase/Phase2_Planning.md",
+      "summary": {
+        "en": "Related evidence reports pending Phase 2 acceptance and a limited Planner boundary; it does not authorize Phase 3 execution.",
+        "ko": "관련 근거는 Phase 2 인수 대기와 제한된 Planner 경계를 보고하며 Phase 3 실행을 승인하지 않는다."
+      },
+      "evidence": "Task 2.6 and Phase acceptance remain pending.",
+      "kind": "explicit"
+    }
+  ],
+  "questions": [
+    {
+      "id": "Q1",
+      "text": {
+        "en": "Phase 2 user acceptance remains pending. This run now supplies the Task 2.6 planning evidence (156 baseline tests, one real Planner call and reviewed v2), but that technical result does not constitute user acceptance. Record the user decision before Phase 3 starts.",
+        "ko": "Phase 2 사용자 인수는 대기 중이다. 이번 실행으로 Task 2.6 계획 기능 근거(기본 검사 156개, 실제 Planner 호출 1회, 검토한 v2)를 확보했지만 기술적 결과가 사용자 인수를 대신하지 않는다. Phase 3 착수 전에 사용자 판단을 기록한다."
+      },
+      "blocking": true
+    },
+    {
+      "id": "Q2",
+      "text": {
+        "en": "The Windows mechanism that restricts Developer/test processes from modifying A and active runtime/approval storage is not selected or verified. Investigate it in P3-T1 and record actual allowed/denied probes in P3-T2 before live worker integration. This is a technical investigation, not a request for the user to choose a backend now.",
+        "ko": "Developer·테스트가 A와 활성 실행·승인 저장소를 변경하지 못하게 할 Windows 수단은 아직 선정·검증되지 않았다. P3-T1에서 검토하고 P3-T2에서 허용·차단의 실제 시험 근거를 확보한 후 실제 작업 프로세스를 연결한다. 현재 사용자에게 권한 수단 선정을 요청하는 것이 아니라 개발에서 해결할 기술 검토 사항이다."
+      },
+      "blocking": true
+    }
+  ]
+}

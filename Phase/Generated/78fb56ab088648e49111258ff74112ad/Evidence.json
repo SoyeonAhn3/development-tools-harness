@@ -1,0 +1,45 @@
+{
+  "date": "2026-09-21",
+  "kind": "skill-based planning fixture, not Decision Desk or user acceptance",
+  "run_id": "78fb56ab088648e49111258ff74112ad",
+  "runtime_root": "%LOCALAPPDATA%/development-tools-harness/phase2-skill/02527e2443044eb0b0c4ba1d63002adb",
+  "stage": "awaiting_plan_approval",
+  "approval": null,
+  "baseline_tests": 2,
+  "baseline_outcome": "passed",
+  "actual_ai_call_attempts": 1,
+  "planner_duration": 75.92029476165771,
+  "cli_version": "codex-cli 0.155.1",
+  "phase_count": 1,
+  "tasks": 2,
+  "requirements": 5,
+  "source_files_unchanged": 3,
+  "writing_profile": {
+    "name": "phase-doc",
+    "version": "1.1",
+    "format": 1,
+    "sha256": "0a0eb1be9e99ed9cc0a215502462d1e9a27ae1d2192b95b8f8639edee4dba64c",
+    "files": {
+      "SKILL.md": "5b9cc1303b50469c85042eea3944ed72d7d39dd1551ed8b4cb7596e5d7ab116f",
+      "references/phase-template.md": "75b2ce2a656b463727458fa55568349750e66a44c4cadb95f133a638e4ce04ab"
+    }
+  },
+  "versions": [
+    {
+      "version": 1,
+      "plan_hash": "3a019ae9ae4bfcde3eded5fcb6a5740700ee69804ec8ffe19ba0a268dbcefd4e",
+      "input_hash": "971903da0e2e00c0ef84af87a781472a655003b42fc8eb248eb6591c081c2c1c",
+      "artifacts": {
+        "Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/plan.json": "2d5ed96973c5e717bcd0e659ccd482d031ff1c1cbf5d2433f73426ffb8e28fe5",
+        "Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/Phase1_InputValidation.md": "c51232531402f2b5aad5e596d421941ed8cfbd3178f43bf5c1f8f02504a85ce2",
+        "Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/Plan.md": "261abbcbe0e8ded66de9162f6506424c6e91ab350551dd44c2173ea78dc47b40",
+        "Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/Plan_ko.md": "67f082e71d8a6a9d5a68e0a1a28de9565b9aa1d989bfabede96046bc0f8c2221",
+        "Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/writing-profile.json": "a7fa68b737abe7e417e802f12a18ca6b445697f79ad086e18db3ce67f69c8a38"
+      },
+      "source": "planner",
+      "attempt_id": "5009053163fb4492bcff030d43c82601",
+      "created": 1789960500.2182813,
+      "writing_profile_hash": "0a0eb1be9e99ed9cc0a215502462d1e9a27ae1d2192b95b8f8639edee4dba64c"
+    }
+  ]
+}

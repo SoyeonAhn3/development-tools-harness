@@ -33,6 +33,7 @@ def parser():
     registration.add_argument("--planner-timeout", type=int, default=240)
     doctor = commands.add_parser("doctor", help="Check ChatGPT login and prove the installed CLI's Planner capability boundary")
     doctor.add_argument("--model")
+    doctor.add_argument("--codex-path", help="Absolute Codex .exe path (overrides DEVELOPMENT_HARNESS_CODEX_PATH)")
     for name, help_text in {
         "baseline": "Run registered baseline checks without an AI call",
         "plan": "Validate the baseline and generate a real bilingual plan",
@@ -41,7 +42,9 @@ def parser():
         "plan-approve": "Approve the reviewed plan version; does not execute implementation",
         "plan-cancel": "Cancel planning while preserving files and evidence",
     }.items():
-        commands.add_parser(name, help=help_text)
+        command = commands.add_parser(name, help=help_text)
+        if name in {"plan", "plan-resume"}:
+            command.add_argument("--codex-path", help="Absolute Codex .exe path (overrides DEVELOPMENT_HARNESS_CODEX_PATH)")
     revision = commands.add_parser("plan-revise", help="Import an edited plan JSON as a new review version")
     revision.add_argument("--from", dest="revision_path", required=True)
     return result
@@ -83,15 +86,17 @@ def planning_main(args):
 
     planner = Planning(args.project, args.state_dir)
     if args.command == "doctor":
-        adapter = CodexPlanner(args.model or default_model(), planner.store.directory / "doctor" / uuid.uuid4().hex)
-        print(json.dumps(adapter.verify(), ensure_ascii=True, indent=2))
-        return 0
+        adapter = CodexPlanner(args.model, planner.store.directory / "doctor" / uuid.uuid4().hex,
+                               codex_path=args.codex_path)
+        report = adapter.diagnose()
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+        return 0 if report["ready"] else 1
     if args.command == "register":
         planner.register({"version": 1, "spec": args.spec, "context": args.context,
                           "validation": read_json(args.validation), "model": args.model or default_model(),
                           "planner_timeout": args.planner_timeout})
     elif args.command in {"baseline", "plan", "plan-resume"}:
-        planner.plan(baseline_only=args.command == "baseline")
+        planner.plan(baseline_only=args.command == "baseline", codex_path=getattr(args, "codex_path", None))
     elif args.command == "plan-approve":
         planner.approve()
     elif args.command == "plan-revise":

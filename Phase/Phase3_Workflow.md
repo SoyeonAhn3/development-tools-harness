@@ -2,11 +2,11 @@
 
 > Complete one real example Phase and prepare a verified fixed runner for self-development.
 
-**Prerequisites**: [Phase 2](Phase2_Planning.md) accepted, permissions verified and a prepared example available.
+**Prerequisites**: [Phase 2](Phase2_Planning.md) accepted on 2026-09-21. Actual worker execution additionally requires verified permissions and a prepared example.
 
 **Technology**: Python + pytest, SQLite and the selected single AI Adapter.
 
-**Plan status**: Outline only; detail Tasks after Phase 2.
+**Plan status**: Reviewed draft from Phase 2 Task 2.6: one real Planner call produced eight Tasks and 18 requirements, followed by recorded manual corrections. Phase 2 is accepted; Phase 3 implementation and worker permission verification remain pending.
 
 ## Overview
 
@@ -23,7 +23,20 @@ Connect actual implementation, validation, separate review, bounded corrections 
 
 ## Verification & Exit Criteria
 
-Detailed Tasks are deferred. Verify the following behavior with pytest integration/regression tests and actual example runs:
+The [reviewed plan](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) contains completion criteria, paths and verification methods. [Review evidence](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md) preserves the original AI output and manual corrections. All implementation Tasks remain pending.
+
+| Task | Planned work | Completion evidence |
+|---|---|---|
+| P3-T1 | Confirm prerequisites, investigate Windows worker isolation, define the execution contract and prepare the small CLI example. | Phase 2 acceptance record, permission mechanism investigation/probes, baseline example tests and bounded specification. |
+| P3-T2 | Extend the single Adapter for Developer and read-only Reviewer sessions; enforce worker/test permissions. | Actual allowed/denied operations and descendant probes; preserve Planner compatibility and capability checks. |
+| P3-T3 | Connect version-bound execution admission and durable call/time/finding records. | Crash/replay checks, no duplicate calls/findings, severity/disposition evidence and unchanged planning-only approval. |
+| P3-T4 | Run Developer → validation → separate Reviewer sequentially with bounded corrections. | Actual validation classifications, evidence-based finding resolution, correction limits and final-content verification. |
+| P3-T5 | Recover partial implementation and interrupted validation safely. | Actual process interruption, descendant cleanup, preserved user edits, ownership races and metadata-only resume. |
+| P3-T6 | Add minimum reports, feedback routing, final reuse checks and acceptance gates. | Success/failure reports, preserved feedback, version checks and rejection of unmet mandatory conditions. |
+| P3-T7 | Complete the external CLI example through actual roles, interruption/resume and user acceptance. | Full regressions, actual outputs, distinct role sessions and recorded user result acceptance. |
+| P3-T8 | Freeze runner A and prove isolation before Phase 4. | Independent installed origins, fixed artifacts, actual B/test write-denial evidence and installed workflow/resume checks. |
+
+Verify the following behavior with pytest integration/regression tests and actual example runs:
 
 - An approved small Phase executes Tasks sequentially. The Reviewer uses a separate session and checks requirements, actual implementation and tests. Required findings must have follow-up review/validation evidence; Developer self-report is insufficient.
 - Required validation runs after changes and on final Phase content. Failed, skipped, interrupted and zero-test outcomes do not pass. Corrections stop at the configured limit; environment/permission/specification problems stop without spending code-fix retries.
@@ -61,6 +74,7 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | Date | Description |
 |---|---|
 | 2026-09-15 | Created the full-flow outline, external example gate and fixed-runner requirements. |
+| 2026-09-21 | Recorded the reviewed eight-Task Phase 3 draft and Phase 2 acceptance. Original AI/manual-review evidence is preserved; Phase 3 implementation and worker permissions remain pending. |
 
 ---
 
@@ -68,11 +82,11 @@ Reuse earlier components with regression evidence. Core protections must work wi
 
 > 실제 예제 Phase 하나를 완료하고 자체 개발에 사용할 검증된 고정 실행본을 준비한다.
 
-**선행 조건**: [Phase 2](Phase2_Planning.md) 인수, 권한 검증, 준비된 예제 확보.
+**선행 조건**: 2026-09-21 [Phase 2](Phase2_Planning.md) 인수 완료. 실제 작업 실행에는 권한 검증과 준비된 예제가 필요하다.
 
 **기술 구성**: Python + pytest, SQLite, 선정한 단일 AI Adapter.
 
-**계획 상태**: 개요만 작성. Phase 2 이후 Task 상세화.
+**계획 상태**: Phase 2 Task 2.6에서 실제 Planner 호출 1회로 Task 8개·요구사항 18개를 생성하고 수동 보완을 기록한 검토 초안이다. Phase 2는 인수했으며 Phase 3 구현·작업 권한 검증은 대기 중이다.
 
 ## 개요
 
@@ -89,7 +103,20 @@ Reuse earlier components with regression evidence. Core protections must work wi
 
 ## 검증 및 종료 조건
 
-상세 Task는 이후 작성한다. pytest 통합·회귀 검사와 실제 예제 실행으로 다음 동작을 확인한다.
+[검토한 계획](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md)에 완료 기준·경로·검증 방법을 기록했다. [검토 근거](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md)에 AI 원본과 수동 보완을 보존했다. 모든 구현 Task는 대기 중이다.
+
+| Task | 개발 내용 | 완료 근거 |
+|---|---|---|
+| P3-T1 | 선행 조건 확인, Windows 작업 권한 분리 검토, 실행 계약과 작은 CLI 예제 준비. | Phase 2 인수 기록, 권한 수단 조사·시험, 예제 기본 검사와 한정된 변경 기획. |
+| P3-T2 | 단일 Adapter에 Developer·읽기 전용 Reviewer 연결, 작업·테스트 권한 집행. | 실제 허용·차단과 자손 프로세스 시험, 기존 Planner 호환성·기능 검사 유지. |
+| P3-T3 | 버전별 실행 진입과 호출·시간·지적의 영속 기록 연결. | 중단·재처리 검사, 호출·지적 중복 방지, 중요도·처리 근거, 계획 전용 승인 유지. |
+| P3-T4 | Developer → 검증 → 별도 Reviewer 순차 실행과 제한된 수정. | 실제 검사 결과 분류, 근거 있는 지적 해결, 수정 한도와 최종 내용 검증. |
+| P3-T5 | 부분 구현과 중단된 검사의 안전한 재개. | 실제 프로세스 중단·자손 정리, 사용자 변경 보존, 소유권 경쟁·메타데이터 전용 변경 재개. |
+| P3-T6 | 최소 보고서·피드백 처리·최종 재사용 확인·인수 조건 추가. | 성공·실패 보고서, 피드백 보존, 버전 확인과 필수 조건 미충족 인수 차단. |
+| P3-T7 | 외부 CLI 예제의 실제 역할 실행·중단·재개·사용자 인수. | 전체 회귀 검사, 실제 출력·별도 역할 세션과 사용자 결과 인수 기록. |
+| P3-T8 | 실행용 A 고정과 Phase 4 이전 분리 입증. | 독립 설치 위치·고정 산출물, 실제 B·테스트 쓰기 차단, 설치본의 흐름·재개 검사. |
+
+pytest 통합·회귀 검사와 실제 예제 실행으로 다음 동작을 확인한다.
 
 - 승인된 작은 Phase의 Task를 순차 실행한다. Reviewer는 별도 세션에서 요구사항·실제 구현·테스트를 대조한다. 필수 지적에는 후속 리뷰·검증 근거가 필요하며 Developer 자기 보고만으로 해결하지 않는다.
 - 변경 후 필요한 검사를 다시 수행하고 Phase 최종 내용에서도 검증한다. 실패·생략·중단·테스트 0개는 통과하지 않는다. 수정은 설정한 한도에서 멈추며 환경·권한·기획 문제는 코드 수정 재시도를 소모하지 않고 중단한다.
@@ -127,3 +154,4 @@ Phase 1 Runner·저장 계층과 Phase 2 Adapter를 확장한다. 기존 패키�
 | 날짜 | 내용 |
 |---|---|
 | 2026-09-15 | 전체 흐름 개요, 외부 예제 통과 조건과 고정 실행본 요구사항 최초 작성. |
+| 2026-09-21 | Task 8개의 Phase 3 검토 초안과 Phase 2 인수를 반영했다. AI 원본·수동 검토 근거는 유지하고 Phase 3 구현·작업 권한 검증은 대기 중이다. |

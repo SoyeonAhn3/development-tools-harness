@@ -15,8 +15,15 @@ dev = ["pytest==9.1.1"]
 [project.scripts]
 dev-harness = "development_harness.cli:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.setuptools]
+packages = ["development_harness", "development_harness._phase_doc"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+"development_harness._phase_doc" = ".agents/skills/phase-doc"
+
+[tool.setuptools.package-data]
+"development_harness._phase_doc" = ["SKILL.md", "references/*.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -8,9 +8,9 @@ Markdown 기획서를 단계별 개발 계획으로 바꾸고, 승인된 작업�
 
 ## 현재 상태
 
-**Phase 1 실행 기반은 2026-09-18 사용자 인수를 받아 완료했습니다.** Windows/Python 3.12 CLI에서 명시적인 가짜 Adapter 계획을 실제 pytest 검증, SQLite 기록, 버전별 승인, 파일 보존, 중단·재개와 함께 실행합니다. Phase 1에 기록한 리뷰 보완 3건의 회귀 검사를 포함해 테스트 63개가 통과했습니다. 실제 AI 계획·구현과 실행 권한 분리는 후속 Phase 범위입니다.
+**Phase 1–2는 인수·완료했습니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬·템플릿을 통한 버전별 영문·국문 계획 생성을 수행합니다. Phase 2에는 P2-01 경로 수정과 검토된 CLI 0.154.0·0.155.1 호환성 개선을 포함합니다. 검사 172개와 실제 계획 예제를 통과했습니다. Phase 3 구현·작업 및 테스트 권한 분리는 다음 개발 범위입니다.
 
-아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. Phase 1 사용 안내에 명시한 기능 외의 전체 제품 기능은 구현 예정입니다.
+아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. Phase 1·2 사용 안내에 구현된 동작을 구분했습니다.
 
 ## Phase 1 설치와 예제
 
@@ -48,6 +48,24 @@ Copy-Item -LiteralPath tests/fixtures/minimal_project -Destination $demoProject 
 
 구현·검증 상세는 [Phase 1](Phase/Phase1_Foundation.md)에 기록했습니다. 위 editable 설치는 개발용이며 dogfooding에 필요한 고정 실행본은 Phase 3에서 준비합니다.
 
+## 프로젝트 스킬을 사용하는 Phase 2 계획 생성
+
+실제 pytest 기본 검사가 통과하는 프로젝트를 사용합니다. 저장소에서 계획 예제를 새 로컬 폴더로 복사해 확인할 수 있습니다.
+
+```powershell
+$harnessPython = "$env:LOCALAPPDATA\development-tools-harness\venv\Scripts\python.exe"
+$planningProject = Join-Path $env:TEMP ('harness-planning-' + [guid]::NewGuid().ToString('N'))
+Copy-Item -LiteralPath tests/fixtures/planning_project -Destination $planningProject -Recurse
+& $harnessPython -m development_harness --project $planningProject doctor
+& $harnessPython -m development_harness --project $planningProject register --spec spec.md --context value.py test_value.py --validation tests/fixtures/planning-checks.json --planner-timeout 600
+& $harnessPython -m development_harness --project $planningProject plan
+& $harnessPython -m development_harness --project $planningProject plan-status
+```
+
+하네스는 자체 설치본의 [프로젝트 스킬](.agents/skills/phase-doc/SKILL.md)과 [템플릿](.agents/skills/phase-doc/references/phase-template.md)을 읽어 Planner에 전달하고, 검사한 계획 데이터를 템플릿의 `harness:*` 블록으로 문서화합니다. `Phase/Generated/<run-id>/vN/`에는 `plan.json`, `Plan.md`·`Plan_ko.md` 개요와 링크, 두 언어를 함께 담은 `PhaseN_EnglishName.md`, 작성 규칙 원문·버전·해시를 담은 `writing-profile.json`이 생성됩니다. 현재 Phase만 Task를 상세화합니다. 문서를 확인한 뒤 `plan-approve`하며 이 승인은 계획 전용입니다.
+
+필수 `{{slots}}`를 유지하면서 템플릿 제목·배치를 수정하면 다음 `register`부터 반영됩니다. 진행 중인 Run과 `plan-revise --from <파일>` 수정본은 등록 당시 규칙을 유지합니다. 작성 규칙 기록이 없는 이전 Run은 기존 형식으로 처리합니다. 설치용 wheel에도 같은 리소스를 포함합니다. 대상 프로젝트·전역 스킬을 자동 탐색하거나 계획 생성 중 README·개발 로그를 갱신하지 않습니다. 원문 인용은 코드 근거로 표시해 상대 링크를 잘못 해석하지 않도록 했습니다. 검증 결과와 한계는 [Phase 2](Phase/Phase2_Planning.md)에 기록했습니다.
+
 ## 목표 사용 흐름
 
 ```text
@@ -67,7 +85,7 @@ Copy-Item -LiteralPath tests/fixtures/minimal_project -Destination $demoProject 
 
 ## 첫 MVP 범위
 
-첫 MVP는 한 번에 한 프로젝트에서 Task를 순차 실행하며, 검증 대상 기술 구성을 한 종류로 제한합니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1을 사용합니다. 실제 외부 예제 구성과 AI 실행 도구는 선정·검증이 필요합니다.
+첫 MVP는 한 프로젝트의 순차 Task와 한 종류의 검증 기술 구성을 다룹니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1입니다. 계획 Adapter는 ChatGPT 인증의 Codex CLI이며 검토 버전은 0.154.0과 0.155.1입니다. 실제 구현·리뷰와 작업 권한 분리는 Phase 3에서 다룹니다.
 
 | 영역 | P0 구현 예정 동작 |
 | --- | --- |
@@ -153,7 +171,7 @@ P0·P1·P2는 우선순위이며, **MVP2는 후속 제품 범위**입니다. 모
 ## 기획 문서
 
 - [전체 개발 Phase 개요](Phase/Overview.md): 4개 개발 Phase, 요구사항 대응표, dogfooding 진입 조건. 각 문서에 영문·국문 전체 내용을 함께 제공합니다.
-- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): Task 7개와 리뷰 보완 3건 검증, 사용자 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md), [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md), [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md)는 착수 전에 보완할 미시작 개요입니다.
+- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 호환성·스킬 기반 문서 포함 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): Phase 2에서 검토 초안 생성, 구현 미시작. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
 - [축소 MVP 계획서 — 0.4](Draft/ai-development-harness-lean-mvp-plan.md): 범위, 우선순위, 인수 규칙, 개발 단계, dogfooding, MVP2, 기획 변경 이력. 이 문서부터 확인하세요.
 - [과거 기획 문서](Draft/archive/): 이전 설계와 결정 기록입니다. 과거 문서의 더 넓은 범위가 축소 MVP에도 적용된다고 가정하지 않습니다.
 
@@ -163,6 +181,9 @@ development-tools-harness/
 ├── README_ko.md
 ├── pyproject.toml
 ├── requirements-dev.lock
+├── .agents/skills/phase-doc/
+│   ├── SKILL.md
+│   └── references/phase-template.md
 ├── src/development_harness/
 ├── tests/
 │   ├── unit/
@@ -179,4 +200,4 @@ development-tools-harness/
     └── archive/
 ```
 
-다음 단계는 Phase 2 상세화와 AI Adapter·준비된 예제 선정입니다. 첫 Adapter 연결에서는 실제로 집행할 수 있는 실행 권한을 확인해야 합니다. Phase 2 구현은 아직 시작하지 않았습니다.
+Phase 2 사용자 인수를 완료했습니다. 다음은 생성된 Phase 3 초안을 검토하고 실제 Developer·Reviewer 실행 전에 작업·테스트 권한을 검증하는 단계입니다. 계획 승인은 계획 전용으로 유지합니다.

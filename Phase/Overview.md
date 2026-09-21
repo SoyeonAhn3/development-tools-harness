@@ -1,6 +1,6 @@
 # Development Phases — Lean MVP
 
-**Revision**: 0.4 · **Date**: 2026-09-18 · **Status**: Phase 1, including review fixes, accepted by the user and completed. Phases 2–4 not started.
+**Revision**: 0.4 · **Date**: 2026-09-21 · **Status**: Phases 1–2 accepted and completed; Phase 3 has a reviewed planning draft. Phases 3–4 implementation not started.
 
 ## Goal & Decisions
 
@@ -8,8 +8,8 @@ Build the P0 local CLI described in the [lean MVP plan 0.4](../Draft/ai-developm
 
 - **Decided**: Windows/Python 3.12.10 + pytest 9.1.1 for harness development; SQLite for execution state, psutil 7.2.2 for process identity. Versions are recorded in `.python-version` and `requirements-dev.lock`. Phase documents contain complete English and Korean sections.
 - **Proposed**: use Python + pytest for the separate real validation examples as well. The Phase 1 fake-Adapter fixture already uses this configuration.
-- **Pending before Phase 2 integration**: select one AI execution tool, authentication method, and enforceable permission boundary. The current coding environment does not automatically determine the product's Adapter.
-- **Current repository**: Phase 1 package/CLI, transactional SQLite state, fake Adapter, actual command validation, approval/file protection and resume are implemented. Review fixes cover hard links, interrupted ownership metadata updates and missing pytest. All 63 tests passed; the initial separate CLI demonstration is also recorded in Phase 1. The user accepted Phase 1 on 2026-09-18. Real AI integration and permission isolation remain unimplemented.
+- **Selected Adapter**: Codex CLI with ChatGPT authentication, reviewed versions 0.154.0 and 0.155.1. The real text-only Planner has verified capability/I/O controls. Worker/test permission isolation remains a Phase 3 investigation and actual-process gate; the Planner boundary does not establish it.
+- **Accepted foundation/planning**: Phase 1 foundation and Phase 2 registration, actual baseline checks, real Planner, bilingual versioned plans, diagnostics and planning approval are implemented. Phase 2 acceptance covered 172 passing tests, including project phase-doc loading, template rendering, pinned rules and package resources. Planning-only use on a harness snapshot produced the [reviewed Phase 3 draft](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) with one actual AI call and recorded manual corrections. The user accepted Phase 2 on 2026-09-21.
 - **Development method**: use existing coding tools for the initial foundation, then progressively use the harness. Refine these Phase documents during development; keep the `phase-doc` skill and template stable unless a necessary correction is demonstrated.
 
 ## Phase Plan
@@ -17,11 +17,11 @@ Build the P0 local CLI described in the [lean MVP plan 0.4](../Draft/ai-developm
 | Phase | Goal & Main Deliverables | Prerequisite | Exit Condition |
 |---|---|---|---|
 | [1 — Foundation](Phase1_Foundation.md) ✅ | Python/test setup, SQLite state, versioned approvals, fake Adapter, validation runner, ownership and resume | Review the overall plan and Phase 1 scope | Met: 63 tests passed and the user accepted the foundation on 2026-09-18 |
-| [2 — Planning](Phase2_Planning.md) | One real Adapter and permission checks; project registration, baseline checks, plans, requirements mapping and code summary | Phase 1 accepted; AI tool selected | A prepared project yields a reviewable plan; unapproved execution and unsupported risky actions are blocked |
-| [3 — Workflow](Phase3_Workflow.md) | Developer → validation → separate Reviewer, bounded corrections, records, minimum reporting and acceptance | Phase 2 accepted | A separate example completes a small Phase including interruption/resume; runner A is verified and frozen |
+| [2 — Planning](Phase2_Planning.md) ✅ | Real Planner, permission/I/O checks, project registration, baseline, plans and code/requirements mapping | Phase 1 accepted; AI tool selected | Met: 172 tests and live planning verified, including project phase-doc integration; user accepted on 2026-09-21 |
+| [3 — Workflow](Phase3_Workflow.md) | Eight drafted Tasks: Developer → validation → separate Reviewer, corrections, records, resume, results and runner A | Phase 2 accepted; verified worker permissions before live execution | A separate example completes a small Phase including interruption/resume; runner A is verified and frozen |
 | [4 — Dogfooding](Phase4_Dogfooding.md) | One small P0 self-development Phase, final report summaries, new/existing project acceptance and regressions | Phase 3 accepted; A/B isolation verified | Self-development is accepted and all MVP section 11 criteria have evidence |
 
-Only Phase 1 has detailed Tasks now. Detail each later Phase using actual results before starting it. No dates or effort estimates are committed before Adapter feasibility is known.
+Phases 1–2 are completed. Phase 3 has a reviewed eight-Task, 18-requirement draft from Phase 2 planning-only dogfooding; its implementation and permission probes remain pending. Phase 4 remains an outline. No development dates or effort estimates are committed.
 
 ## Requirements Mapping
 
@@ -58,12 +58,15 @@ Preserve pre-existing changes, stop on unexpected file differences, and keep run
 | 2026-09-15 | Phase 1 authorized and implemented; 43 tests passed. Recorded concrete environment and remaining acceptance/real-integration boundaries. |
 | 2026-09-18 | Fixed Phase 1 review findings R1–R3 and verified 63 tests. User acceptance remains pending. |
 | 2026-09-18 | User explicitly accepted Phase 1, including review fixes. Marked Phase 1 completed; Phases 2–4 remain not started. |
+| 2026-09-21 | Synchronized Phase 2 implementation/compatibility and successful planning-only dogfooding: 156 tests, one Planner call, reviewed Phase 3 draft and manual corrections. Phase 2 user acceptance and Phase 3 worker isolation remain pending. |
+| 2026-09-21 | Added authorized project phase-doc integration: pinned skill/template rules, bilingual Phase documents and wheel resources. All 172 tests and one small live example passed; earlier planning evidence remains unchanged. |
+| 2026-09-21 | User explicitly accepted Phase 2 with “phase2 인수”, including Tasks 2.1–2.7, P2-01 and compatibility improvements. Marked Phase 2 completed; Phases 3–4 implementation remains not started. Generated-plan approvals are separate from this development acceptance. |
 
 ---
 
 # 개발 Phase — 축소 MVP
 
-**문서 버전**: 0.4 · **작성일**: 2026-09-18 · **상태**: 리뷰 보완을 포함한 Phase 1 사용자 인수·완료. Phase 2–4 미시작.
+**문서 버전**: 0.4 · **작성일**: 2026-09-21 · **상태**: Phase 1–2 인수·완료, Phase 3 검토 계획 초안 확보. Phase 3–4 구현 미시작.
 
 ## 목표와 결정 사항
 
@@ -71,8 +74,8 @@ Preserve pre-existing changes, stop on unexpected file differences, and keep run
 
 - **확정**: 하네스 개발은 Windows/Python 3.12.10 + pytest 9.1.1, 실행 상태는 SQLite, 프로세스 식별은 psutil 7.2.2를 사용한다. 버전은 `.python-version`과 `requirements-dev.lock`에 기록했다. Phase 문서는 영문·국문 전체 내용을 함께 작성한다.
 - **제안**: 별도 실제 검증 예제도 Python + pytest로 통일한다. Phase 1 가짜 Adapter 예제는 이미 이 구성을 사용한다.
-- **Phase 2 연결 전 결정**: AI 실행 도구 한 개, 인증 방식, 실제로 집행 가능한 권한 경계. 현재 사용하는 코딩 환경이 제품의 Adapter 선택을 자동으로 결정하지 않는다.
-- **현재 저장소**: Phase 1 패키지·CLI, 트랜잭션 기반 SQLite 상태, 가짜 Adapter, 실제 명령 검증, 승인·파일 보호와 재개를 구현했다. 하드링크, 소유권 정보 갱신 중단, pytest 미설치 관련 리뷰 보완을 마쳤다. 검사 63개가 통과했으며 최초 별도 CLI 시연도 Phase 1에 기록했다. 사용자는 2026-09-18 Phase 1을 인수했다. 실제 AI 연결과 권한 분리는 미구현이다.
+- **선정 Adapter**: ChatGPT 인증의 Codex CLI이며 검토된 버전은 0.154.0·0.155.1이다. 실제 텍스트 전용 Planner의 기능·입출력 제어를 검증했다. 작업·테스트 권한 분리는 Phase 3 조사와 실제 프로세스 검증 조건으로 남아 있으며 Planner 경계만으로 입증되지 않는다.
+- **인수한 기반·계획 기능**: Phase 1 기반과 Phase 2 등록·실제 기본 검사·실제 Planner·영문 및 국문 버전별 계획·진단·계획 승인을 구현했다. Phase 2 인수에는 프로젝트 phase-doc 읽기·템플릿 출력·규칙 고정·설치 리소스를 포함한 검사 172개 통과가 반영됐다. 하네스 복사본에서 실제 AI 호출 1회로 [검토용 Phase 3 초안](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md)을 만들고 수동 보완을 기록했다. 2026-09-21 Phase 2 사용자 인수를 완료했다.
 - **개발 방식**: 초기 기반은 기존 코딩 도구로 만들고 하네스 사용 범위를 점진적으로 넓힌다. 개발 중에는 Phase 문서를 보완하며, 필요한 수정 근거가 있는 경우 외에는 `phase-doc` 스킬과 템플릿을 유지한다.
 
 ## 전체 Phase 계획
@@ -80,11 +83,11 @@ Preserve pre-existing changes, stop on unexpected file differences, and keep run
 | Phase | 목표와 주요 산출물 | 선행 조건 | 종료 조건 |
 |---|---|---|---|
 | [1 — 실행 기반](Phase1_Foundation.md) ✅ | Python·테스트 환경, SQLite 상태, 버전에 연결된 승인, 가짜 Adapter, 검사 실행, 실행 소유권·재개 | 전체 계획과 Phase 1 범위 검토 | 충족: 검사 63개 통과, 2026-09-18 사용자 인수 |
-| [2 — 실제 연결과 계획](Phase2_Planning.md) | 실제 Adapter 한 개와 권한 확인, 프로젝트 등록·기본 검사·계획·대응표·코드 요약 | Phase 1 인수, AI 도구 선정 | 준비된 프로젝트에서 검토 가능한 계획 생성, 미승인 실행·지원하지 않는 위험 동작 차단 |
-| [3 — 전체 실행 흐름](Phase3_Workflow.md) | 구현 → 검증 → 별도 리뷰, 제한된 수정, 실행 기록, 최소 보고·인수 | Phase 2 인수 | 별도 예제의 작은 Phase를 중단·재개 포함 완료하고 실행용 A 검증·고정 |
+| [2 — 실제 연결과 계획](Phase2_Planning.md) ✅ | 실제 Planner·권한 및 입출력 확인·등록·기본 검사·계획·코드 및 요구사항 대응 | Phase 1 인수, AI 도구 선정 | 충족: 프로젝트 phase-doc 연결 포함 검사 172개와 실제 계획 검증, 2026-09-21 사용자 인수 |
+| [3 — 전체 실행 흐름](Phase3_Workflow.md) | 초안 Task 8개: 구현 → 검증 → 별도 리뷰, 수정·기록·재개·결과·실행용 A | Phase 2 인수, 실제 실행 전 작업 권한 검증 | 별도 예제의 작은 Phase를 중단·재개 포함 완료하고 실행용 A 검증·고정 |
 | [4 — 자체 개발과 MVP 인수](Phase4_Dogfooding.md) | 작은 P0 자체 기능 개발, 최종 보고서 집계, 신규·기존 프로젝트 인수·회귀 검증 | Phase 3 인수, A/B 분리 검증 | 자체 개발 인수 및 기획서 11장 전체 완료 기준의 근거 확보 |
 
-현재는 Phase 1만 Task로 상세화한다. 이후 Phase는 앞 단계의 실제 결과를 반영해 착수 전에 상세화한다. Adapter 실현 가능성을 확인하기 전에는 일정·소요 시간을 확정하지 않는다.
+Phase 1–2는 완료했다. Phase 2의 계획 기능 dogfooding으로 Task 8개·요구사항 18개의 Phase 3 검토 초안을 확보했으며 구현·권한 시험은 대기 중이다. Phase 4는 개요로 유지한다. 개발 일정·소요 시간은 확정하지 않았다.
 
 ## 요구사항 대응표
 
@@ -121,3 +124,6 @@ P1 기획 검토·배포용 템플릿, MVP2 독립 수정 요청 및 나머지 P
 | 2026-09-15 | Phase 1 승인·구현, 검사 43개 통과. 실제 개발 환경과 남은 사용자 인수·실제 연결 경계를 기록. |
 | 2026-09-18 | Phase 1 리뷰 결함 R1–R3 수정과 검사 63개를 검증했다. 사용자 인수 대기는 유지한다. |
 | 2026-09-18 | 사용자가 리뷰 보완을 포함한 Phase 1을 명시적으로 인수했다. Phase 1 완료 처리, Phase 2–4 미시작 상태 유지. |
+| 2026-09-21 | Phase 2 구현·호환성 개선과 계획 dogfooding 성공을 반영했다. 검사 156개·Planner 호출 1회·Phase 3 검토 초안과 수동 보완을 기록했으며 Phase 2 사용자 인수·Phase 3 작업 권한 분리는 대기 중이다. |
+| 2026-09-21 | 승인된 프로젝트 phase-doc 연결로 스킬·템플릿 규칙 고정, 영문·국문 통합 Phase 문서와 wheel 리소스를 추가했다. 검사 172개와 작은 실제 예제가 통과했으며 이전 계획 근거는 유지했다. |
+| 2026-09-21 | 사용자가 “phase2 인수”로 Task 2.1–2.7, P2-01·호환성 개선을 포함한 Phase 2를 명시적으로 인수했다. Phase 2 완료 처리, Phase 3–4 구현 미시작 상태 유지. 생성한 계획의 승인은 이번 개발 결과 인수와 별도다. |

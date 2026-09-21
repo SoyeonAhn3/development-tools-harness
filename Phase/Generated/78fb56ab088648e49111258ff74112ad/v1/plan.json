@@ -1,0 +1,206 @@
+{
+  "overview": {
+    "en": "Add negative-integer validation while preserving doubling for nonnegative integers. Use the existing Python module and pytest setup. This is a planning draft; implementation, test results and user acceptance are not established.",
+    "ko": "음이 아닌 정수를 두 배로 만드는 기존 동작을 유지하면서 음의 정수 검증을 추가한다. 기존 Python 모듈과 pytest 구성을 사용한다. 이 문서는 계획 초안이며 구현, 테스트 결과, 사용자 인수 완료를 입증하지 않는다."
+  },
+  "current_phase": "phase-1",
+  "phases": [
+    {
+      "id": "phase-1",
+      "title": {
+        "en": "Input Validation",
+        "ko": "입력 검증"
+      },
+      "goal": {
+        "en": "Reject negative integers with a useful ValueError while preserving zero and positive integer behavior.",
+        "ko": "0과 양의 정수의 동작을 유지하면서 유용한 메시지를 포함한 ValueError로 음의 정수를 거부한다."
+      },
+      "exit_criteria": {
+        "en": "Negative, zero and positive pytest cases pass; existing doubling behavior is preserved and no dependencies, UI or network access are added.",
+        "ko": "음수, 0, 양수에 대한 pytest 검사가 통과하고 기존 두 배 계산 동작이 유지되며 의존성, UI, 네트워크 접근이 추가되지 않는다."
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T1",
+      "title": {
+        "en": "Add a negative-integer guard to the existing double function",
+        "ko": "기존 double 함수에 음의 정수 검증 추가"
+      },
+      "requirements": [
+        "R1",
+        "R2",
+        "R4",
+        "R5"
+      ],
+      "paths": [
+        "value.py"
+      ],
+      "acceptance": {
+        "en": "double rejects negative integers with ValueError and a message explaining that the value must be nonnegative; zero returns 0 and positive integers return twice their input. Use the existing module without adding dependencies, UI or network access.",
+        "ko": "double은 음의 정수에 대해 값이 음수가 아니어야 함을 설명하는 메시지와 함께 ValueError를 발생시킨다. 0은 0을 반환하고 양의 정수는 입력의 두 배를 반환한다. 의존성, UI, 네트워크 접근을 추가하지 않고 기존 모듈을 사용한다."
+      },
+      "verification": {
+        "en": "Review the guard and unchanged multiplication behavior; verify runtime outcomes with the pytest cases in T2. These checks are proposed, not executed.",
+        "ko": "검증 조건과 기존 곱셈 동작의 유지를 검토하고 T2의 pytest 사례로 실행 결과를 확인한다. 이 검사는 수행 예정이며 아직 실행되지 않았다."
+      },
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "title": {
+        "en": "Extend existing pytest coverage and verify regression behavior",
+        "ko": "기존 pytest 검사 확장 및 회귀 동작 검증"
+      },
+      "requirements": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "paths": [
+        "test_value.py",
+        "value.py"
+      ],
+      "acceptance": {
+        "en": "Retain the existing zero and positive assertions and add negative-integer coverage using pytest.raises to check ValueError and a meaningful message. All cases pass without new dependencies.",
+        "ko": "기존 0과 양수 단언문을 유지하고 pytest.raises로 ValueError와 의미 있는 메시지를 확인하는 음의 정수 검사를 추가한다. 새 의존성 없이 모든 사례가 통과한다."
+      },
+      "verification": {
+        "en": "Run pytest test_value.py and record its actual result. Inspect changes to confirm coverage of negative, zero and positive inputs and absence of added dependencies, UI or network calls. No tests have been run during planning.",
+        "ko": "pytest test_value.py를 실행하고 실제 결과를 기록한다. 변경 사항을 검토하여 음수, 0, 양수 입력의 검사 여부와 의존성, UI, 네트워크 호출이 추가되지 않았음을 확인한다. 계획 단계에서는 테스트를 실행하지 않았다."
+      },
+      "depends_on": [
+        "T1"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "text": {
+        "en": "Preserve doubling behavior for zero and positive integers.",
+        "ko": "0과 양의 정수를 두 배로 만드는 동작을 유지한다."
+      },
+      "source_quote": "The project already doubles nonnegative integer values. Preserve that behavior.",
+      "disposition": "reuse",
+      "phase_id": "phase-1",
+      "verification": {
+        "en": "Run the existing assertions double(0) == 0 and double(3) == 6 after adding validation.",
+        "ko": "검증 로직 추가 후 기존 double(0) == 0 및 double(3) == 6 단언문을 실행한다."
+      },
+      "rationale": {
+        "en": "The existing multiplication and tests provide behavior to retain; reuse still requires regression verification.",
+        "ko": "기존 곱셈 로직과 테스트를 유지하며, 재사용하더라도 회귀 검증이 필요하다."
+      }
+    },
+    {
+      "id": "R2",
+      "text": {
+        "en": "Reject negative integers with ValueError and a useful error message.",
+        "ko": "유용한 오류 메시지를 포함한 ValueError로 음의 정수를 거부한다."
+      },
+      "source_quote": "Reject negative integers with ValueError and a useful error message.",
+      "disposition": "implement",
+      "phase_id": "phase-1",
+      "verification": {
+        "en": "Use pytest.raises to assert the exception type and that the message explains the nonnegative input requirement.",
+        "ko": "pytest.raises로 예외 유형과 메시지가 음수가 아닌 입력 조건을 설명하는지 확인한다."
+      },
+      "rationale": {
+        "en": "The supplied function currently multiplies without a negative-value guard.",
+        "ko": "제공된 함수는 현재 음수 검증 없이 곱셈을 수행한다."
+      }
+    },
+    {
+      "id": "R3",
+      "text": {
+        "en": "Cover negative, zero and positive inputs with pytest tests.",
+        "ko": "pytest 테스트로 음수, 0, 양수 입력을 검사한다."
+      },
+      "source_quote": "Cover negative, zero and positive cases with pytest tests.",
+      "disposition": "implement",
+      "phase_id": "phase-1",
+      "verification": {
+        "en": "Run pytest test_value.py and confirm all three input categories are covered and pass.",
+        "ko": "pytest test_value.py를 실행하고 세 입력 범주가 모두 검사되며 통과하는지 확인한다."
+      },
+      "rationale": {
+        "en": "Zero and positive tests exist; negative-input exception coverage must be added.",
+        "ko": "0과 양수 테스트가 있으므로 음수 입력의 예외 검사를 추가해야 한다."
+      }
+    },
+    {
+      "id": "R4",
+      "text": {
+        "en": "Use the existing Python module and pytest setup.",
+        "ko": "기존 Python 모듈과 pytest 구성을 사용한다."
+      },
+      "source_quote": "Use the existing Python module and pytest setup.",
+      "disposition": "reuse",
+      "phase_id": "phase-1",
+      "verification": {
+        "en": "Confirm changes target value.py and test_value.py and verify that pytest collects and runs the tests in the existing environment.",
+        "ko": "변경 대상이 value.py와 test_value.py인지 확인하고 기존 환경에서 pytest가 테스트를 수집하고 실행하는지 검증한다."
+      },
+      "rationale": {
+        "en": "The specification selects Python and pytest, and the supplied files establish the existing function and test structure.",
+        "ko": "명세에서 Python과 pytest를 지정했으며 제공된 파일에서 기존 함수와 테스트 구조를 확인할 수 있다."
+      }
+    },
+    {
+      "id": "R5",
+      "text": {
+        "en": "Keep the change within the existing module and tests without adding dependencies, UI or network access.",
+        "ko": "의존성, UI, 네트워크 접근을 추가하지 않고 기존 모듈과 테스트 범위에서 변경한다."
+      },
+      "source_quote": "No new dependencies, UI or network access are required.",
+      "disposition": "implement",
+      "phase_id": "phase-1",
+      "verification": {
+        "en": "Review changes for added dependencies, UI components and network calls; confirm none are introduced.",
+        "ko": "변경 사항에 추가된 의존성, UI 구성 요소, 네트워크 호출이 없는지 검토한다."
+      },
+      "rationale": {
+        "en": "A local input guard and existing pytest coverage are sufficient for the requested behavior.",
+        "ko": "요청한 동작은 로컬 입력 검증과 기존 pytest 검사만으로 구현할 수 있다."
+      }
+    }
+  ],
+  "code_context": [
+    {
+      "path": "value.py",
+      "summary": {
+        "en": "Existing double function directly multiplies its input by two without validation.",
+        "ko": "기존 double 함수는 검증 없이 입력에 2를 곱한다."
+      },
+      "evidence": "def double(value):\n    return value * 2",
+      "kind": "explicit"
+    },
+    {
+      "path": "test_value.py",
+      "summary": {
+        "en": "Existing positive-input regression assertion.",
+        "ko": "기존 양수 입력 회귀 검사용 단언문."
+      },
+      "evidence": "assert double(3) == 6",
+      "kind": "explicit"
+    },
+    {
+      "path": "test_value.py",
+      "summary": {
+        "en": "Existing zero-input regression assertion.",
+        "ko": "기존 0 입력 회귀 검사용 단언문."
+      },
+      "evidence": "assert double(0) == 0",
+      "kind": "explicit"
+    }
+  ],
+  "questions": [],
+  "technology": {
+    "en": "Selected by the specification: Python with the existing value.py module and pytest setup. No new dependencies. Python and pytest versions are unspecified.",
+    "ko": "명세에서 선택한 기술: 기존 value.py 모듈을 사용하는 Python 및 기존 pytest 구성. 새 의존성은 추가하지 않는다. Python과 pytest 버전은 명시되지 않았다."
+  }
+}

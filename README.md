@@ -8,9 +8,9 @@ A planned local CLI for semi-automated development: turn a Markdown specificatio
 
 ## Current status
 
-**Phase 1 foundation completed and accepted by the user on 2026-09-18.** A Windows/Python 3.12 CLI now runs explicit fake-Adapter plans with real pytest validation, SQLite records, versioned approvals, file preservation and interruption/resume. The 63-test suite passes, including regressions for three review fixes recorded in Phase 1. Live AI planning/implementation and execution permission isolation are later-Phase work.
+**Phases 1–2 are accepted and completed.** The Windows/Python 3.12 CLI registers prepared projects, runs baseline tests and generates versioned bilingual plans through Codex CLI and the project phase-doc skill/template. Phase 2 includes the P2-01 path fix and compatibility for reviewed CLI versions 0.154.0 and 0.155.1. All 172 tests and real planning examples passed. Phase 3 implementation and worker/test isolation remain the next development scope.
 
-The roadmap below summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md) (Korean). Full-product capabilities remain planned unless explicitly listed in the Phase 1 usage section.
+The roadmap below summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md). Phase 1 and Phase 2 usage sections identify implemented behavior.
 
 ## Phase 1 setup and example
 
@@ -48,6 +48,24 @@ The final state should be `awaiting_acceptance`. Inspect the changed files, vali
 
 Implementation and verification details are in [Phase 1](Phase/Phase1_Foundation.md). The editable installation above is a development setup; the fixed runtime required for dogfooding is prepared in Phase 3.
 
+## Phase 2 planning with the project skill
+
+Use a prepared project with actual passing pytest tests. From this repository, copy the planning fixture to a new local folder:
+
+```powershell
+$harnessPython = "$env:LOCALAPPDATA\development-tools-harness\venv\Scripts\python.exe"
+$planningProject = Join-Path $env:TEMP ('harness-planning-' + [guid]::NewGuid().ToString('N'))
+Copy-Item -LiteralPath tests/fixtures/planning_project -Destination $planningProject -Recurse
+& $harnessPython -m development_harness --project $planningProject doctor
+& $harnessPython -m development_harness --project $planningProject register --spec spec.md --context value.py test_value.py --validation tests/fixtures/planning-checks.json --planner-timeout 600
+& $harnessPython -m development_harness --project $planningProject plan
+& $harnessPython -m development_harness --project $planningProject plan-status
+```
+
+The harness reads [the project skill](.agents/skills/phase-doc/SKILL.md) and [its template](.agents/skills/phase-doc/references/phase-template.md) from its own installation and passes them to the Planner. The template's `harness:*` blocks render validated plan data. Each `Phase/Generated/<run-id>/vN/` contains `plan.json`, `Plan.md`/`Plan_ko.md` overview indexes, bilingual `PhaseN_EnglishName.md` documents and `writing-profile.json` with exact writing rules/version/hashes. Only the current Phase has detailed Tasks. Inspect the documents before `plan-approve`; approval is planning-only.
+
+Edit template headings/layout while retaining required `{{slots}}`; changes apply on the next `register`. Existing Runs and `plan-revise --from <file>` revisions retain their pinned rules. Older Runs without a writing profile keep their original format. Wheels include the same resources. Target-project/global skills are not auto-loaded; planning does not update README or development logs. Source quotations are rendered as code evidence so relative links are not misinterpreted. See [Phase 2](Phase/Phase2_Planning.md) for verification and limitations.
+
 ## Intended workflow
 
 ```text
@@ -67,7 +85,7 @@ Approvals cover the overall plan, the current Phase, significant scope or risk c
 
 ## First MVP scope
 
-The first MVP focuses on one project at a time, sequential tasks, and one technology configuration for validation. Harness development uses Python 3.12.10 + pytest 9.1.1. The real external example configuration and AI execution tool still need to be selected and verified.
+The first MVP focuses on one project, sequential Tasks and one validation technology configuration. Harness development uses Python 3.12.10 + pytest 9.1.1. The planning Adapter uses Codex CLI with ChatGPT authentication; reviewed versions are 0.154.0 and 0.155.1. Real implementation/review and worker isolation remain Phase 3 work.
 
 | Area | Planned P0 behavior |
 | --- | --- |
@@ -153,7 +171,7 @@ P0/P1/P2 express priority; **MVP2 is a later product scope**, not a commitment t
 ## Planning documents
 
 - [Development Phase overview](Phase/Overview.md): four development Phases, requirements mapping, and dogfooding entry conditions. Each document contains full English and Korean sections.
-- [Phase 1 — Foundation](Phase/Phase1_Foundation.md): seven Tasks and three review fixes verified; user acceptance complete. [Phase 2 — Planning](Phase/Phase2_Planning.md), [Phase 3 — Workflow](Phase/Phase3_Workflow.md), and [Phase 4 — Dogfooding](Phase/Phase4_Dogfooding.md) are unstarted outlines to refine before implementation.
+- [Phase 1 — Foundation](Phase/Phase1_Foundation.md): accepted. [Phase 2 — Planning](Phase/Phase2_Planning.md): accepted, including compatibility and skill-based documents. [Phase 3 — Workflow](Phase/Phase3_Workflow.md): reviewed draft produced during Phase 2; implementation not started. [Phase 4 — Dogfooding](Phase/Phase4_Dogfooding.md): outline.
 - [Lean MVP plan — revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md): scope, priorities, acceptance rules, development stages, dogfooding, MVP2, and planning change history. Start here.
 - [Earlier planning documents](Draft/archive/): historical designs and decisions. Their broader scope should not be assumed to apply to the lean MVP.
 
@@ -163,6 +181,9 @@ development-tools-harness/
 ├── README_ko.md
 ├── pyproject.toml
 ├── requirements-dev.lock
+├── .agents/skills/phase-doc/
+│   ├── SKILL.md
+│   └── references/phase-template.md
 ├── src/development_harness/
 ├── tests/
 │   ├── unit/
@@ -179,4 +200,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Next, detail Phase 2 and select the AI adapter and prepared example. The first adapter integration must establish which execution permissions can actually be enforced. Phase 2 implementation has not started.
+Phase 2 user acceptance is complete. Next, review the generated Phase 3 draft and verify actual worker/test permissions before live Developer/Reviewer execution. Planning approval remains planning-only.

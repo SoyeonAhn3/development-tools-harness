@@ -10,7 +10,7 @@ from pathlib import Path
 import subprocess
 import threading
 
-from .codex_adapter import environment
+from .codex_adapter import DISABLED_CODE_MODE_NOTICE, environment, parse_events
 from .model import HarnessError
 from .processes import Job
 
@@ -18,6 +18,9 @@ from .processes import Job
 ALLOWED_TOOLS = {"request_user_input"}  # No file/process/network capability.
 DENIED_TOOLS = ("exec_command", "shell", "apply_patch", "view_image", "web.run",
                 "mcp__probe__send", "spawn_agent")
+PROBE_PROMPT = "Synthetic permission probe; no project data."
+PROBE_SCHEMA = {"type": "object", "properties": {"probe": {"type": "string", "enum": ["ok"]}},
+                "required": ["probe"], "additionalProperties": False}
 
 
 def verify_capabilities(adapter):
@@ -25,6 +28,8 @@ def verify_capabilities(adapter):
     marker = adapter.directory / "forbidden-tool-write.txt"
     if marker.exists():
         raise HarnessError("Permission probe marker already exists; preserve and inspect it.")
+    schema_path = adapter.directory / "probe-schema.json"
+    schema_path.write_text(json.dumps(PROBE_SCHEMA), encoding="utf-8")
 
     class Handler(http.server.BaseHTTPRequestHandler):
         def log_message(self, *_):
@@ -38,6 +43,14 @@ def verify_capabilities(adapter):
                 if not 0 < size < 2_000_000:
                     raise ValueError("Unexpected probe request size.")
                 request = json.loads(self.rfile.read(size))
+                output_format = request.get("text", {}).get("format", {})
+                if output_format.get("type") != "json_schema" or output_format.get("schema") != PROBE_SCHEMA:
+                    raise ValueError("CLI did not transmit the required output schema.")
+                if not manifests and not any(
+                        item.get("role") == "user" and any(
+                            part.get("type") == "input_text" and part.get("text") == PROBE_PROMPT
+                            for part in item.get("content", [])) for item in request.get("input", [])):
+                    raise ValueError("CLI did not transmit the synthetic stdin prompt.")
                 names = {tool.get("name", tool.get("type")) for tool in request.get("tools", [])}
                 manifests.append(sorted(names))
                 if not names <= ALLOWED_TOOLS:
@@ -82,13 +95,13 @@ def verify_capabilities(adapter):
     worker = None
     job = Job()
     try:
-        args = adapter.arguments(probe_url=f"http://127.0.0.1:{server.server_port}/v1")
+        args = adapter.arguments(schema_path, probe_url=f"http://127.0.0.1:{server.server_port}/v1")
         worker = subprocess.Popen(args, cwd=adapter.directory, env=environment(), stdin=subprocess.PIPE,
                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                   creationflags=subprocess.CREATE_NO_WINDOW)
         job.assign(worker.pid)
         try:
-            output, error = worker.communicate(b"Synthetic permission probe; no project data.", timeout=45)
+            output, error = worker.communicate(PROBE_PROMPT.encode("utf-8"), timeout=45)
         except subprocess.TimeoutExpired as exc:
             raise HarnessError("Codex capability probe timed out; live calls are disabled.") from exc
         (adapter.directory / "permission-probe.jsonl").write_bytes(output)
@@ -107,8 +120,14 @@ def verify_capabilities(adapter):
             json.dumps({"manifests": manifests, "replies": replies, "failures": failures}, indent=2), encoding="utf-8")
         if not manifests or not expected <= blocked:
             raise HarnessError("Codex did not prove rejection of every forced tool call; live calls are disabled.")
+        notices = []
+        response, _ = parse_events(output.decode("utf-8"), allowed_notices=(DISABLED_CODE_MODE_NOTICE,), notices=notices)
+        if response != {"probe": "ok"}:
+            raise HarnessError("Codex did not return the expected synthetic JSON response.")
         return {"tool_manifest": manifests[0], "rejected_tools": list(DENIED_TOOLS),
-                "probe_requests": len(manifests), "probe_actual_ai_calls": 0}
+                "probe_requests": len(manifests), "probe_actual_ai_calls": 0,
+                "stdin_verified": True, "output_schema_verified": True, "json_response_verified": True,
+                "probe_notices": notices}
     finally:
         job.close()
         if worker:

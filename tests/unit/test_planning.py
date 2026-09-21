@@ -19,8 +19,8 @@ def words(text="Implement input validation"):
     return {"en": text, "ko": "입력 검증을 구현하고 확인한다"}
 
 
-def example_plan():
-    return {
+def example_plan(*, skill=True):
+    plan = {
         "overview": words(), "current_phase": "P1",
         "phases": [{"id": "P1", "title": words(), "goal": words(), "exit_criteria": words()}],
         "tasks": [{"id": "T1", "title": words(), "requirements": ["R1"], "paths": ["value.py"],
@@ -30,6 +30,9 @@ def example_plan():
         "code_context": [{"path": "value.py", "summary": words(), "evidence": "VALUE = 1", "kind": "inferred"}],
         "questions": [],
     }
+    if skill:
+        plan["technology"] = words("Python and pytest")
+    return plan
 
 
 @pytest.fixture
@@ -61,7 +64,7 @@ class StubAdapter:
         attempt.update(outcome="running")
         launched(attempt)
         attempt.update(ended=time.time(), duration=0.01, outcome="responded")
-        return copy.deepcopy(self.response or example_plan())
+        return copy.deepcopy(self.response or example_plan(skill="technology" in schema["properties"]))
 
 
 @pytest.fixture
@@ -221,6 +224,21 @@ def test_permission_failure_prevents_live_attempt(planning_workspace, fast_basel
     assert planner.status()["actual_ai_call_attempts"] == 0
 
 
+def test_selected_codex_path_reaches_planning_and_resume(planning_workspace, fast_baseline):
+    planner, config = planning_workspace
+    planner.register(config)
+    selected = []
+    def unavailable(model, directory, *, codex_path):
+        selected.append(codex_path)
+        raise HarnessError("Selected CLI has not been reviewed")
+    for path in ("C:/Tools/old/codex.exe", "C:/Tools/reviewed/codex.exe"):
+        run = planner.plan(adapter_factory=unavailable, codex_path=path)
+        assert "not been reviewed" in run["reason"]
+    assert selected == ["C:/Tools/old/codex.exe", "C:/Tools/reviewed/codex.exe"]
+    assert planner.status()["actual_ai_call_attempts"] == 0
+    assert len([a for a in run["attempts"] if a["role"] == "baseline_validation"]) == 1
+
+
 def test_interrupted_approved_revision_reclaims_ownership(planning_workspace, fast_baseline, monkeypatch, tmp_path):
     from development_harness import planning
     planner, config = planning_workspace
@@ -316,7 +334,7 @@ def test_plan_semantics_reject_invalid_evidence_and_references(planning_workspac
     plan = example_plan()
     mutation(plan)
     with pytest.raises(HarnessError):
-        validate_plan(plan, files)
+        validate_plan(plan, files, skill=True)
 
 
 def test_missing_baseline_evidence_blocks_approval(planning_workspace, fast_baseline):

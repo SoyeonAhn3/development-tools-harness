@@ -1,0 +1,2 @@
+# Generated plan evidence is hash-bound; preserve its original bytes on checkout.
+Phase/Generated/** -text whitespace=cr-at-eol
