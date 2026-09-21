@@ -34,6 +34,10 @@ def parser():
     doctor = commands.add_parser("doctor", help="Check ChatGPT login and prove the installed CLI's Planner capability boundary")
     doctor.add_argument("--model")
     doctor.add_argument("--codex-path", help="Absolute Codex .exe path (overrides DEVELOPMENT_HARNESS_CODEX_PATH)")
+    worker_doctor = commands.add_parser("workflow-doctor", help="Probe Windows worker permissions on synthetic files; no AI execution")
+    worker_doctor.add_argument("--backend", choices=("appcontainer", "codex-unelevated"), default="appcontainer",
+                               help="Candidate to investigate (default: administrator-free AppContainer)")
+    worker_doctor.add_argument("--codex-path", help="Absolute Codex .exe path (overrides DEVELOPMENT_HARNESS_CODEX_PATH)")
     for name, help_text in {
         "baseline": "Run registered baseline checks without an AI call",
         "plan": "Validate the baseline and generate a real bilingual plan",
@@ -57,6 +61,21 @@ def main(argv=None):
         return 2
     from .runner import Harness
     try:
+        if args.command == "workflow-doctor":
+            from .store import Store
+            import uuid
+            if args.backend == "appcontainer" and args.codex_path:
+                raise HarnessError("--codex-path requires --backend codex-unelevated; AppContainer does not use Codex.")
+            store = Store(args.project, args.state_dir)
+            directory = store.home / "worker-probes" / uuid.uuid4().hex
+            if args.backend == "appcontainer":
+                from .appcontainer_probe import diagnose_appcontainer
+                report = diagnose_appcontainer(directory)
+            else:
+                from .worker_probe import diagnose_workers
+                report = diagnose_workers(directory, codex_path=args.codex_path)
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+            return 0 if report["ready"] else 1
         if args.command in {"register", "doctor", "baseline", "plan", "plan-resume", "plan-status", "plan-approve", "plan-revise", "plan-cancel"}:
             return planning_main(args)
         harness = Harness(args.project, args.state_dir)

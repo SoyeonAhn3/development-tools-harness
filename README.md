@@ -8,7 +8,7 @@ A planned local CLI for semi-automated development: turn a Markdown specificatio
 
 ## Current status
 
-**Phases 1–2 are accepted and completed.** The Windows/Python 3.12 CLI registers prepared projects, runs baseline tests and generates versioned bilingual plans through Codex CLI and the project phase-doc skill/template. Phase 2 includes the P2-01 path fix and compatibility for reviewed CLI versions 0.154.0 and 0.155.1. All 172 tests and real planning examples passed. Phase 3 implementation and worker/test isolation remain the next development scope.
+**Phases 1–2 are accepted and completed; Phase 3 is in progress.** The Windows/Python 3.12 CLI registers prepared projects, runs baseline tests and generates versioned bilingual plans using Codex and the repository phase-doc skill. P3-T1 preparation and P3-T2 real Developer/Reviewer, controlled file changes and administrator-free isolated pytest are verified. All **265 tests passed**, plus a two-call live component example. General execution admission, orchestration, resume and acceptance remain P3-T3–T8.
 
 The roadmap below summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md). Phase 1 and Phase 2 usage sections identify implemented behavior.
 
@@ -65,6 +65,30 @@ Copy-Item -LiteralPath tests/fixtures/planning_project -Destination $planningPro
 The harness reads [the project skill](.agents/skills/phase-doc/SKILL.md) and [its template](.agents/skills/phase-doc/references/phase-template.md) from its own installation and passes them to the Planner. The template's `harness:*` blocks render validated plan data. Each `Phase/Generated/<run-id>/vN/` contains `plan.json`, `Plan.md`/`Plan_ko.md` overview indexes, bilingual `PhaseN_EnglishName.md` documents and `writing-profile.json` with exact writing rules/version/hashes. Only the current Phase has detailed Tasks. Inspect the documents before `plan-approve`; approval is planning-only.
 
 Edit template headings/layout while retaining required `{{slots}}`; changes apply on the next `register`. Existing Runs and `plan-revise --from <file>` revisions retain their pinned rules. Older Runs without a writing profile keep their original format. Wheels include the same resources. Target-project/global skills are not auto-loaded; planning does not update README or development logs. Source quotations are rendered as code evidence so relative links are not misinterpreted. See [Phase 2](Phase/Phase2_Planning.md) for verification and limitations.
+
+## Phase 3 worker investigation
+
+`workflow-doctor` now tests an administrator-free Windows AppContainer on fresh synthetic files and owned local listeners, including child processes. It copies Python into the disposable probe directory and creates/removes per-user application profiles. It does not call AI, edit target-project files or approve implementation. No administrator account/firewall setup is requested.
+
+```powershell
+& $harnessPython -m development_harness --project . workflow-doctor
+# Reproduce the earlier Codex candidate investigation explicitly:
+& $harnessPython -m development_harness --project . workflow-doctor --backend codex-unelevated
+```
+
+Read the JSON output and saved `report.json` under `evidence_directory`. Exit code 1 means a failed/incomplete probe. On this standard-user Windows 10 environment, AppContainer passed role/file/token checks and blocked all 24 parent/child TCP/UDP IPv4/IPv6 attempts against owned loopback listeners. A deadline test also stopped the process and child. `ready=true` means this synthetic candidate investigation passed; `execution_enabled=false` remains explicit. External-network and live-role behavior are not established by this command.
+
+Company policy rules out elevated setup. The prior unelevated Codex candidate still fails raw TCP denial; `--backend codex-unelevated` retains that investigation for reviewed CLI 0.155.1, with `--codex-path` applying only there. AppContainer diagnosis requires no Codex. T2 now reuses the existing text-only adapter for live roles and tests generated code inside AppContainer. General workflow commands remain pending; [Phase 3](Phase/Phase3_Workflow.md) records the component evidence and remaining work.
+
+## Phase 3 component verification
+
+T2 provides real roles and isolated tests as components. To reproduce its small example from this repository, run:
+
+```powershell
+& $harnessPython scripts/verify_t2.py --live
+```
+
+This makes two actual AI calls on a fresh fixture copy outside OneDrive. It checks the baseline, applies only allowed file changes, runs isolated tests and independent checks, and requests a separate read-only review. The output names the saved report directory. It supports the reviewed Python/pytest dependency set; tests write artifacts to scratch. General plan execution, correction/resume and acceptance await P3-T3–T8. See [T2 evidence](Phase/Evidence/Phase3_Workers.json).
 
 ## Intended workflow
 
@@ -171,7 +195,7 @@ P0/P1/P2 express priority; **MVP2 is a later product scope**, not a commitment t
 ## Planning documents
 
 - [Development Phase overview](Phase/Overview.md): four development Phases, requirements mapping, and dogfooding entry conditions. Each document contains full English and Korean sections.
-- [Phase 1 — Foundation](Phase/Phase1_Foundation.md): accepted. [Phase 2 — Planning](Phase/Phase2_Planning.md): accepted, including compatibility and skill-based documents. [Phase 3 — Workflow](Phase/Phase3_Workflow.md): reviewed draft produced during Phase 2; implementation not started. [Phase 4 — Dogfooding](Phase/Phase4_Dogfooding.md): outline.
+- [Phase 1 — execution foundation](Phase/Phase1_Foundation.md): accepted. [Phase 2 — real connection and planning](Phase/Phase2_Planning.md): accepted. [Phase 3 — workflow](Phase/Phase3_Workflow.md): in progress; P3-T1–T2 verified, P3-T3–T8 pending. [Phase 4 — dogfooding and MVP acceptance](Phase/Phase4_Dogfooding.md): outline.
 - [Lean MVP plan — revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md): scope, priorities, acceptance rules, development stages, dogfooding, MVP2, and planning change history. Start here.
 - [Earlier planning documents](Draft/archive/): historical designs and decisions. Their broader scope should not be assumed to apply to the lean MVP.
 
@@ -200,4 +224,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Phase 2 user acceptance is complete. Next, review the generated Phase 3 draft and verify actual worker/test permissions before live Developer/Reviewer execution. Planning approval remains planning-only.
+Phase 2 user acceptance is complete. Phase 3 has an execution contract, prepared example and reproducible permission investigation. A stronger verified boundary is needed before actual Developer/Reviewer execution; the text-only Planner boundary does not establish worker/test isolation.

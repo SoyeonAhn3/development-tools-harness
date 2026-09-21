@@ -8,7 +8,7 @@ Markdown 기획서를 단계별 개발 계획으로 바꾸고, 승인된 작업�
 
 ## 현재 상태
 
-**Phase 1–2는 인수·완료했습니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬·템플릿을 통한 버전별 영문·국문 계획 생성을 수행합니다. Phase 2에는 P2-01 경로 수정과 검토된 CLI 0.154.0·0.155.1 호환성 개선을 포함합니다. 검사 172개와 실제 계획 예제를 통과했습니다. Phase 3 구현·작업 및 테스트 권한 분리는 다음 개발 범위입니다.
+**Phase 1–2는 인수·완료했으며 Phase 3는 진행 중입니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬을 사용한 버전별 영문·국문 계획 생성을 수행합니다. P3-T1 준비와 P3-T2 실제 Developer·Reviewer, 파일 변경 검사, 관리자 설정 없는 격리된 pytest를 검증했습니다. **전체 검사 265개**와 실제 호출 2회의 구성요소 예제를 통과했습니다. 일반 실행 승인·순차 실행·재개·인수는 P3-T3–T8에 남아 있습니다.
 
 아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. Phase 1·2 사용 안내에 구현된 동작을 구분했습니다.
 
@@ -65,6 +65,30 @@ Copy-Item -LiteralPath tests/fixtures/planning_project -Destination $planningPro
 하네스는 자체 설치본의 [프로젝트 스킬](.agents/skills/phase-doc/SKILL.md)과 [템플릿](.agents/skills/phase-doc/references/phase-template.md)을 읽어 Planner에 전달하고, 검사한 계획 데이터를 템플릿의 `harness:*` 블록으로 문서화합니다. `Phase/Generated/<run-id>/vN/`에는 `plan.json`, `Plan.md`·`Plan_ko.md` 개요와 링크, 두 언어를 함께 담은 `PhaseN_EnglishName.md`, 작성 규칙 원문·버전·해시를 담은 `writing-profile.json`이 생성됩니다. 현재 Phase만 Task를 상세화합니다. 문서를 확인한 뒤 `plan-approve`하며 이 승인은 계획 전용입니다.
 
 필수 `{{slots}}`를 유지하면서 템플릿 제목·배치를 수정하면 다음 `register`부터 반영됩니다. 진행 중인 Run과 `plan-revise --from <파일>` 수정본은 등록 당시 규칙을 유지합니다. 작성 규칙 기록이 없는 이전 Run은 기존 형식으로 처리합니다. 설치용 wheel에도 같은 리소스를 포함합니다. 대상 프로젝트·전역 스킬을 자동 탐색하거나 계획 생성 중 README·개발 로그를 갱신하지 않습니다. 원문 인용은 코드 근거로 표시해 상대 링크를 잘못 해석하지 않도록 했습니다. 검증 결과와 한계는 [Phase 2](Phase/Phase2_Planning.md)에 기록했습니다.
+
+## Phase 3 작업 권한 조사
+
+`workflow-doctor`는 새 합성 파일과 자체 로컬 수신 서버로 관리자 설정 없는 Windows AppContainer와 자식 프로세스를 시험합니다. 임시 시험 폴더에 Python을 복사하고 사용자별 앱 프로필을 생성·삭제합니다. AI 호출·대상 프로젝트 파일 수정·구현 승인은 수행하지 않으며 관리자 계정·방화벽 설정을 요청하지 않습니다.
+
+```powershell
+& $harnessPython -m development_harness --project . workflow-doctor
+# 이전 Codex 후보 시험을 명시적으로 재현하려면:
+& $harnessPython -m development_harness --project . workflow-doctor --backend codex-unelevated
+```
+
+JSON 출력과 `evidence_directory` 아래의 `report.json`을 확인합니다. 종료 코드 1은 실패·미완료 시험을 뜻합니다. 이 PC의 Windows 10 일반 사용자 환경에서 AppContainer의 역할·파일·토큰 검사를 통과했고, 부모·자식의 자체 루프백 서버 대상 TCP·UDP, IPv4·IPv6 연결 24건이 모두 차단됐습니다. 시간 초과 시험에서도 프로세스와 자식이 종료됐습니다. `ready=true`는 이 합성 후보 시험 통과를 뜻하며 `execution_enabled=false`를 유지합니다. 외부 네트워크와 실제 AI 역할 동작까지 입증한 명령은 아닙니다.
+
+회사 정책상 elevated 설정은 제외합니다. 기존 unelevated Codex 후보의 직접 TCP 차단은 실패하며 `--backend codex-unelevated`로 검토된 CLI 0.155.1의 시험을 유지합니다. `--codex-path`는 그 방식에만 사용하며 AppContainer 진단에는 Codex가 필요 없습니다. T2는 기존 텍스트 전용 Adapter를 실제 역할에 재사용하고 생성 코드를 AppContainer에서 검사합니다. 일반 Workflow 명령은 아직 연결 전이며 [Phase 3](Phase/Phase3_Workflow.md)에 구성요소 근거와 남은 작업을 기록했습니다.
+
+## Phase 3 구성요소 검증
+
+T2에서 실제 AI 역할과 격리된 테스트를 구성요소로 구현했습니다. 이 저장소에서 작은 예제를 재현하려면 다음 명령을 사용합니다.
+
+```powershell
+& $harnessPython scripts/verify_t2.py --live
+```
+
+OneDrive 밖에 새 예제 복사본을 만들고 실제 AI를 두 번 호출합니다. 기본 검사 후 허용한 파일 변경만 적용하고 격리된 테스트·독립 검사를 거쳐 별도 읽기 전용 리뷰를 받습니다. 출력에 보고서 저장 위치를 표시합니다. 검토한 Python·pytest 의존성을 지원하며 테스트 출력은 scratch를 사용합니다. 일반 계획 실행·수정·재개·인수는 P3-T3–T8 연결이 필요합니다. [T2 검증 근거](Phase/Evidence/Phase3_Workers.json)를 참고하세요.
 
 ## 목표 사용 흐름
 
@@ -171,7 +195,7 @@ P0·P1·P2는 우선순위이며, **MVP2는 후속 제품 범위**입니다. 모
 ## 기획 문서
 
 - [전체 개발 Phase 개요](Phase/Overview.md): 4개 개발 Phase, 요구사항 대응표, dogfooding 진입 조건. 각 문서에 영문·국문 전체 내용을 함께 제공합니다.
-- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 호환성·스킬 기반 문서 포함 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): Phase 2에서 검토 초안 생성, 구현 미시작. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
+- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): 진행 중, P3-T1–T2 검증 완료·P3-T3–T8 대기. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
 - [축소 MVP 계획서 — 0.4](Draft/ai-development-harness-lean-mvp-plan.md): 범위, 우선순위, 인수 규칙, 개발 단계, dogfooding, MVP2, 기획 변경 이력. 이 문서부터 확인하세요.
 - [과거 기획 문서](Draft/archive/): 이전 설계와 결정 기록입니다. 과거 문서의 더 넓은 범위가 축소 MVP에도 적용된다고 가정하지 않습니다.
 
@@ -200,4 +224,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Phase 2 사용자 인수를 완료했습니다. 다음은 생성된 Phase 3 초안을 검토하고 실제 Developer·Reviewer 실행 전에 작업·테스트 권한을 검증하는 단계입니다. 계획 승인은 계획 전용으로 유지합니다.
+Phase 2 사용자 인수를 완료했습니다. Phase 3 실행 계약·예제·재현 가능한 권한 조사를 준비했습니다. 실제 Developer·Reviewer 연결에는 더 강한 권한 수단의 검증이 필요하며, 텍스트 전용 Planner 경계만으로 작업·테스트 권한 분리를 입증하지 않습니다.
