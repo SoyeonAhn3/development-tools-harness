@@ -38,6 +38,9 @@ def test_real_role_contracts_use_separate_single_use_sessions(calls, tmp_path):
     review = reviewer.invoke(scope, before=scope.files, validation=[{"content_version": digest(scope.baseline), "outcome": "passed"}])
     assert dev["attempt"]["session_id"] != review["attempt"]["session_id"]
     assert dev["attempt"]["actual_ai_call_attempts"] == review["attempt"]["actual_ai_call_attempts"] == 1
+    assert review["attempt"]["review_verdict"] == "pass"
+    assert review["attempt"]["review_findings_hash"] == digest([])
+    assert review["attempt"]["review_validation_hashes"] == [digest({"content_version": digest(scope.baseline), "outcome": "passed"})]
     assert [entry[0] for entry in seen] == ["developer", "reviewer"]
     assert "independent read-only Reviewer" in seen[1][1]
     with pytest.raises(HarnessError, match="fresh session"):

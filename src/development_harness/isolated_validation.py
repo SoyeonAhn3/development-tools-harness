@@ -10,6 +10,7 @@ import shutil
 import sys
 import time
 import uuid
+import xml.etree.ElementTree as ET
 
 from .appcontainer_probe import copy_runtime, diagnose_appcontainer, tree_hash
 from .files import require_single_link, require_snapshot, snapshot, target
@@ -24,6 +25,54 @@ from .worker_contract import save_record
 DISTRIBUTIONS = {"pytest": "9.1.1", "pluggy": "1.6.0", "iniconfig": "2.3.0", "packaging": "26.3",
                  "pygments": "2.21.0", "colorama": "0.4.6", "psutil": "7.2.2"}
 ENTRY = Path(__file__).with_name("validation_entry.py")
+
+
+def failure_classification(outcome, junit):
+    """Separate verified code failures from faults that cannot justify a retry.
+
+    Only structured JUnit exception fields are considered, never process output.
+    An unknown exception or incomplete suite stops for inspection. This does not
+    change the underlying result, including the legacy ``failed`` outcome.
+    """
+    if outcome == "passed":
+        return None
+    if outcome == "interrupted":
+        return "interrupted"
+    if outcome != "failed":
+        return "validation_incomplete"
+    try:
+        cases = list(ET.parse(junit).getroot().iter("testcase"))
+    except (OSError, ET.ParseError):
+        return "validation_incomplete"
+    if not cases or any(case.find("skipped") is not None for case in cases):
+        return "validation_incomplete"
+    kinds = []
+    code_exceptions = {"AssertionError", "AttributeError", "IndexError", "KeyError", "NameError",
+                       "NotImplementedError", "RecursionError", "RuntimeError", "StopIteration",
+                       "SyntaxError", "TypeError", "UnboundLocalError", "ValueError", "ZeroDivisionError"}
+    environment_exceptions = {"ImportError", "ModuleNotFoundError", "FileNotFoundError", "OSError",
+                              "IOError", "ConnectionError", "TimeoutError", "MemoryError"}
+    for case in cases:
+        for problem in (child for child in case if child.tag in {"failure", "error"}):
+            message = problem.get("message", "").strip()
+            # Pytest fixture errors wrap the exception in this JUnit attribute.
+            message = re.sub(r'^failed on (?:setup|teardown) with [\"\']', "", message)
+            exception = problem.get("type", "").rsplit(".", 1)[-1]
+            if not exception:
+                match = re.match(r"([A-Za-z_][A-Za-z_0-9]*(?:Error|Exception))(?::|$)", message)
+                exception = match.group(1) if match else ""
+            if exception == "PermissionError" or re.match(r"\[(?:Errno 13|WinError 5)\]", message):
+                kinds.append("permission")
+            elif exception in environment_exceptions or problem.tag == "error":
+                kinds.append("environment")
+            elif exception in code_exceptions or (not exception and message.startswith("assert ")):
+                kinds.append("code")
+            else:
+                kinds.append("validation_incomplete")
+    for stop in ("permission", "environment", "validation_incomplete"):
+        if stop in kinds:
+            return stop
+    return "code" if kinds else "validation_incomplete"
 
 
 def copy_validation_runtime(directory):
@@ -90,7 +139,7 @@ class IsolatedValidator:
         self.policy = report
         return report
 
-    def run(self, check, project, *, launched=lambda _: None):
+    def run(self, check, project, *, launched=lambda _: None, attempt_id=None):
         check = pytest_arguments(check)
         project = Path(project).resolve(strict=True)
         check_home(self.directory, project)
@@ -104,7 +153,7 @@ class IsolatedValidator:
         work, scratch = directory / "project", directory / "tmp"
         work.mkdir(parents=True)
         scratch.mkdir()
-        evidence = {"id": directory.name, "outcome": "preparing", "content_version": digest(baseline),
+        evidence = {"id": attempt_id or directory.name, "outcome": "preparing", "content_version": digest(baseline),
                     "source_project": str(project), "copied_project": str(work), "argv": check["argv"],
                     "check_hash": digest(check), "backend": "appcontainer", "started": time.time(),
                     "permission_report": str(Path(self.policy["evidence_directory"]) / "report.json"),
@@ -176,12 +225,16 @@ class IsolatedValidator:
             raise
         except Exception as exc:
             evidence.update(outcome="unverified", reason=str(exc))
+            if isinstance(exc, PermissionError):
+                evidence["failure_kind"] = "permission"
         finally:
             if container:
                 evidence["container"] = container.record
             interrupted = evidence["outcome"] == "interrupted"
             evidence.update(ended=None if interrupted else time.time())
             evidence["duration"] = None if interrupted else evidence["ended"] - evidence["started"]
+            evidence.setdefault("failure_kind", failure_classification(evidence["outcome"], directory / "pytest.xml"))
+            evidence["stop_kind"] = evidence["failure_kind"] if evidence["failure_kind"] != "code" else None
             save_record(directory / "validation.json", evidence)
         return evidence
 
@@ -190,5 +243,6 @@ def review_evidence(result):
     """Bounded actual results from this invocation, without loading other logs."""
     return {key: result[key] for key in ("id", "content_version", "check_hash", "outcome", "tests", "argv")} | {
         "exit_code": result.get("exit_code"), "reason": result.get("reason"),
+        "failure_kind": result.get("failure_kind"), "stop_kind": result.get("stop_kind"),
         "stdout": result.get("process_result", {}).get("stdout", "")[-16000:],
         "stderr": result.get("process_result", {}).get("stderr", "")[-8000:]}

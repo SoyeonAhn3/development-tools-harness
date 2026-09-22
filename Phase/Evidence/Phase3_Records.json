@@ -1,0 +1,97 @@
+{
+  "date": "2026-09-22",
+  "phase": "Phase3",
+  "task": "P3-T3",
+  "status": "Implemented and verified; P3-T4-T8 and Phase acceptance pending",
+  "base_commit": "d6957b03ce420821fa80bfafee17cd2738aef10f",
+  "tests": {
+    "tests": 378,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 378,
+    "seconds": 272.571,
+    "report": "%LOCALAPPDATA%/development-tools-harness/t3-regression/27473119975a/pytest.xml",
+    "report_sha256": "f6f71d669f8ece8803f209cbcf739b951529fff8cadc2f40cc64ee09b6f31051",
+    "pip_check": "passed",
+    "new_cases": 113
+  },
+  "actual_live_ai_call_attempts": 0,
+  "ai_transport_verification": "Deterministic local Python subprocesses exercise the real adapter lifecycle and SQLite bridge; these are not AI-service calls. T2 live-role evidence remains historical.",
+  "workflow_execution_enabled": false,
+  "user_phase_acceptance": null,
+  "implemented": [
+    "Version-bound controller execution admission separate from planning-only approval",
+    "workflow-prepare, workflow-approve, workflow-status and workflow-cancel commands without AI dispatch",
+    "Atomic state/event transitions with stable replay keys and conflict detection",
+    "Controller attempt IDs, process identities, dispatch intent, response/session evidence and unknown measurements",
+    "Durable approval waits without duplicate accumulation",
+    "Stable finding identities, disposition histories, mandatory deferral and evidence-bound closure checks",
+    "Single-role and isolated-check controller entries bound to the admission journal",
+    "Pending review ingestion and incomplete attempts block subsequent dispatch"
+  ],
+  "verification": {
+    "admission": "Unapproved/stale plans, changed source/artifacts/config/profile/policy, unsupported checks, protected paths, concurrent ownership, legacy compatibility and unchanged planning-only approval",
+    "journal": "Transaction rollback, actual controller process death during SQLite event insert, dispatch callback failures, replay idempotency and preservation of observed versus unknown measurements",
+    "review": "Repeated findings, explicit identity mappings, mandatory deferral, fresh review/validation provenance, stale evidence rejection and ingestion interruption",
+    "real_processes": "Local subprocess transport and standard-user AppContainer pytest with controller-assigned attempt identity",
+    "independent_review_fixes": [
+      "Reject source edits between initial planning check and admission snapshot",
+      "Block new calls when a completed reviewer response has not been ingested"
+    ]
+  },
+  "isolated_validation_evidence": {
+    "database": "%LOCALAPPDATA%/development-tools-harness/t2-tests/d56227992711/journal-runtime/dcad23c89f93ca1018888896e6e57df73590a79400a041061425a10102f0f814/state.sqlite3",
+    "database_sha256": "68d09721d5258c5a2c31b2a995187c54501832c5efc6ab7231cca6c32ef380e5",
+    "record": "%LOCALAPPDATA%/development-tools-harness/t2-tests/d56227992711/validator/c-a7c08c7fe573/validation.json",
+    "record_sha256": "d1b188f84977e33b10939f2273c69473064365e71da06a9ab0a6b45c6493d754",
+    "attempt_id": "d906dfc596644f5e9bce88af7c35931f",
+    "outcome": "passed",
+    "tests": 1,
+    "backend": "appcontainer",
+    "check_hash": "b77a480083fc9df29de1f95d8de2d03d617af304f87b9af32321833fa59d1a73",
+    "content_version": "4cc09ffe76462b59ba7b048b728d22ac6fa2e2ce93e0b443c461890d29117ebd",
+    "process": {
+      "pid": 29524,
+      "created": 1790042862.7389505
+    }
+  },
+  "previous_full_regression": {
+    "report": "%LOCALAPPDATA%/development-tools-harness/t3-regression/919eb2b2d02a/pytest.xml",
+    "tests": 378,
+    "passed": 377,
+    "failures": 1,
+    "resolution": "A newly added regression fixture omitted the response hash required by the strengthened journal contract. The fixture was corrected, its five tests passed, and the final complete suite passed all 378 tests."
+  },
+  "source_sha256": {
+    "src/development_harness/cli.py": "4c460d59899b278c463c92d1d09cad7a14bb13b4eb17de5a0da145ebddab57d2",
+    "src/development_harness/codex_adapter.py": "eedb623670b107324a3625417b4077d90c577509b212cba0ac508e3e18c52817",
+    "src/development_harness/isolated_validation.py": "4ea87d16cc36c4b796e5f662867345917230368550d9ba1e4aea25f3b66e70eb",
+    "src/development_harness/planning.py": "269348be044de9867f82c93d9c883054f334b08d8f51c7a8034f765c3414db59",
+    "src/development_harness/runner.py": "28233156db1d4e0b2fd0d59f36f17d7e367bd19bf1dfd1f5822f8d35aef7148e",
+    "src/development_harness/store.py": "ca2796889eeef62948c058fa61c8e3f1b5e6b080ce152f3e38e292be86255ca1",
+    "src/development_harness/workers.py": "9df955dc4aed054d3b2ad525faff379e6187b6dcf310940cd4ada5b7b7478e90",
+    "src/development_harness/workflow.py": "488b95552943b8e916a8294c7440ba105f5f96c0ffaa422c7b3acfd862d61ccf",
+    "src/development_harness/workflow_records.py": "d6b4b4e1daf6a6a7926101915474bcd19f56ba1b6807543d09d237cd393b835e",
+    "tests/integration/test_workflow_admission_cli.py": "6dc624187c3a4c1fe3cde6ec2bda67f6f17c549b1c598ac73decc8b9af66c596",
+    "tests/integration/test_workflow_journal_bridge.py": "c1cae2f9385c890a2d51de54f42abe5e3685e52cdf80c9c0ad0d0d28dfcd48f5",
+    "tests/integration/test_workflow_permissions.py": "aab5d1dc30b22ea269e0aa9fed7c1ab7f642da93803f0f3dc56557603f94cb9b",
+    "tests/unit/test_worker_calls.py": "24bd20210bc14eda09be53b457dae4464090fe975e754c8a4e78e3158c5631ea",
+    "tests/unit/test_worker_lifecycle.py": "4b60cc17d5efa740efc5a81ff5f7c14e173a450c7544233991ab2809e4c6f813",
+    "tests/unit/test_workflow_admission.py": "a2ed2605bf1f50b9d0e7daa31961d912b085c3fef0e5dd105199f43c0e9d3313",
+    "tests/unit/test_workflow_records.py": "0119b0c4cccac3025a5c0f3d95e0d0ebb5de30309402d770f90190e0502dfb5f",
+    "tests/unit/test_workflow_review_regressions.py": "0af52bf602502ecb995bab708868e383d90c306cfa6d5d5856e488796194c6b6"
+  },
+  "remaining_work": [
+    "P3-T4 sequential execution and corrections",
+    "P3-T5 process-aware recovery",
+    "P3-T6 reports, feedback and acceptance",
+    "P3-T7 accepted end-to-end example",
+    "P3-T8 fixed-runner isolation"
+  ],
+  "limits": [
+    "No automatic task scheduling, patch application or recovery is enabled by admission.",
+    "Unknown delivery is retained for inspection; external exactly-once delivery is not claimed.",
+    "No new live AI-service call was made during T3 verification."
+  ]
+}

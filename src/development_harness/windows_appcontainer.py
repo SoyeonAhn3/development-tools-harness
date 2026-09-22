@@ -164,7 +164,7 @@ class AppContainer:
         self.record["grants"].append({"path": str(path), "rights": rights})
 
     def run(self, argv, cwd, output, *, timeout=25, scratch=None, launched=lambda _: None):
-        """Create suspended, assign a kill-on-close job, verify token, then start."""
+        """Create suspended inside a kill-on-close job, verify token, then start."""
         if type(timeout) not in {int, float} or not math.isfinite(timeout) or not 0 < timeout <= 3600:
             raise HarnessError("AppContainer timeout must be between 0 and 3600 seconds.")
         cwd, output = self.owned(cwd), self.owned(output)
@@ -174,10 +174,16 @@ class AppContainer:
         api, process, attributes, job = self.api, _Process(), None, None
         started = time.time()
         try:
+            job = Job()
             length = ctypes.c_size_t()
-            api.InitializeProcThreadAttributeList(None, 2, 0, ctypes.byref(length))
+            api.InitializeProcThreadAttributeList(None, 3, 0, ctypes.byref(length))
             attributes = ctypes.create_string_buffer(length.value)
-            _checked(api.InitializeProcThreadAttributeList(attributes, 2, 0, ctypes.byref(length)))
+            _checked(api.InitializeProcThreadAttributeList(attributes, 3, 0, ctypes.byref(length)))
+            # Assign during creation so controller death cannot strand a suspended
+            # process between CreateProcessW and AssignProcessToJobObject.
+            jobs = (wintypes.HANDLE * 1)(job.handle)
+            _checked(api.UpdateProcThreadAttribute(attributes, 0, 0x2000D, jobs,
+                                                   ctypes.sizeof(jobs), None, None))
             capabilities = _Capabilities(self.sid, None, 0, 0)
             _checked(api.UpdateProcThreadAttribute(attributes, 0, 0x20009, ctypes.byref(capabilities),
                                                    ctypes.sizeof(capabilities), None, None))
@@ -205,12 +211,11 @@ class AppContainer:
                 finally:
                     for handle in handles:
                         os.set_handle_inheritable(handle, False)
-                job = Job()
-                job.assign(process.pid)
                 token = token_evidence(api, process.process)
                 if token != {"appcontainer": True, "capability_count": 0, "elevated": False}:
                     raise HarnessError("Unexpected AppContainer token; process was not started.")
-                launched({"process": identity(process.pid), "token": token, "outcome": "running"})
+                launched({"process": identity(process.pid), "containment": dict(job.record),
+                          "token": token, "outcome": "running"})
                 if api.ResumeThread(process.thread) == 0xffffffff:
                     raise ctypes.WinError(ctypes.get_last_error())
                 deadline = time.monotonic() + timeout
@@ -228,7 +233,8 @@ class AppContainer:
                 _checked(api.GetExitCodeProcess(process.process, ctypes.byref(code)))
                 job.close()  # Also stop children left behind by a finished parent.
             result = {"outcome": "finished" if state == 0 else "interrupted", "exit_code": code.value,
-                      "pid": process.pid, "token": token, "duration": time.time() - started if state == 0 else None}
+                      "pid": process.pid, "containment": dict(job.record), "token": token,
+                      "duration": time.time() - started if state == 0 else None}
             for name in ("stdout", "stderr"):
                 with (output / (name + ".log")).open("rb") as stream:
                     raw = stream.read(1024 * 1024 + 1)

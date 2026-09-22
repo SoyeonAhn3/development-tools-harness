@@ -1,0 +1,137 @@
+{
+  "date": "2026-09-22",
+  "phase": "Phase3",
+  "task": "P3-T6",
+  "status": "Implemented and verified; P3-T7, P3-T8 and Phase 3 user acceptance remain pending",
+  "base_commit": "d6957b03ce420821fa80bfafee17cd2738aef10f",
+  "approved_task_source": "Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/plan.json",
+  "user_phase_acceptance": null,
+  "actual_ai_calls_during_t6": 0,
+  "tests": {
+    "status": "passed",
+    "total": 632,
+    "passed": 632,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "duration_seconds": 1801.44,
+    "previous_t5_unique_cases": 536,
+    "new_t6_cases": 96,
+    "new_t6_case_groups": {
+      "tests.integration.test_workflow_results": 14,
+      "tests.integration.test_workflow_acceptance": 22,
+      "tests.integration.test_workflow_feedback_flow": 6,
+      "tests.unit.test_workflow_feedback": 34,
+      "tests.unit.test_workflow_replanning": 20
+    },
+    "report_path": "%LOCALAPPDATA%/development-tools-harness/t6-regression/43c96f65d234/pytest.xml",
+    "report_sha256": "f84d5bd39f393a72c230c56676ee5ce8ef0db86e4efe2266e51d5237bfe338c3",
+    "source_files_verified_unchanged": 70,
+    "pip_check": "passed",
+    "note": "One final full-suite run on the unchanged source/test manifest; no failures, errors or skips. Earlier focused runs are not added to this total."
+  },
+  "source_manifest_at_regression_start": {
+    "path": "%LOCALAPPDATA%/development-tools-harness/t6-regression/43c96f65d234/source-at-start.json",
+    "sha256": "0540030a8f25007d9abd99e657cc910ca7715b3ea9a25b6aa6601029a506156e"
+  },
+  "implemented": [
+    "Read-only JSON workflow-report for success, failure, interruption, permission failure, unverified proof, replanning and superseded histories",
+    "Delivered files with exact contributing patches/Tasks, current and final validation, unresolved findings/feedback, manual/reuse status and actual evidence paths",
+    "Exact original feedback and idempotent routing/outcome history; a same-scope defect consumes the existing Task correction allowance without resetting approval or records",
+    "After an earlier Task correction, revalidate and independently review previously completed later Tasks; run all final checks again",
+    "Changed requirements invalidate the old planning/execution route; atomically preserve/supersede the workflow and register fresh current-file planning with no approval",
+    "Replanning baselines for generated source/tests use standard-user AppContainer and named-Job/PID checks without host execution fallback",
+    "Explicit user reuse explanations refer to actual passing final-validation IDs for every current reused requirement, including requirements with no Task",
+    "Required manual definitions are pinned before execution approval; actual observations are versioned against plan, policy, code and final-completion identity",
+    "Explicit workflow-accept only after complete task/review order, all final checks, intact evidence, no mandatory unresolved work, and current reuse/manual confirmation",
+    "Separate result-acceptance authorization and measured waiting intervals; technical completion remains distinct from user acceptance"
+  ],
+  "commands": [
+    "workflow-prepare --manual-checks <json-array-file>",
+    "workflow-report",
+    "workflow-feedback --kind defect --task <task-id> --text <original-feedback>",
+    "workflow-feedback --kind requirements --text <original-feedback>",
+    "workflow-replan",
+    "workflow-reuse --requirement <id> --validation-ids <final-attempt-ids> --outcome <passed|failed> --evidence <observed-proof>",
+    "workflow-manual --check <id> --outcome <passed|failed> --evidence <observed-proof>",
+    "workflow-accept"
+  ],
+  "verification": {
+    "reports": "Actual isolated success/failure, correction exhaustion, permission failure, forced-controller interruption and partial patches; reports preserve DB bytes, events, project files, calls and approvals.",
+    "feedback": "Exact multiline text, stable replay IDs, unchanged approval/attempt history, correction exhaustion, code-versus-environment routing and fresh independent review before marking corrected.",
+    "same_content_correction": "A new final-validation batch invalidates old manual confirmation even when application bytes are unchanged. Downstream Tasks receive validation/review without duplicate Developer calls.",
+    "replanning": "New current-file baseline and unapproved planning; atomic rollback on insertion/event failure and real os._exit(77), no ownership loss, idempotent linked replacement and no old-approval bypass.",
+    "isolated_replanning": "Actual AppContainer baseline retains baseline-validation identity, input hash and zero-capability non-elevated token. Permission failures, failed checks and interruption block baseline credit and Planner dispatch without host fallback.",
+    "reuse_and_manual": "No-Task reused requirements; missing, failed and stale evidence; baseline/non-final IDs rejected; every declared manual check remains mandatory.",
+    "acceptance": "Precompletion, user edits, edits during final-evidence inspection, missing/modified final records/JUnit/log/Reviewer responses, failed or substituted final batches and unresolved mandatory findings block acceptance.",
+    "acceptance_binding": "Final evidence follows every role attempt, is latest for its registered check, matches the durable technical-completion event and AppContainer token, and retains sealed artifacts. Repeat acceptance is idempotent.",
+    "legacy": "Historical runs lack the newly approved result policy/seals and cannot be silently accepted or upgraded.",
+    "ai_transport": "Tests use deterministic local role subprocesses, not new AI-service calls. Generated application checks execute in actual AppContainer. Test-fixture acceptance is not user acceptance of this Phase."
+  },
+  "integration_fixes": [
+    "Existing Store initialization no longer rewrites the SQLite user-version header when merely opening an existing journal; missing schemas are not silently rebuilt.",
+    "Final validation IDs must match the technical-completion event and follow all role attempts, preventing reuse of an earlier same-content Task check.",
+    "Final file identity is checked again after evidence inspection to preserve an edit made during acceptance verification.",
+    "Requirements replanning keeps generated tests in AppContainer instead of using the original host baseline validator.",
+    "The T5 final-timeout regression now distinguishes preserved execution-approval wait from the newly introduced result-acceptance wait."
+  ],
+  "historical_live_report_inspection": {
+    "verification": {
+      "path": "%LOCALAPPDATA%/development-tools-harness/t6-results/df2c8127f247/verification.json",
+      "sha256": "7c221a03fe09191f6995c127b32aea2776ab7800fbeb3b46f859fca1f66952b7"
+    },
+    "report": {
+      "path": "%LOCALAPPDATA%/development-tools-harness/t6-results/df2c8127f247/report.json",
+      "sha256": "d7fdaa05ebb28c2d3cc3599ca80cf3b8e36e250407e85fa961e4480e5c003904"
+    },
+    "source_t5_report": {
+      "path": "%LOCALAPPDATA%/development-tools-harness/t5-live/0bd5406cb3a6/report.json",
+      "sha256": "2bcf63b6a4199bd137e6cb370044e96eab7d9bdc8b07cacc85f8922968c57866"
+    },
+    "passed": true,
+    "expected_cli_exit_code": 1,
+    "historical_stage": "technically_complete",
+    "current_report_outcome": "unverified",
+    "acceptance_blockers": [
+      "Legacy results lack approved acceptance policy and sealed evidence; prepare a new approved workflow.",
+      "Reuse requirement R1 is missing."
+    ],
+    "database_sha256_before": "72364c75ce02135149d427c9ab20278fc7a01ce2d9680eb06870181843c5b664",
+    "database_sha256_after": "72364c75ce02135149d427c9ab20278fc7a01ce2d9680eb06870181843c5b664",
+    "project_unchanged": true,
+    "additional_ai_calls": 0,
+    "user_acceptance": false,
+    "note": "This reads the existing two-call T5 live result. Its expected unverified report and blocked acceptance prove the new legacy/reuse guards without changing historical evidence or making a new live call."
+  },
+  "source_sha256": {
+    "src/development_harness/results.py": "71ab75e63e663aa501c5d0e617db54b418e562f2296cbfb244e1a29a07134b02",
+    "src/development_harness/workflow_acceptance.py": "896990133f724fb2d54449e09f932a546fa623ccc7c5479b8e099774574c3103",
+    "src/development_harness/workflow_feedback.py": "ed42b6f943490495d515d36c336e15280e97917e91fa05ccf60785d1ee30d6ed",
+    "src/development_harness/workflow.py": "0b443c2045e1c532c4bd9024980b45caabf397b82ca851c73506505791035cb2",
+    "src/development_harness/workflow_execution.py": "03ecbd328a08f88926fc5aeff31c2c88f4aabea94a2ffb9b4c01a80355f6e272",
+    "src/development_harness/workflow_recovery.py": "ab04fb04bfd226a07a7d83775900690179ba45f10815d766d1d0579befe8c205",
+    "src/development_harness/planning.py": "edc6c6d152ab7555f53434c7069ff02daf4bfb5ded59c9ac0dd7ec5f5f4ad74d",
+    "src/development_harness/store.py": "d4c9ee557aa9380f179b6864ff735a6dd17df94b339c7663620dff9fa34d6834",
+    "src/development_harness/cli.py": "46743e01c102c1ff087a0bba90dac807bed9b21bdaed02b61f615b721bd8e2ae",
+    "tests/integration/test_workflow_results.py": "bc9203f588106ac8337eae188735b2c31f648e5ab85c497c2301bce5d9ecdd7b",
+    "tests/integration/test_workflow_acceptance.py": "f22b45b91141caae990bca572bf610e1a7eb41c1f46b2c4150c77d051ae87dca",
+    "tests/integration/test_workflow_feedback_flow.py": "7ff434da1a6bb5bdd4cacdf45c3b91fd27cb02335e098d981b3be405afa29510",
+    "tests/unit/test_workflow_feedback.py": "8a6fb86154f6a54e62e1c68c93a857c869c307b1c90baf7cb85489b3b55b4136",
+    "tests/unit/test_workflow_replanning.py": "a34eaa6276537a458d25d4e939426e7d83359f812b6a50278b36c636e9be6599",
+    "tests/integration/test_workflow_recovery_edges.py": "c8f059087a96d350c10000f1caeacfa9e06dd00403aa68e718878f2021973b7a"
+  },
+  "remaining_work": [
+    "P3-T7 actual external end-to-end example with genuine user result acceptance",
+    "P3-T8 fixed-runner isolation and promotion proof",
+    "Phase4 compact report presentation and dogfooding"
+  ],
+  "limits": [
+    "Reports currently use JSON CLI output; compact human-oriented report presentation remains Phase4.",
+    "Reuse explanations and manual observations are explicit user attestations tied to controller-recorded final tests; they are not inferred from a generic passing baseline.",
+    "Changed requirements must be reflected in the registered specification before new planning captures current files; feedback does not silently rewrite the specification.",
+    "Manual-check definitions cannot be added or weakened after execution approval; changing them requires a new approved execution policy.",
+    "Historical T4/T5 completed results remain inspectable, but acceptance requires a new approved result_version=1 workflow with sealed final evidence.",
+    "Accepted, cancelled and superseded results cannot be reopened through the same-scope feedback route; exhausted correction allowances are not reset.",
+    "No actual Phase3 user acceptance, T7 completion, fixed runner A, administrator setup, commit or push is claimed."
+  ]
+}

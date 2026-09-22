@@ -20,6 +20,8 @@ class Harness:
 
     def _execution_run(self):
         run = self.store.get()
+        if run.get("kind") == "workflow":
+            raise HarnessError("This is a real workflow record. Use workflow-status/workflow-approve/workflow-cancel; sequential execution is not connected yet.")
         if run.get("kind") == "planning":
             raise HarnessError("This is a planning-only run. Use plan-status/plan-approve/plan-cancel; real implementation is Phase 3.")
         return run

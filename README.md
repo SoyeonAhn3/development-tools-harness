@@ -8,9 +8,9 @@ A planned local CLI for semi-automated development: turn a Markdown specificatio
 
 ## Current status
 
-**Phases 1–2 are accepted and completed; Phase 3 is in progress.** The Windows/Python 3.12 CLI registers prepared projects, runs baseline tests and generates versioned bilingual plans using Codex and the repository phase-doc skill. P3-T1 preparation and P3-T2 real Developer/Reviewer, controlled file changes and administrator-free isolated pytest are verified. All **265 tests passed**, plus a two-call live component example. General execution admission, orchestration, resume and acceptance remain P3-T3–T8.
+**Phases 1–2 are accepted and completed; Phase 3 is in progress.** The Windows/Python 3.12 CLI registers prepared projects, runs baseline tests and generates versioned bilingual plans using Codex and the repository phase-doc skill. P3-T1–T2 preparation, actual roles and isolated pytest were verified on 2026-09-21 with **265 passing tests** and a two-call live example. P3-T3 added execution authorization and durable records, verified with **378 passing tests** and `pip check` on 2026-09-22. P3-T4 connects sequential development, isolated validation, independent review, bounded corrections and final checks through `workflow-run`. P3-T5 adds explicit interruption recovery through `workflow-resume`. P3-T6 implements minimum JSON reports, feedback routing and evidence-bound user acceptance. P3-T7–T8 still require an accepted external example and verified fixed runner A. [Implementation and verification](Phase/Phase3_Workflow.md).
 
-The roadmap below summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md). Phase 1 and Phase 2 usage sections identify implemented behavior.
+The roadmap below summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md). The usage sections identify implemented behavior.
 
 ## Phase 1 setup and example
 
@@ -78,7 +78,7 @@ Edit template headings/layout while retaining required `{{slots}}`; changes appl
 
 Read the JSON output and saved `report.json` under `evidence_directory`. Exit code 1 means a failed/incomplete probe. On this standard-user Windows 10 environment, AppContainer passed role/file/token checks and blocked all 24 parent/child TCP/UDP IPv4/IPv6 attempts against owned loopback listeners. A deadline test also stopped the process and child. `ready=true` means this synthetic candidate investigation passed; `execution_enabled=false` remains explicit. External-network and live-role behavior are not established by this command.
 
-Company policy rules out elevated setup. The prior unelevated Codex candidate still fails raw TCP denial; `--backend codex-unelevated` retains that investigation for reviewed CLI 0.155.1, with `--codex-path` applying only there. AppContainer diagnosis requires no Codex. T2 now reuses the existing text-only adapter for live roles and tests generated code inside AppContainer. General workflow commands remain pending; [Phase 3](Phase/Phase3_Workflow.md) records the component evidence and remaining work.
+Company policy rules out elevated setup. The prior unelevated Codex candidate still fails raw TCP denial; `--backend codex-unelevated` retains that investigation for reviewed CLI 0.155.1, with `--codex-path` applying only there. AppContainer diagnosis requires no Codex. T2 reuses the text-only adapter for live roles and tests generated code inside AppContainer; T3 adds admission and T4 connects sequential execution below. [Phase 3](Phase/Phase3_Workflow.md) records the component evidence and remaining work.
 
 ## Phase 3 component verification
 
@@ -88,7 +88,99 @@ T2 provides real roles and isolated tests as components. To reproduce its small 
 & $harnessPython scripts/verify_t2.py --live
 ```
 
-This makes two actual AI calls on a fresh fixture copy outside OneDrive. It checks the baseline, applies only allowed file changes, runs isolated tests and independent checks, and requests a separate read-only review. The output names the saved report directory. It supports the reviewed Python/pytest dependency set; tests write artifacts to scratch. General plan execution, correction/resume and acceptance await P3-T3–T8. See [T2 evidence](Phase/Evidence/Phase3_Workers.json).
+This makes two actual AI calls on a fresh fixture copy outside OneDrive. It checks the baseline, applies only allowed file changes, runs isolated tests and independent checks, and requests a separate read-only review. The output names the saved report directory. It supports the reviewed Python/pytest dependency set; tests write artifacts to scratch. This T2 script verifies components; T4 connects execution and T5 adds interruption recovery below. T6 implements acceptance conditions; the accepted external example remains P3-T7 work. See [T2 evidence](Phase/Evidence/Phase3_Workers.json).
+
+## Phase 3 execution, corrections and records
+
+After reviewing and approving the plan for `$planningProject`, prepare a separate execution record:
+
+```powershell
+& $harnessPython -m development_harness --project $planningProject workflow-prepare --max-corrections 2
+& $harnessPython -m development_harness --project $planningProject workflow-status
+# Authorize the recorded plan, code and policy; no task or AI call starts.
+& $harnessPython -m development_harness --project $planningProject workflow-approve
+# Start actual Developer/Reviewer calls and apply approved file changes.
+& $harnessPython -m development_harness --project $planningProject workflow-run
+& $harnessPython -m development_harness --project $planningProject workflow-status
+# Optional cancellation preserves project files and all evidence.
+& $harnessPython -m development_harness --project $planningProject workflow-cancel
+```
+
+Preparation requires the latest approved plan, unchanged artifacts/inputs and supported isolated pytest checks. Use `workflow-prepare --planning-run <run-id>` to identify that plan explicitly. `plan-approve` remains planning-only. Repeated preparation/approval preserves the same record, and `plan-status` still shows the planning Run. Workflow status includes attempts, waits and evidence-linked findings; unknown measurements remain `null`. Changed files or authorization data block execution approval; status reports the inspection error with exit code 1.
+
+Preparation and approval make no AI calls or file changes. `workflow-run` executes each approved Task as Developer → controlled file application → AppContainer tests → a fresh Reviewer session. Test failures and mandatory review findings share the same per-Task correction allowance: the default is two additional attempts after the initial implementation. Missing dependencies, permission problems, unclear requirements, timeouts, skipped/empty or incomplete checks stop execution without requesting another code correction.
+
+The initial authorization remains fixed while each controller-applied patch records the current code version. Review uses the current validation batch and original Task before-files. Every prior finding needs an explicit follow-up assessment and evidence; omission or a Developer claim cannot resolve it. Deferred mandatory findings remain blocking. After all Tasks pass, every registered check runs again on final content. A final failure stops for inspection without automatically attributing it to a Task. `technically_complete` records this technical result; explicit user acceptance is a separate step described below.
+
+Workflow records expose `workflow_execution_enabled=true` and `orchestration_available=true`; these describe capability, not approval or completion. `workflow-run --steps 1` stops after a durably completed stage, and another `workflow-run` can continue from that boundary. After an interruption, inspect the advisory `recovery` field in `workflow-status`, then explicitly resume:
+
+```powershell
+& $harnessPython -m development_harness --project $planningProject workflow-status
+& $harnessPython -m development_harness --project $planningProject workflow-resume
+```
+
+`workflow-resume` checks the same plan, approval, files and recorded process tree under the project lock. A proven unsent request can run; a complete saved response is reused after checking its input, schema, event stream and session. Unknown dispatch without a complete verified response blocks automatic redispatch. Partial patches resume only where each file still matches its recorded before/after content; unexpected edits are preserved and stop recovery. Interrupted validation runs fresh checks before review/final completion. Approval and correction counts are retained, and cancelled or failed workflows cannot be reset by resuming. Interrupted legacy records without an `active_step` cursor require inspection.
+
+Raw attempt history remains unchanged; separate recovery facts supply the effective call/usage summary and prevent duplicate findings. Unknown timing remains `null`. Changing `--state-dir` cannot bypass project ownership; a missing/corrupt previous state database blocks reassignment. Existing `run`/`resume` still support Phase 1 fixtures only. `workflow-run` and `workflow-resume` return a nonzero exit code when stopped or failed.
+
+T3's historical **378 tests**, 113 added cases and zero live AI calls are preserved in [T3 evidence](Phase/Evidence/Phase3_Records.json). T4 passed **all 465 tests** and `pip check`, plus a two-Task example with four actual AI calls and six independent requirement checks. Results are recorded in [T4 evidence](Phase/Evidence/Phase3_Execution.json) and [Phase 3](Phase/Phase3_Workflow.md). To explicitly reproduce the T4 live fixture, run `& $harnessPython scripts/verify_t4.py --live`; it makes actual role calls on a new disposable project and does not establish T5 recovery or Phase 3 user acceptance.
+
+T5 passed **535 full regression tests**, nine final recovery edge checks and `pip check`. Its disposable live example passed with **two confirmed role calls**: a real Developer response survived forced controller exit and was reused with no extra Developer call, followed by isolated validation and independent review. Task/final checks each passed eight tests, plus six independent checks. [T5 evidence](Phase/Evidence/Phase3_Recovery.json) is separate from the preserved T4 record. To explicitly reproduce this bounded live recovery check, run `& $harnessPython scripts/verify_t5.py --live`. Phase 3 user acceptance remains pending.
+
+## Phase 3 results, feedback and acceptance
+
+`workflow-report` prints the minimum JSON result without changing project files, workflow records or existing database bytes. It covers success, failure, interruption and permission stops, including delivered files, current test results, unresolved findings/feedback, required manual checks and actual evidence paths. Missing files and inspection errors remain visible. Richer report presentation remains Phase 4 work.
+
+```powershell
+& $harnessPython -m development_harness --project $planningProject workflow-report
+```
+
+Declare any required manual checks before execution approval. Write a JSON array to an external file such as `$env:TEMP\harness-manual-checks.json`, using real requirement IDs from the approved current Phase:
+
+```json
+[
+  {
+    "id": "M1",
+    "requirement_ids": ["R1"],
+    "procedure": "Run the CLI with negative input and inspect stdout, stderr and exit code.",
+    "expected": "No numeric stdout, an explanatory stderr message and a nonzero exit code."
+  }
+]
+```
+
+```powershell
+# On a new workflow, before workflow-approve:
+& $harnessPython -m development_harness --project $planningProject workflow-prepare --manual-checks "$env:TEMP\harness-manual-checks.json"
+```
+
+Every declared manual check is mandatory and fixed in the approved policy. After technical completion, perform the check and record its actual outcome. Every current requirement marked `reuse`, including those without an implementation Task, also needs an explicit explanation mapped to actual passing final-validation IDs from `workflow-report`. The following IDs and observations are illustrative; replace them with the report's IDs and your evidence:
+
+```powershell
+& $harnessPython -m development_harness --project $planningProject workflow-reuse --requirement R1 --validation-ids '<final-validation-id>' --outcome passed --evidence 'The final positive and zero-input tests verify the reused doubling behavior.'
+& $harnessPython -m development_harness --project $planningProject workflow-manual --check M1 --outcome passed --evidence 'Observed empty stdout, a negative-input explanation on stderr and exit code 2.'
+& $harnessPython -m development_harness --project $planningProject workflow-report
+# Only after reviewing the result and all mandatory evidence:
+& $harnessPython -m development_harness --project $planningProject workflow-accept
+```
+
+Failed, missing or stale evidence blocks acceptance. Confirmations match the plan, policy, code and final completion; a new correction invalidates old confirmations even if some files remain the same. The gate verifies final record/JUnit/log hashes, completed reviews and unresolved mandatory findings. Technical success can therefore coexist with pending manual/reuse checks. Legacy T4/T5 runs remain historical and unverified for T6 acceptance: they lack the approved `result_version=1` policy and sealed evidence, so a new approved workflow is required. Reports never upgrade or accept them automatically.
+
+Feedback records the exact original text and routing history without calling AI. Choose one route:
+
+```powershell
+# Same-scope defect: preserve approval and use the Task's remaining correction budget.
+& $harnessPython -m development_harness --project $planningProject workflow-feedback --kind defect --task '<task-id>' --text 'Describe the observed defect within the approved requirement.'
+& $harnessPython -m development_harness --project $planningProject workflow-run
+# Changed requirements: preserve old approval as history and start fresh planning.
+& $harnessPython -m development_harness --project $planningProject workflow-feedback --kind requirements --text 'Describe the changed requirement.'
+# Update the registered specification file to describe the requested change before replanning.
+& $harnessPython -m development_harness --project $planningProject workflow-replan
+& $harnessPython -m development_harness --project $planningProject plan
+```
+
+Defect feedback shares the original per-Task limit; it does not reset the budget. After correcting an earlier Task, previously completed later Tasks receive fresh validation/review and all final checks run again. Changed requirements block the old execution approval. Update the registered specification before `workflow-replan`: feedback preserves your exact request but does not rewrite that specification, which remains the Planner's source. Review the new plan, then use `plan-approve`, `workflow-prepare` and `workflow-approve`. Replanning baseline checks for previously generated code run in AppContainer. Existing implementation files, feedback and approval history remain available.
+
+T6 passed the full suite of **632 tests** and `pip check`, including **96 added cases**. It adds **zero actual AI calls**. Reporting on the saved T5 live example retains its two historical calls and does not constitute a new T6 live example or user acceptance. [T6 verification evidence](Phase/Evidence/Phase3_Results.json) and [Phase 3 details](Phase/Phase3_Workflow.md) record the current verification state. P3-T7–T8 and Phase 3 acceptance remain pending.
 
 ## Intended workflow
 
@@ -109,7 +201,7 @@ Approvals cover the overall plan, the current Phase, significant scope or risk c
 
 ## First MVP scope
 
-The first MVP focuses on one project, sequential Tasks and one validation technology configuration. Harness development uses Python 3.12.10 + pytest 9.1.1. The planning Adapter uses Codex CLI with ChatGPT authentication; reviewed versions are 0.154.0 and 0.155.1. Real implementation/review and worker isolation remain Phase 3 work.
+The first MVP focuses on one project, sequential Tasks and one validation technology configuration. Harness development uses Python 3.12.10 + pytest 9.1.1. The Adapter uses Codex CLI with ChatGPT authentication; reviewed versions are 0.154.0 and 0.155.1. Actual roles, isolation, admission, bounded sequential execution, explicit interruption recovery, minimum JSON reports, feedback and acceptance gates are implemented. The accepted external example and fixed runner remain Phase 3 work.
 
 | Area | Planned P0 behavior |
 | --- | --- |
@@ -195,7 +287,7 @@ P0/P1/P2 express priority; **MVP2 is a later product scope**, not a commitment t
 ## Planning documents
 
 - [Development Phase overview](Phase/Overview.md): four development Phases, requirements mapping, and dogfooding entry conditions. Each document contains full English and Korean sections.
-- [Phase 1 — execution foundation](Phase/Phase1_Foundation.md): accepted. [Phase 2 — real connection and planning](Phase/Phase2_Planning.md): accepted. [Phase 3 — workflow](Phase/Phase3_Workflow.md): in progress; P3-T1–T2 verified, P3-T3–T8 pending. [Phase 4 — dogfooding and MVP acceptance](Phase/Phase4_Dogfooding.md): outline.
+- [Phase 1 — execution foundation](Phase/Phase1_Foundation.md): accepted. [Phase 2 — real connection and planning](Phase/Phase2_Planning.md): accepted. [Phase 3 — workflow](Phase/Phase3_Workflow.md): in progress; P3-T1–T6 implemented, T7–T8 pending. [Phase 4 — dogfooding and MVP acceptance](Phase/Phase4_Dogfooding.md): outline.
 - [Lean MVP plan — revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md): scope, priorities, acceptance rules, development stages, dogfooding, MVP2, and planning change history. Start here.
 - [Earlier planning documents](Draft/archive/): historical designs and decisions. Their broader scope should not be assumed to apply to the lean MVP.
 
@@ -224,4 +316,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Phase 2 user acceptance is complete. Phase 3 has an execution contract, prepared example and reproducible permission investigation. A stronger verified boundary is needed before actual Developer/Reviewer execution; the text-only Planner boundary does not establish worker/test isolation.
+Phase 2 user acceptance is complete. Phase 3 connects actual roles, isolated tests, execution admission, durable records, bounded sequential corrections, explicit interruption recovery, minimum reports, feedback and evidence-bound result acceptance. The accepted external example and fixed runner remain P3-T7–T8; Phase 3 user acceptance is pending.

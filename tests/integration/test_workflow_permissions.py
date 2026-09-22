@@ -48,6 +48,40 @@ def test_isolated_pytest_classifies_actual_results(validation_environment, text,
     assert (project / "test_case.py").read_text(encoding="utf-8") == text
 
 
+def test_actual_isolated_check_uses_durable_controller_attempt(validation_environment):
+    from development_harness.files import snapshot
+    from development_harness.model import digest
+    from development_harness.store import Store
+    from development_harness.workflow_records import WorkflowRecords
+
+    root, validator = validation_environment
+    project = root / "journal-project"
+    project.mkdir()
+    (project / "test_case.py").write_text("def test_actual():\n    assert 3 * 2 == 6\n", encoding="utf-8")
+    store = Store(project, root / "journal-runtime")
+    policy = {"validation": [CHECK]}
+    store.save({"id": "isolated-journal", "kind": "workflow", "stage": "execution_ready",
+                "plan_hash": "test-plan", "policy_hash": digest(policy), "policy": policy,
+                "expected": snapshot(project), "attempts": [], "findings": {}, "waits": [],
+                "tasks": [{"id": "T1", "requirements": ["R1"], "paths": ["test_case.py"]}]}, "created", new=True)
+    records = WorkflowRecords(store, "isolated-journal")
+    attempt = records.prepare_attempt("T1", "validation", digest(snapshot(project)))
+    attempt["check_hash"] = digest(CHECK)
+    records.lifecycle(attempt, "prepared")
+    def launched(evidence):
+        attempt.update(evidence)
+        records.lifecycle(attempt, "process_registered")
+        assert store.get()["attempts"][0]["process"] == evidence["process"]
+    result = validator.run(CHECK, project, launched=launched, attempt_id=attempt["id"])
+    attempt.update(result)
+    records.lifecycle(attempt, "finished")
+    stored = store.get()["attempts"][0]
+    assert stored["outcome"] == "passed", stored
+    assert stored["tests"] == 1
+    assert json.loads(Path(stored["record"]).read_text(encoding="utf-8"))["id"] == attempt["id"]
+    assert records.summary()["ai_dispatch_attempts"] == 0
+
+
 def test_actual_pytest_and_child_cannot_change_protected_files_or_connect(validation_environment):
     root, validator = validation_environment
     project = root / "permission-project"

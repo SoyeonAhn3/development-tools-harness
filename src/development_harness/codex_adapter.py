@@ -7,10 +7,11 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import time
 import tomllib
 
-from .model import HarnessError
+from .model import HarnessError, digest
 from .processes import Job, identity
 from .project import decode_json
 
@@ -29,6 +30,21 @@ CODEX_PATH_ENV = "DEVELOPMENT_HARNESS_CODEX_PATH"
 DISABLED_CODE_MODE_NOTICE = ("Code Mode is unavailable because code-mode host is disabled. "
                             "Code mode will fail closed; enable `features.code_mode_host` "
                             "and install `codex-code-mode-host`.")
+
+# This trusted bootstrap is inert until the controller has assigned its job and
+# durably registered dispatch intent. If the controller dies before containment,
+# its pipe closes and the gate exits without starting the target executable.
+# -I prevents imports from the worker directory or inherited Python settings.
+LAUNCH_GATE = """
+import json, subprocess, sys
+raw = sys.stdin.buffer.read()
+if not raw:
+    raise SystemExit(125)
+request = json.loads(raw)
+result = subprocess.run(request['argv'], input=request['prompt'].encode('utf-8'),
+                        creationflags=subprocess.CREATE_NO_WINDOW, check=False)
+raise SystemExit(result.returncode)
+"""
 
 
 def executable(selected=None):
@@ -87,6 +103,9 @@ class CodexPlanner:
         self.exe = None
         self.features = {}
         self.policy = None
+        # Optional controller hook. Keep generate's existing call signature compatible
+        # with planning adapters; workers also persist prepared/finished around it.
+        self.lifecycle = None
 
     def inspect(self):
         self.policy = None
@@ -237,27 +256,44 @@ class CodexPlanner:
         attempt.update(model=self.model, policy=self.policy, schema=str(schema_path),
                        log=str(log), stderr=str(errors),
                        outcome="launching", started=time.time())
+        for key in ("usage", "session_id"):
+            attempt.setdefault(key, None)
+        attempt.update(dispatch_status="not_sent", actual_ai_call_attempts=0, confirmed_ai_calls=0)
+
+        def observe(phase):
+            attempt[phase + "_at"] = time.time()
+            callback = getattr(self, "lifecycle", None)
+            if callback is not None:
+                callback(attempt, phase)
+
         worker = None
         job = Job()
         try:
             with log.open("wb") as output, errors.open("wb") as error:
-                worker = subprocess.Popen(self.arguments(schema_path), cwd=self.directory, env=environment(),
+                request = json.dumps({"argv": [str(value) for value in self.arguments(schema_path)],
+                                      "prompt": prompt}).encode("utf-8")
+                worker = subprocess.Popen([sys.executable, "-I", "-B", "-c", LAUNCH_GATE], cwd=self.directory, env=environment(),
                                           stdin=subprocess.PIPE, stdout=output, stderr=error,
                                           creationflags=subprocess.CREATE_NO_WINDOW)
                 job.assign(worker.pid)
-                attempt.update(process=identity(worker.pid), outcome="running")
+                attempt.update(process=identity(worker.pid), containment=dict(job.record), outcome="running")
+                observe("process_registered")
                 launched(attempt)
+                # This durable intent precedes input transmission. A crash here cannot
+                # establish whether the server received it, so recovery must not retry.
+                attempt.update(dispatch_status="uncertain", actual_ai_call_attempts=1, confirmed_ai_calls=None)
+                observe("dispatch_intent")
                 try:
-                    worker.communicate(prompt.encode("utf-8"), timeout=timeout)
+                    worker.communicate(request, timeout=timeout)
                 except subprocess.TimeoutExpired:
-                    attempt.update(outcome="interrupted", reason="Planner timeout; resume explicitly to retry.")
+                    attempt.update(outcome="interrupted", reason="Planner timeout; inspect recorded dispatch before recovery.")
                     return None
                 attempt["exit_code"] = worker.returncode
                 if worker.returncode:
                     attempt.update(outcome="unverified", reason="Codex call failed; inspect the recorded logs and login/limits.")
                     return None
         except KeyboardInterrupt:
-            attempt.update(outcome="interrupted", reason="Planner interrupted; resume explicitly to retry.")
+            attempt.update(outcome="interrupted", reason="Planner interrupted; inspect recorded dispatch before recovery.")
             raise
         finally:
             job.close()
@@ -272,13 +308,38 @@ class CodexPlanner:
             else:
                 attempt["ended"] = time.time()
                 attempt["duration"] = attempt["ended"] - attempt["started"]
+            observe_output(log, attempt)
         allowed = (DISABLED_CODE_MODE_NOTICE,) if self.policy.get("profile") == "text-only-v1" else ()
         attempt["notices"] = []
         response, usage = parse_events(log.read_text(encoding="utf-8"), allowed_notices=allowed,
                                        notices=attempt["notices"])
         attempt["usage"] = usage
-        attempt["outcome"] = "responded"
+        attempt.update(outcome="responded", dispatch_status="responded", confirmed_ai_calls=1,
+                       response_hash=digest(response))
+        observe("responded")
         return response
+
+
+def observe_output(log, attempt):
+    """Preserve facts seen even in a partial/failed stream without verifying a turn."""
+    try:
+        lines = log.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return
+    sessions = set()
+    for line in lines:
+        try:
+            event = decode_json(line)
+        except HarnessError:
+            continue
+        if not isinstance(event, dict):
+            continue
+        if event.get("type") == "thread.started" and isinstance(event.get("thread_id"), str) and event["thread_id"]:
+            sessions.add(event["thread_id"])
+        if event.get("type") == "turn.completed" and isinstance(event.get("usage"), dict):
+            attempt["usage"] = event["usage"]
+    if len(sessions) == 1:
+        attempt["session_id"] = sessions.pop()
 
 
 def parse_events(raw, *, allowed_notices=(), notices=None):

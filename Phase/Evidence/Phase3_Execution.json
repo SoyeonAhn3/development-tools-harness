@@ -1,0 +1,293 @@
+{
+  "date": "2026-09-22",
+  "phase": "Phase3",
+  "task": "P3-T4",
+  "status": "Implemented and verified; P3-T5-T8 and Phase acceptance pending",
+  "base_commit": "d6957b03ce420821fa80bfafee17cd2738aef10f",
+  "tests": {
+    "tests": 465,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "status": "passed",
+    "passed": 465,
+    "new_cases": 87,
+    "seconds": 348.746,
+    "console_seconds": 348.78,
+    "report": "%LOCALAPPDATA%/development-tools-harness/t4-regression/bcda88eaee1f/pytest.xml",
+    "report_sha256": "5e7c1c5866089872d50b61115f58ea1347dff18c0f71c7688494b6e94948e03c",
+    "pip_check": "passed"
+  },
+  "workflow_execution_enabled": true,
+  "user_phase_acceptance": null,
+  "implemented": [
+    "Dependency-ordered approved Tasks through Developer, controlled patches, required isolated validation and separate Reviewer sessions",
+    "Immutable original execution approval plus a checked proposal/patch chain for current content",
+    "Pinned per-Task correction allowance, default two additional attempts, shared by failed code checks and mandatory review findings",
+    "Explicit independent follow-up assessment of every unresolved finding, with matched review and fresh registered validation for resolution",
+    "Environmental, permission, specification, timeout and incomplete-validation stops without requesting code corrections",
+    "Every registered check rerun against final content before technically_complete; user acceptance remains separate",
+    "Durable clean stage boundaries; interrupted or partial boundaries block automatic redispatch pending T5",
+    "workflow-run with optional --steps; workflow-prepare --max-corrections fixes the execution policy before approval"
+  ],
+  "verification": {
+    "corrections": "Real isolated assertion failures, shared test/review budget, limits zero/two, exhaustion and no advancement to dependent Tasks",
+    "review": "Repeated findings, falsely claimed fixes, mandatory deferral, explicit resolved/false_positive evidence, immutable Task before-image and stale-validation rejection",
+    "failure_classification": "Real pytest mixed failure/skips, empty suites, missing imports, PermissionError and timeout stop with zero new corrections",
+    "integrity": "Project lock; unapproved execution; scope violation; original/current versions; patch bytes/proposal/location tampering; arbitrary snapshot adoption; completed boundary continuation and interrupted boundary blocking",
+    "final_checks": "All registered checks at final content; a final-only failure prevents technical completion",
+    "independent_review_fixes": [
+      "Select the latest validation per registered check before requiring passing outcomes; an earlier pass cannot hide a later failure",
+      "Reconstruct current file identities from the original approved snapshot and hash-checked, scoped Developer proposals",
+      "Shorten the production validator storage location after reproducing Windows MAX_PATH runtime-copy failure"
+    ],
+    "ai_transport": "Regression workers use deterministic local subprocesses, not an AI service. Actual AppContainer execution verifies generated-test behavior. Live AI evidence is listed separately."
+  },
+  "live_example": {
+    "script": "scripts/verify_t4.py --live",
+    "report": {
+      "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/report.json",
+      "sha256": "eb703f20be830b09f3dd34fab3f2c73d1c3d6066b8f776667b634eb894d48050"
+    },
+    "database": {
+      "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/state/99d777b8a76a7d02cbb2c760346438a54a6b899b9c9e320e354e4ea0c1945e0a/state.sqlite3",
+      "sha256": "bab3b93b9b173acaf3d13e51154f61fb85d9b87ba8515951aab38666a57d99e3"
+    },
+    "passed": true,
+    "model": "gpt-6-astra",
+    "planner_ai_calls": 0,
+    "fixture_plan_source": "controller_fixture",
+    "actual_ai_call_attempts": 4,
+    "confirmed_ai_calls": 4,
+    "uncertain_ai_calls": 0,
+    "workflow_run_id": "0615a2bf0c484af29897c50268b8b65d",
+    "planning_run_id": "98ae0867ac4d494c9e4be6df4b0f23c0",
+    "plan_hash": "e2321cb0993d23e4686e0aefa970182cc5f6f04c095f3633c2874a28b87b012d",
+    "initial_content_version": "f4ed4988185357fa04ffedd6e66c3963ccdf268842fc39747711bf637e8519d8",
+    "final_content_version": "009a0c8165f834f5d77648e45050ad218a9378f4815e43c5fc510eae4c1a3b0d",
+    "approval_unchanged": true,
+    "baseline_tests": 2,
+    "completed_tasks": [
+      "T1",
+      "T2"
+    ],
+    "corrections": {
+      "T1": 0,
+      "T2": 0
+    },
+    "roles": [
+      {
+        "id": "52dadc1561f948cda2782e3405965f1a",
+        "task_id": "T1",
+        "role": "developer",
+        "session_id": "01a0c703-93de-7002-847e-f8df47b8d2fc",
+        "outcome": "validated",
+        "content_version": "f4ed4988185357fa04ffedd6e66c3963ccdf268842fc39747711bf637e8519d8",
+        "result": "changes",
+        "response_hash": "2bfbbfb8f61923675e60776fd19dd75c8fc49d0a0283c6f591f74d258798c2b9",
+        "response": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/state/99d777b8a76a7d02cbb2c760346438a54a6b899b9c9e320e354e4ea0c1945e0a/workflow/0615a2bf0c484af29897c50268b8b65d/52dadc1561f948cda2782e3405965f1a/response.json",
+          "sha256": "09dbf3958d1ad90553ee261d17161c264b7c5c908f25f8cf43d95575e47b9b80"
+        }
+      },
+      {
+        "id": "16596d8a8e514e1ba3f8a23abc2e4165",
+        "task_id": "T1",
+        "role": "reviewer",
+        "session_id": "01a0c704-1303-7410-a4c5-c48048af396e",
+        "outcome": "validated",
+        "content_version": "009a0c8165f834f5d77648e45050ad218a9378f4815e43c5fc510eae4c1a3b0d",
+        "result": "pass",
+        "response_hash": "e22abcb9b5ef239a60b40386604ee1f60931630f5caad4aefcdad2e791e05943",
+        "response": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/state/99d777b8a76a7d02cbb2c760346438a54a6b899b9c9e320e354e4ea0c1945e0a/workflow/0615a2bf0c484af29897c50268b8b65d/16596d8a8e514e1ba3f8a23abc2e4165/response.json",
+          "sha256": "4cbce20e38fe8e373e01e9c3a5ef2a998b224027241425109505f8f9239c44e3"
+        }
+      },
+      {
+        "id": "eb68185ad3ee416ebc4d923e0b1b03fc",
+        "task_id": "T2",
+        "role": "developer",
+        "session_id": "01a0c704-411b-7961-8ee5-f31dcf3e407f",
+        "outcome": "validated",
+        "content_version": "009a0c8165f834f5d77648e45050ad218a9378f4815e43c5fc510eae4c1a3b0d",
+        "result": "unchanged",
+        "response_hash": "25dc290189bd14b3ee5e9fd2a1daad4113e86b1fd31a9624c80c790d0a9fde23",
+        "response": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/state/99d777b8a76a7d02cbb2c760346438a54a6b899b9c9e320e354e4ea0c1945e0a/workflow/0615a2bf0c484af29897c50268b8b65d/eb68185ad3ee416ebc4d923e0b1b03fc/response.json",
+          "sha256": "18305346e4f44f85685ef91ad71d98c02e58e847efb0f4aa2c88c7bb0c434db4"
+        }
+      },
+      {
+        "id": "2065b32a762f4f1bb4561181bd4ad10b",
+        "task_id": "T2",
+        "role": "reviewer",
+        "session_id": "01a0c704-89f9-7061-9c8b-473f17fe76ae",
+        "outcome": "validated",
+        "content_version": "009a0c8165f834f5d77648e45050ad218a9378f4815e43c5fc510eae4c1a3b0d",
+        "result": "pass",
+        "response_hash": "828d2d68ac8b116fd618fe85a4dde089820e8d7a280a802b5d4a919b3a0448dd",
+        "response": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/state/99d777b8a76a7d02cbb2c760346438a54a6b899b9c9e320e354e4ea0c1945e0a/workflow/0615a2bf0c484af29897c50268b8b65d/2065b32a762f4f1bb4561181bd4ad10b/response.json",
+          "sha256": "7f085aac9662fc53a93a0329010270240cf2d6fdeef396793ef38c07ca5167bf"
+        }
+      }
+    ],
+    "distinct_sessions": true,
+    "validation": [
+      {
+        "id": "81a40477c83d4a0fb9676a32c4fe2bcf",
+        "task_id": "T1",
+        "outcome": "passed",
+        "tests": 8,
+        "backend": "appcontainer",
+        "content_version": "009a0c8165f834f5d77648e45050ad218a9378f4815e43c5fc510eae4c1a3b0d",
+        "check_hash": "eeb208cbe3b397212cb4a848fbc29634781bb8e99d5f21b9bb9e2aae6eb84303",
+        "record": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/validator/c-481d098f6249/validation.json",
+          "sha256": "81d988a6971db6526f6a2b9c059c135636282d3141d798cdc277b8855c5f1d91"
+        }
+      },
+      {
+        "id": "70b1ac5a5b8946cf9cef4b6e871572b1",
+        "task_id": "T2",
+        "outcome": "passed",
+        "tests": 8,
+        "backend": "appcontainer",
+        "content_version": "009a0c8165f834f5d77648e45050ad218a9378f4815e43c5fc510eae4c1a3b0d",
+        "check_hash": "eeb208cbe3b397212cb4a848fbc29634781bb8e99d5f21b9bb9e2aae6eb84303",
+        "record": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/validator/c-b6c0c3eb7bda/validation.json",
+          "sha256": "9b131506ef452ca19e4c686f636846f62e642a654b9588113124c9e2ea1f54ae"
+        }
+      },
+      {
+        "id": "d844fae2c9164b629d033255bca8f1a4",
+        "task_id": "T2",
+        "outcome": "passed",
+        "tests": 8,
+        "backend": "appcontainer",
+        "content_version": "009a0c8165f834f5d77648e45050ad218a9378f4815e43c5fc510eae4c1a3b0d",
+        "check_hash": "eeb208cbe3b397212cb4a848fbc29634781bb8e99d5f21b9bb9e2aae6eb84303",
+        "record": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/validator/c-617f0ed99384/validation.json",
+          "sha256": "5458459de956cbe2c50eca4abf87ee434c4ecdb96fd85a113a2e318b9cad3099"
+        }
+      }
+    ],
+    "final_validation_ids": [
+      "d844fae2c9164b629d033255bca8f1a4"
+    ],
+    "independent_requirements": {
+      "id": "c-00fadf3623cb",
+      "task_id": null,
+      "outcome": "passed",
+      "tests": 6,
+      "backend": "appcontainer",
+      "content_version": "23e325f37b2ce7a4a0c24fa219dd6ded2dd80dc7abf29db2232b16cf012117d6",
+      "check_hash": "166122801f167cd6a8123518e270a9c941247e2c54bfa418678ae48f3a888c91",
+      "record": {
+        "path": "%LOCALAPPDATA%/development-tools-harness/t4-live/d912782f99cd/validator/c-00fadf3623cb/validation.json",
+        "sha256": "afc89db4da416d5e5567efee411e635f7156c787e3933f070f7b2360fe28866f"
+      },
+      "application_content_version": "009a0c8165f834f5d77648e45050ad218a9378f4815e43c5fc510eae4c1a3b0d",
+      "controller_test_sha256": "f72ccdb22bd61abf9e38fa010b2a6d16af0cc9c8ab6dae1d890b9f58e2e14230"
+    },
+    "fixture_preserved": true,
+    "workflow_stage": "technically_complete",
+    "user_acceptance": false,
+    "notes": [
+      "Fresh external disposable copy, controller-authored planning fixture with real two-test baseline and recorded plan/execution approvals; no Planner service call",
+      "T1 changed cli.py and test_cli.py. T2 returned unchanged because T1 already covered its cases, then received its own validation and independent review.",
+      "Task1, Task2 and final suites each passed eight tests. Six additional controller-authored checks passed on a copy of the same final application.",
+      "Live corrections were zero; correction/review failure scenarios are verified by deterministic subprocess and actual isolated-test regression cases.",
+      "The live script supplies a preverified short-path validator. The production default storage is independently verified below after its path fix."
+    ]
+  },
+  "default_storage_regression": {
+    "test": "tests/integration/test_workflow_default_validation.py",
+    "reproduced_failure": {
+      "path": "%LOCALAPPDATA%/development-tools-harness/runtime/9ac45b0506212efb268368ad4987c25b1ea7a687bc2b59d1ce3de55afa4a3b77/workflow/20bdada4eb4642cb970e63d39ea86045/ec75f720a50749d6a8f6a4fdaac4f0e4/p-ec59716a0fa2/report.json",
+      "sha256": "49976e2efeb6c59282dd7db28a9344c2beaffa06a8b9d26f168c6d6321e4ebbb"
+    },
+    "cause": "Windows WinError 206 while copying Python at the former nested validator location",
+    "fix": "<state-home>/workflow-validation/<controller-attempt-id>; original attempt identity and evidence paths remain journalled",
+    "permission_report": {
+      "path": "%LOCALAPPDATA%/development-tools-harness/runtime/workflow-validation/7e6d32c295a8482baae664e3412e09b9/p-301084a990d0/report.json",
+      "sha256": "9885ae579d0e851b609451a77467ed48b03b071f97b20a315a8248eefcdd1eda"
+    },
+    "validation": [
+      {
+        "id": "7e6d32c295a8482baae664e3412e09b9",
+        "task_id": null,
+        "outcome": "passed",
+        "tests": 1,
+        "backend": "appcontainer",
+        "content_version": "fa9a92a3405a00690673945607cf80ca9541cf861dea6e5a557c48150365560f",
+        "check_hash": "ebe64d8bf56a4eb16e06c9cff8b75d7849019c4922775ef18cea49c517b58b09",
+        "record": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/runtime/workflow-validation/7e6d32c295a8482baae664e3412e09b9/c-6d0f4be11a92/validation.json",
+          "sha256": "eef02d17d5854efb1e91bb2cb759db66391351a672b991cff643883af37c347d"
+        }
+      },
+      {
+        "id": "06d2eeba9caa499eb8e61cda55c4065f",
+        "task_id": null,
+        "outcome": "passed",
+        "tests": 1,
+        "backend": "appcontainer",
+        "content_version": "fa9a92a3405a00690673945607cf80ca9541cf861dea6e5a557c48150365560f",
+        "check_hash": "ebe64d8bf56a4eb16e06c9cff8b75d7849019c4922775ef18cea49c517b58b09",
+        "record": {
+          "path": "%LOCALAPPDATA%/development-tools-harness/runtime/workflow-validation/7e6d32c295a8482baae664e3412e09b9/c-c32b2cf56ca8/validation.json",
+          "sha256": "a804d9afc39783d19413f673bd2f6224f0ce287cd8d7240fda4b1fa01ed8668b"
+        }
+      }
+    ],
+    "actual_ai_calls": 0,
+    "longest_verified_file_path_chars": 206
+  },
+  "previous_full_regression": {
+    "report": {
+      "path": "%LOCALAPPDATA%/development-tools-harness/t4-regression/08c6f24efa99/pytest.xml",
+      "sha256": "97431e7e47d7a8a1da57b2e063d9ca6f3e550d94d6316f00b2b2dacb060ea74f"
+    },
+    "tests": 464,
+    "passed": 464,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "note": "Passed before the extra default-validator path regression and storage fix; final complete regression is recorded above."
+  },
+  "source_sha256": {
+    "src/development_harness/cli.py": "40df2ba838da444fbd477b203fab52871053f27c57a0d56b24e999be4909abf1",
+    "src/development_harness/workflow.py": "31427a201456ded1276d216e111f59917ce2374804803f8540fce7b26b2fdae4",
+    "src/development_harness/workflow_execution.py": "2e576163baa0773c409486dc23d704008baaeb2fd75f2b1edce30bd6ccf59a48",
+    "src/development_harness/workflow_records.py": "1d33ebd4d56857f0b437b4c432d4426a2573e790b44a8724a90a9573b3d1507d",
+    "src/development_harness/workers.py": "62a45e6d987202dce954199cd25e765be1fd74de5359d00181cb76e06653f451",
+    "src/development_harness/worker_contract.py": "b1329a5483a2b45845b624fb984ff3a0fb5cc3a088a7bc8dcdd456b0ff3ef665",
+    "src/development_harness/isolated_validation.py": "bd877b590c2bac30911ed3057c1e7842fca02c1871dc1bb26abce9f487a6a47f",
+    "scripts/verify_t4.py": "01458ca134a2f2fc6e5c380c560c3ce072d22a2c48d6bca9b10e8b9eb4a39a52",
+    "tests/integration/test_workflow.py": "73626ac7429b92364bff280b0ac50abb067590dfc53711ec112bf61cf67bc8e1",
+    "tests/integration/test_workflow_integrity.py": "460764b0fb52f70c1526c8206576e5caee84b2a65fb707147cd889b81c6b36a7",
+    "tests/integration/test_workflow_default_validation.py": "c42035f4c0b5620cb223869267b2cdd36a74fa1f41cf67c7a4823c314bdaade6",
+    "tests/integration/test_workflow_admission_cli.py": "3badebbe1ea1256fd79514fc066217d3b835fe00ddb9786c1323b4025d52d07c",
+    "tests/integration/test_workflow_journal_bridge.py": "1de0fc0bfc738d0d7e7a4ccbe483582938e22705f47685a37be4059730b2e65e",
+    "tests/unit/test_workflow_admission.py": "ea1165c1b34fa97a4b35500923e6c2c7cd1401975d38e5c68ead62b109c6b04d",
+    "tests/unit/test_review_followup.py": "d258e168db25554e78e3bc14f4299b15a3275c0d96a329a87aa541ce2e9434ea",
+    "tests/unit/test_validation_classification.py": "bb15e2d4cd19e13e33c0b0f5d01f678a8df5cc5e526760bf4565a903744e814e"
+  },
+  "remaining_work": [
+    "P3-T5 process-aware interrupted recovery",
+    "P3-T6 reports, feedback and user acceptance",
+    "P3-T7 accepted end-to-end example including interruption/resume",
+    "P3-T8 fixed-runner isolation"
+  ],
+  "limits": [
+    "Clean --steps boundaries can continue; uncertain calls and partial patches are preserved without automatic recovery or replay.",
+    "A failing final Phase check stops; the scheduler does not guess which completed Task caused a nondeterministic final failure.",
+    "Unknown validation faults are not treated as repairable code errors.",
+    "The existing reviewed UTF-8 file creation/replacement and Python/pytest dependency scope remains; deletion/rename and dependency installation are unsupported.",
+    "This T4 smoke example is not the P3-T7 accepted example, Phase 3 acceptance or frozen runner A."
+  ]
+}

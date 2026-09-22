@@ -11,6 +11,9 @@ import uuid
 from .model import HarnessError, digest
 
 
+INACTIVE_STAGES = {"accepted", "cancelled", "plan_approved", "superseded"}
+
+
 def default_home():
     base = Path(os.environ.get("LOCALAPPDATA", Path.home() / ".local" / "share"))
     return base / "development-tools-harness" / "runtime"
@@ -37,7 +40,15 @@ class Store:
             version = db.execute("PRAGMA user_version").fetchone()[0]
             if version not in (0, 1):
                 raise HarnessError(f"Unsupported state format {version}; existing database was not migrated.")
-            db.executescript("""
+            if version == 1:
+                # Opening an existing journal for status/report must not write
+                # its schema-version header or silently rebuild missing tables.
+                db.execute("SELECT id, active, data FROM runs LIMIT 0")
+                db.execute("SELECT id, run_id, recorded, kind, data FROM events LIMIT 0")
+                if not db.execute("SELECT 1 FROM sqlite_master WHERE type='index' AND name='one_active_run'").fetchone():
+                    raise HarnessError("State ownership index is missing; inspect the existing database.")
+            else:
+                db.executescript("""
                 CREATE TABLE IF NOT EXISTS runs (
                     id TEXT PRIMARY KEY, active INTEGER NOT NULL, data TEXT NOT NULL
                 );
@@ -47,7 +58,7 @@ class Store:
                     recorded REAL NOT NULL, kind TEXT NOT NULL, data TEXT NOT NULL
                 );
                 PRAGMA user_version=1;
-            """)
+                """)
 
     @contextmanager
     def connect(self):
@@ -74,10 +85,101 @@ class Store:
             row = db.execute("SELECT data FROM runs WHERE active=1").fetchone()
         return json.loads(row[0]) if row else None
 
+    def latest(self, kind):
+        """Select by recorded run kind without changing the active run."""
+        with self.connect() as db:
+            rows = db.execute("SELECT data FROM runs ORDER BY rowid DESC").fetchall()
+        for row in rows:
+            run = json.loads(row[0])
+            if run.get("kind") == kind:
+                return run
+        raise HarnessError("No " + kind + " run found.")
+
+    def transition(self, run_id, event_id, kind, detail, update):
+        """Atomically update a fresh run and append one replay-safe event.
+
+        The callback only changes the in-memory run. Files and external calls
+        cannot be made atomic by this transaction and must be journaled first.
+        A replay returns current state, never a stale snapshot supplied by a caller.
+        """
+        if not isinstance(event_id, str) or not event_id:
+            raise HarnessError("A stable transition identity is required.")
+        detail = json.dumps(detail, ensure_ascii=True, sort_keys=True, allow_nan=False)
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            row = db.execute("SELECT data FROM runs WHERE id=?", (run_id,)).fetchone()
+            if row is None:
+                raise HarnessError("Run no longer exists.")
+            run = json.loads(row[0])
+            previous = db.execute("SELECT run_id, kind, data FROM events WHERE id=?", (event_id,)).fetchone()
+            if previous is not None:
+                if (previous["run_id"] != run_id or previous["kind"] != kind or
+                        json.loads(previous["data"]) != json.loads(detail)):
+                    raise HarnessError("Transition identity was reused with different evidence.")
+                return run
+            update(run)
+            if run.get("id") != run_id:
+                raise HarnessError("A transition cannot change the run identity.")
+            active = int(run["stage"] not in INACTIVE_STAGES)
+            db.execute("UPDATE runs SET active=?, data=? WHERE id=?",
+                       (active, json.dumps(run, ensure_ascii=True, allow_nan=False), run_id))
+            db.execute("INSERT INTO events VALUES (?, ?, ?, ?, ?)",
+                       (event_id, run_id, time.time(), kind, detail))
+            return run
+
+    def supersede_and_create(self, run_id, event_id, kind, detail, new_run, update_old):
+        """Replace the active workflow and journal both links in one transaction.
+
+        No filesystem changes or external calls belong in ``update_old``. A
+        failed insert/event rolls back supersession as well as the new run.
+        """
+        if not isinstance(event_id, str) or not event_id:
+            raise HarnessError("A stable replanning transition identity is required.")
+        if (not isinstance(new_run, dict) or not isinstance(new_run.get("id"), str) or not new_run["id"]
+                or new_run["id"] == run_id or new_run.get("kind") != "planning"
+                or new_run.get("stage") != "baseline_pending" or new_run.get("approval") is not None
+                or new_run.get("project_id") != self.project_id or new_run.get("project") != str(self.project)
+                or new_run.get("feedback_source", {}).get("workflow_run_id") != run_id):
+            raise HarnessError("Replanning must create a distinct unapproved planning baseline.")
+        detail = json.dumps(detail, ensure_ascii=True, sort_keys=True, allow_nan=False)
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            row = db.execute("SELECT data, active FROM runs WHERE id=?", (run_id,)).fetchone()
+            if row is None:
+                raise HarnessError("Source workflow no longer exists.")
+            previous = db.execute("SELECT run_id, kind, data FROM events WHERE id=?", (event_id,)).fetchone()
+            old = json.loads(row["data"])
+            if previous is not None:
+                if (previous["run_id"] != run_id or previous["kind"] != kind
+                        or json.loads(previous["data"]) != json.loads(detail)):
+                    raise HarnessError("Replanning transition identity was reused with different evidence.")
+                replacement_id = old.get("replanning", {}).get("planning_run_id")
+                if replacement_id != new_run["id"]:
+                    raise HarnessError("Replanning replay refers to a different replacement run.")
+                replacement = db.execute("SELECT data FROM runs WHERE id=?", (replacement_id,)).fetchone()
+                if replacement is None:
+                    raise HarnessError("Recorded replacement planning run is missing.")
+                return json.loads(replacement["data"])
+            if old.get("kind") != "workflow" or old.get("stage") != "replanning_required" or row["active"] != 1:
+                raise HarnessError("Only the active workflow awaiting requirement replanning can be superseded.")
+            update_old(old)
+            if (old.get("id") != run_id or old.get("stage") != "superseded"
+                    or old.get("replanning", {}).get("planning_run_id") != new_run["id"]):
+                raise HarnessError("Replanning must preserve and link the superseded workflow identity.")
+            db.execute("UPDATE runs SET active=0, data=? WHERE id=?",
+                       (json.dumps(old, ensure_ascii=True, allow_nan=False), run_id))
+            db.execute("INSERT INTO runs VALUES (?, 1, ?)",
+                       (new_run["id"], json.dumps(new_run, ensure_ascii=True, allow_nan=False)))
+            now = time.time()
+            db.execute("INSERT INTO events VALUES (?, ?, ?, ?, ?)", (event_id, run_id, now, kind, detail))
+            db.execute("INSERT INTO events VALUES (?, ?, ?, ?, ?)",
+                       (event_id + ":registered", new_run["id"], now, "replanning_registered", detail))
+            return new_run
+
     def save(self, run, kind, detail=None, *, new=False):
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
-            active = int(run["stage"] not in {"accepted", "cancelled", "plan_approved"})
+            active = int(run["stage"] not in INACTIVE_STAGES)
             data = json.dumps(run, ensure_ascii=True)
             if new:
                 db.execute("INSERT INTO runs VALUES (?, ?, ?)", (run["id"], active, data))

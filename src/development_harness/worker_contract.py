@@ -24,6 +24,9 @@ REVIEWER_SCHEMA = obj(task_id=TEXT, verdict={"type": "string", "enum": ["pass", 
                       summary=TEXT, findings=array(obj(id=TEXT, requirement_id=TEXT, path=TEXT,
                           severity={"type": "string", "enum": ["critical", "high", "medium", "low"]},
                           required={"type": "boolean"}, evidence=TEXT, recommendation=TEXT)), questions=array(TEXT))
+REVIEWER_FOLLOWUP_SCHEMA = obj(**REVIEWER_SCHEMA["properties"], assessments=array(obj(
+    finding_id=TEXT, status={"type": "string", "enum": ["open", "resolved", "false_positive", "deferred"]},
+    reason=TEXT, evidence=TEXT)))
 
 
 def save_record(path, value):
@@ -148,8 +151,52 @@ def validate_proposal(value, scope):
     return value
 
 
-def validate_review(value, scope):
-    _shape(value, REVIEWER_SCHEMA)
+def validate_prior_findings(prior_findings, scope):
+    """Check controller identities before disclosing a bounded follow-up packet."""
+    if not isinstance(prior_findings, list) or len(prior_findings) > 100:
+        raise HarnessError("Prior findings must be a bounded list.")
+    ids = set()
+    for finding in prior_findings:
+        if (not isinstance(finding, dict) or not isinstance(finding.get("id"), str) or
+                not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", finding["id"]) or finding["id"] in ids or
+                finding.get("task_id") != scope.task_id or not isinstance(finding.get("requirement_id"), str) or
+                finding.get("requirement_id") not in scope.requirements or not isinstance(finding.get("path"), str) or
+                type(finding.get("required")) is not bool or finding.get("status") not in {"open", "deferred"} or
+                finding.get("path") not in {"", *(item["path"] for item in scope.files)}):
+            raise HarnessError("Prior finding identity, status or task scope is invalid.")
+        ids.add(finding["id"])
+    return prior_findings
+
+
+def validate_review_assessments(value, prior_findings):
+    """Require an explicit disposition for every supplied controller finding."""
+    _shape(value, REVIEWER_FOLLOWUP_SCHEMA)
+    previous = {item["id"]: item for item in prior_findings}
+    assessments = value["assessments"]
+    if len(assessments) != len(previous) or {item["finding_id"] for item in assessments} != set(previous):
+        raise HarnessError("Follow-up review must assess every prior finding exactly once, with no invented IDs.")
+    repeated = {item["id"]: item for item in value["findings"]}
+    for assessment in assessments:
+        if not assessment["reason"].strip() or not assessment["evidence"].strip():
+            raise HarnessError("Review assessments require a reason and concrete evidence.")
+        identity, status = assessment["finding_id"], assessment["status"]
+        if (status in {"open", "deferred"}) != (identity in repeated):
+            raise HarnessError("Open/deferred assessments must repeat the controller finding; closed findings cannot recur.")
+        if identity in repeated:
+            original, current = previous[identity], repeated[identity]
+            if ((original["requirement_id"], original["path"]) != (current["requirement_id"], current["path"]) or
+                    original["required"] and not current["required"]):
+                raise HarnessError("Repeated findings cannot change scope or downgrade mandatory status.")
+        if status in {"resolved", "false_positive"} and value["verdict"] == "blocked":
+            raise HarnessError("A blocked follow-up review cannot close a finding.")
+    return value
+
+
+def validate_review(value, scope, prior_findings=None):
+    _shape(value, REVIEWER_FOLLOWUP_SCHEMA if prior_findings else REVIEWER_SCHEMA)
+    if prior_findings:
+        validate_prior_findings(prior_findings, scope)
+        validate_review_assessments(value, prior_findings)
     if len(json.dumps(value, ensure_ascii=False).encode("utf-8")) > MAX_CONTEXT_BYTES * 2:
         raise HarnessError("Reviewer response exceeds the bounded output size.")
     if value["task_id"] != scope.task_id or not value["summary"].strip():

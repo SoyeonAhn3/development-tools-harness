@@ -9,10 +9,11 @@ import uuid
 
 from .codex_adapter import CodexPlanner
 from .files import apply_write, target
+from .isolated_validation import IsolatedValidator
 from .model import HarnessError, digest, file_digest
 from .plan_schema import SCHEMA, SKILL_SCHEMA, render, validate_plan
 from .phase_docs import load_profile, profile_summary, render_documents, validate_profile
-from .processes import ProjectLock, alive
+from .processes import ProjectLock, alive, ensure_stopped
 from .project import (CONFIG, OUTPUT, content_baseline, load_project, packet_hash, read_json,
                       require_baseline, save_new, validate_config)
 from .store import Store
@@ -26,6 +27,8 @@ class Planning:
 
     def get(self):
         run = self.store.get()
+        if run.get("kind") == "workflow":
+            run = self.store.latest("planning")
         if run.get("kind") != "planning":
             raise HarnessError("This is a Phase 1 execution run. Use its status/resume/cancel commands.")
         return run
@@ -53,9 +56,84 @@ class Planning:
             self.store.save(run, "project_registered", {"files": [f["path"] for f in files]}, new=True)
             return run
 
+    def replan(self):
+        """Capture current files after explicit requirements feedback, without writes.
+
+        The old approved input baseline deliberately does not constrain the new
+        specification/code. Configuration changes require separate registration;
+        this route preserves the registered input paths and validation controls.
+        """
+        from .workflow import Workflow
+        from .workflow_records import effective_attempt
+        with ProjectLock(self.store):
+            previous = self.store.latest("workflow")
+            link = previous.get("replanning")
+            if previous["stage"] == "superseded" and link:
+                replacement = self.store.get(link["planning_run_id"])
+                origin = replacement.get("feedback_source", {})
+                if (replacement.get("kind") != "planning" or origin.get("workflow_run_id") != previous["id"]
+                        or origin.get("feedback_ids") != link.get("feedback_ids")):
+                    raise HarnessError("Replacement planning linkage is invalid.")
+                return replacement
+            if previous["stage"] != "replanning_required":
+                raise HarnessError("Requirements feedback must request replanning before workflow-replan.")
+            active = self.store.active()
+            if not active or active["id"] != previous["id"]:
+                raise HarnessError("The workflow awaiting replanning no longer owns this project.")
+            feedback = [item for item in previous.get("feedback", [])
+                        if item.get("kind") == "requirements" and item.get("outcome") == "replanning_required"]
+            feedback_ids = [item.get("id") for item in feedback]
+            if (not feedback_ids or any(not isinstance(value, str) or not value for value in feedback_ids)
+                    or len(set(feedback_ids)) != len(feedback_ids)):
+                raise HarnessError("Pending requirements feedback is missing or invalid.")
+            execution = previous.get("execution", {})
+            if execution.get("in_flight") or execution.get("patch_pending") or execution.get("active_step"):
+                raise HarnessError("An incomplete workflow boundary must be reconciled before replanning.")
+            ensure_stopped([effective_attempt(item) for item in previous["attempts"]])
+            if Workflow._pending(previous):
+                raise HarnessError("Unfinished or uncertain attempts must be reconciled before replanning.")
+            config, files = load_project(self.project)
+            if config != previous["config"]:
+                raise HarnessError("Registered configuration changed; preserve it and use separate registration after cancellation.")
+            writing_profile = load_profile()
+            baseline = content_baseline(self.project)
+            if any(baseline.get(item["path"]) != item["sha256"] for item in files):
+                raise HarnessError("Inputs changed while preparing the new planning baseline.")
+            now = time.time()
+            replacement = {"id": uuid.uuid4().hex, "kind": "planning", "project_id": self.store.project_id,
+                "project": str(self.project), "stage": "baseline_pending", "config": copy.deepcopy(config),
+                "baseline": baseline, "input_hash": digest(baseline), "context_hash": packet_hash(files),
+                "attempts": [], "baseline_evidence": [], "versions": [], "approval": None,
+                "waiting_since": None, "approval_wait_seconds": 0, "created": now, "reason": None,
+                "writing_profile": writing_profile,
+                "feedback_source": {"workflow_run_id": previous["id"], "planning_run_id": previous["planning_run_id"],
+                                    "feedback_ids": feedback_ids}}
+            # Inspect twice around profile/context preparation; no current edit is
+            # rolled back or silently attached to a stale input packet.
+            self._check(replacement)
+            previous_hash = digest(previous)
+
+            def supersede(current):
+                if digest(current) != previous_hash:
+                    raise HarnessError("Workflow changed while preparing requirement replanning.")
+                current.update(stage="superseded", reason="Requirements feedback started a new planning run.",
+                               replanning={"planning_run_id": replacement["id"], "feedback_ids": feedback_ids, "at": now})
+                for item in current["feedback"]:
+                    if item["id"] in feedback_ids:
+                        item["outcome"] = "replanning_started"
+                        item.setdefault("history", []).append({"outcome": "replanning_started", "at": now,
+                                                               "planning_run_id": replacement["id"]})
+
+            detail = {"workflow_run_id": previous["id"], "planning_run_id": replacement["id"],
+                      "feedback_ids": feedback_ids, "input_hash": replacement["input_hash"]}
+            return self.store.supersede_and_create(previous["id"], previous["id"] + ":replanned",
+                                                   "workflow_superseded", detail, replacement, supersede)
+
     def _check(self, run):
         if "writing_profile" in run:
             validate_profile(run["writing_profile"])
+        if "feedback_source" in run:
+            ensure_stopped(run["attempts"])
         for attempt in run["attempts"]:
             if attempt["outcome"] in {"launching", "running"} and alive(attempt.get("process")):
                 raise HarnessError("A recorded worker is still active; wait before planning/resuming.")
@@ -77,12 +155,45 @@ class Planning:
         attempt["dispatched"] = True
         self.store.save(run, "planning_worker_registered", {"attempt_id": attempt["id"]})
 
-    def _baseline(self, run):
+    def _baseline(self, run, *, validator_factory=IsolatedValidator):
         batch = []
+        isolated = "feedback_source" in run
+        validator = None
         for check in run["config"]["validation"]:
             self._check(run)
             attempt = self._attempt(run, "baseline_validation")
-            validate(check, self.project, self.store.directory, attempt, lambda a: self._launched(run, a))
+            if isolated:
+                # A replacement plan may contain generated implementation/tests;
+                # its new baseline retains their AppContainer boundary.
+                identity = {key: attempt[key] for key in ("id", "role", "scope", "synthetic", "input_hash")}
+                attempt["backend"] = "appcontainer"
+
+                def merge(evidence):
+                    if evidence.get("id") != identity["id"]:
+                        raise HarnessError("Replanning validation changed its controller attempt identity.")
+                    attempt.update(copy.deepcopy(evidence))
+                    attempt.update(identity)
+
+                def launched(evidence):
+                    merge(evidence)
+                    self._launched(run, attempt)
+
+                try:
+                    if validator is None:
+                        directory = self.store.home / "replanning-validation" / attempt["id"]
+                        validator = validator_factory(directory)
+                        if not validator.verify().get("ready"):
+                            raise HarnessError("Replanning validation permissions were not verified.")
+                    merge(validator.run(check, self.project, launched=launched, attempt_id=attempt["id"]))
+                except (KeyboardInterrupt, HarnessError, OSError) as exc:
+                    attempt.update(outcome="interrupted" if isinstance(exc, KeyboardInterrupt) else "unverified",
+                                   ended=None, duration=None, reason=str(exc),
+                                   failure_kind="interrupted" if isinstance(exc, KeyboardInterrupt) else
+                                   "permission" if isinstance(exc, PermissionError) else "environment")
+                    self.store.save(run, "baseline_check_finished", {"attempt_id": attempt["id"]})
+                    raise
+            else:
+                validate(check, self.project, self.store.directory, attempt, lambda a: self._launched(run, a))
             require_baseline(self.project, run["baseline"])
             self.store.save(run, "baseline_check_finished", {"attempt_id": attempt["id"]})
             batch.append(copy.deepcopy(attempt))
@@ -96,7 +207,8 @@ class Planning:
         self.store.save(run, "baseline_passed")
         return True
 
-    def plan(self, *, baseline_only=False, adapter_factory=CodexPlanner, codex_path=None):
+    def plan(self, *, baseline_only=False, adapter_factory=CodexPlanner, codex_path=None,
+             validator_factory=IsolatedValidator):
         with ProjectLock(self.store):
             run = self.get()
             files = self._check(run)
@@ -110,7 +222,7 @@ class Planning:
                                        reason="Previous invocation ended without a confirmed result.")
                 run["reason"] = None
                 self.store.save(run, "planning_resumed")
-                if run["stage"] == "baseline_pending" and not self._baseline(run):
+                if run["stage"] == "baseline_pending" and not self._baseline(run, validator_factory=validator_factory):
                     return run
                 if baseline_only:
                     return run
@@ -203,6 +315,9 @@ class Planning:
     def revise(self, path):
         with ProjectLock(self.store):
             run = self.get()
+            active = self.store.active()
+            if active and active["id"] != run["id"]:
+                raise HarnessError("Another run is active; cancel it before revising its source plan.")
             if run["stage"] not in {"awaiting_plan_approval", "plan_approved"}:
                 raise HarnessError("Generate a plan before revising it.")
             files = self._check(run)

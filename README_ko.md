@@ -8,9 +8,9 @@ Markdown 기획서를 단계별 개발 계획으로 바꾸고, 승인된 작업�
 
 ## 현재 상태
 
-**Phase 1–2는 인수·완료했으며 Phase 3는 진행 중입니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬을 사용한 버전별 영문·국문 계획 생성을 수행합니다. P3-T1 준비와 P3-T2 실제 Developer·Reviewer, 파일 변경 검사, 관리자 설정 없는 격리된 pytest를 검증했습니다. **전체 검사 265개**와 실제 호출 2회의 구성요소 예제를 통과했습니다. 일반 실행 승인·순차 실행·재개·인수는 P3-T3–T8에 남아 있습니다.
+**Phase 1–2는 인수·완료했으며 Phase 3는 진행 중입니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬을 사용한 버전별 영문·국문 계획 생성을 수행합니다. 2026-09-21 P3-T1–T2 준비·실제 역할·격리된 pytest를 **검사 265개 통과**와 실제 호출 2회의 예제로 검증했습니다. P3-T3는 실행 승인·영속 기록을 추가했고 2026-09-22 **전체 검사 378개**와 `pip check`를 통과했습니다. P3-T4는 `workflow-run`으로 순차 개발·격리된 검사·독립 리뷰·제한된 수정·최종 검사를 연결합니다. P3-T5는 `workflow-resume`으로 명시적인 중단 복구를 추가합니다. P3-T6는 최소 JSON 보고서·피드백 처리·근거에 연결된 사용자 인수 조건을 구현했습니다. P3-T7–T8의 외부 예제 인수와 검증된 고정 실행용 A는 남아 있습니다. [구현과 검증](Phase/Phase3_Workflow.md).
 
-아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. Phase 1·2 사용 안내에 구현된 동작을 구분했습니다.
+아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. 사용 안내에 구현된 동작을 구분했습니다.
 
 ## Phase 1 설치와 예제
 
@@ -78,7 +78,7 @@ Copy-Item -LiteralPath tests/fixtures/planning_project -Destination $planningPro
 
 JSON 출력과 `evidence_directory` 아래의 `report.json`을 확인합니다. 종료 코드 1은 실패·미완료 시험을 뜻합니다. 이 PC의 Windows 10 일반 사용자 환경에서 AppContainer의 역할·파일·토큰 검사를 통과했고, 부모·자식의 자체 루프백 서버 대상 TCP·UDP, IPv4·IPv6 연결 24건이 모두 차단됐습니다. 시간 초과 시험에서도 프로세스와 자식이 종료됐습니다. `ready=true`는 이 합성 후보 시험 통과를 뜻하며 `execution_enabled=false`를 유지합니다. 외부 네트워크와 실제 AI 역할 동작까지 입증한 명령은 아닙니다.
 
-회사 정책상 elevated 설정은 제외합니다. 기존 unelevated Codex 후보의 직접 TCP 차단은 실패하며 `--backend codex-unelevated`로 검토된 CLI 0.155.1의 시험을 유지합니다. `--codex-path`는 그 방식에만 사용하며 AppContainer 진단에는 Codex가 필요 없습니다. T2는 기존 텍스트 전용 Adapter를 실제 역할에 재사용하고 생성 코드를 AppContainer에서 검사합니다. 일반 Workflow 명령은 아직 연결 전이며 [Phase 3](Phase/Phase3_Workflow.md)에 구성요소 근거와 남은 작업을 기록했습니다.
+회사 정책상 elevated 설정은 제외합니다. 기존 unelevated Codex 후보의 직접 TCP 차단은 실패하며 `--backend codex-unelevated`로 검토된 CLI 0.155.1의 시험을 유지합니다. `--codex-path`는 그 방식에만 사용하며 AppContainer 진단에는 Codex가 필요 없습니다. T2는 텍스트 전용 Adapter를 실제 역할에 재사용하고 생성 코드를 AppContainer에서 검사합니다. T3는 실행 승인을, T4는 아래 순차 실행을 연결합니다. [Phase 3](Phase/Phase3_Workflow.md)에 구성요소 근거와 남은 작업을 기록했습니다.
 
 ## Phase 3 구성요소 검증
 
@@ -88,7 +88,99 @@ T2에서 실제 AI 역할과 격리된 테스트를 구성요소로 구현했습
 & $harnessPython scripts/verify_t2.py --live
 ```
 
-OneDrive 밖에 새 예제 복사본을 만들고 실제 AI를 두 번 호출합니다. 기본 검사 후 허용한 파일 변경만 적용하고 격리된 테스트·독립 검사를 거쳐 별도 읽기 전용 리뷰를 받습니다. 출력에 보고서 저장 위치를 표시합니다. 검토한 Python·pytest 의존성을 지원하며 테스트 출력은 scratch를 사용합니다. 일반 계획 실행·수정·재개·인수는 P3-T3–T8 연결이 필요합니다. [T2 검증 근거](Phase/Evidence/Phase3_Workers.json)를 참고하세요.
+OneDrive 밖에 새 예제 복사본을 만들고 실제 AI를 두 번 호출합니다. 기본 검사 후 허용한 파일 변경만 적용하고 격리된 테스트·독립 검사를 거쳐 별도 읽기 전용 리뷰를 받습니다. 출력에 보고서 저장 위치를 표시합니다. 검토한 Python·pytest 의존성을 지원하며 테스트 출력은 scratch를 사용합니다. 이 T2 스크립트는 구성요소 검사이며 T4는 실행을, T5는 아래 중단 복구를 연결합니다. T6는 인수 조건을 구현했고 외부 예제 인수는 P3-T7에 남아 있습니다. [T2 검증 근거](Phase/Evidence/Phase3_Workers.json)를 참고하세요.
+
+## Phase 3 실행·수정과 기록
+
+`$planningProject`의 계획을 검토·승인한 뒤 별도 실행 기록을 준비합니다.
+
+```powershell
+& $harnessPython -m development_harness --project $planningProject workflow-prepare --max-corrections 2
+& $harnessPython -m development_harness --project $planningProject workflow-status
+# 기록한 계획·코드·정책의 실행을 승인합니다. Task·AI 호출은 시작하지 않습니다.
+& $harnessPython -m development_harness --project $planningProject workflow-approve
+# 실제 Developer·Reviewer를 호출하고 승인 범위의 파일 변경을 적용합니다.
+& $harnessPython -m development_harness --project $planningProject workflow-run
+& $harnessPython -m development_harness --project $planningProject workflow-status
+# 선택 사항: 프로젝트 파일·근거를 보존하면서 취소합니다.
+& $harnessPython -m development_harness --project $planningProject workflow-cancel
+```
+
+준비하려면 가장 최근에 승인한 계획, 변경되지 않은 산출물·입력과 지원되는 격리된 pytest 검사가 필요합니다. `workflow-prepare --planning-run <run-id>`로 해당 계획을 명시할 수도 있습니다. `plan-approve`는 계속 계획만 승인합니다. 준비·승인을 반복해도 같은 기록을 유지하며 `plan-status`는 계속 계획 Run을 보여줍니다. Workflow 상태는 시도·대기·근거 기반 지적을 포함하고 미확정 측정값은 `null`로 표시합니다. 파일·승인 데이터가 달라지면 실행 승인을 막으며 상태 조회에 검사 오류와 종료 코드 1을 표시합니다.
+
+준비·승인 명령은 AI 호출·파일 변경을 수행하지 않습니다. `workflow-run`은 승인한 Task마다 Developer → 변경 검사·적용 → AppContainer 테스트 → 새 세션의 Reviewer 순서로 실행합니다. 테스트 실패와 필수 리뷰 지적은 같은 Task 수정 한도를 사용하며 기본값은 최초 구현 뒤 추가 2회입니다. 의존성 누락·권한·요구사항 불명확·시간 초과·테스트 생략 및 0개·미완료 검사는 추가 코드 수정을 요청하지 않고 멈춥니다.
+
+최초 실행 승인은 유지하고 하네스가 적용한 변경마다 현재 코드 버전을 기록합니다. 리뷰에는 현재 검사 묶음과 Task 시작 시점의 파일을 제공합니다. 이전 지적은 후속 리뷰가 처리 상태와 근거를 명시해야 하며 지적 누락이나 Developer의 주장만으로 해결되지 않습니다. 보류한 필수 지적도 완료를 막습니다. 모든 Task가 통과하면 최종 코드에서 등록 검사 전체를 다시 실행합니다. 최종 실패는 특정 Task의 결함으로 자동 판단하지 않고 확인을 위해 멈춥니다. `technically_complete`는 이 기술적 결과이며 명시적인 사용자 인수는 아래 설명하는 별도 단계입니다.
+
+Workflow 기록의 `workflow_execution_enabled=true`·`orchestration_available=true`는 기능 제공 여부이며 승인·완료를 뜻하지 않습니다. `workflow-run --steps 1`은 단계 완료를 영속 저장한 뒤 멈추며 다음 `workflow-run`으로 그 지점부터 계속할 수 있습니다. 도중에 중단됐다면 `workflow-status`의 참고용 `recovery` 판정을 확인하고 명시적으로 재개합니다.
+
+```powershell
+& $harnessPython -m development_harness --project $planningProject workflow-status
+& $harnessPython -m development_harness --project $planningProject workflow-resume
+```
+
+`workflow-resume`은 프로젝트 소유권을 확보하고 같은 계획·승인·파일·기록된 프로세스와 자식을 확인합니다. 미전송이 증명된 요청은 실행하고, 완전하게 저장된 응답은 입력·스키마·이벤트·세션을 검증한 뒤 재사용합니다. 전송 여부가 불확실하고 완전한 검증 응답도 없으면 자동 재호출하지 않습니다. 부분 변경은 각 파일이 기록된 변경 전·후 내용과 일치할 때만 이어서 적용하며 예상 밖 편집은 보존하고 복구를 멈춥니다. 중단된 검사는 새로 실행한 뒤 리뷰·최종 완료로 진행합니다. 승인·수정 횟수를 유지하고 취소·실패 상태를 재개로 초기화하지 않습니다. `active_step` 기록이 없는 이전 중단 실행은 별도 확인이 필요합니다.
+
+호출 시도의 원본 이력은 유지하며 별도 복구 사실을 반영해 실제 호출·사용량을 집계하고 지적 중복을 막습니다. 미확정 시간은 `null`로 유지합니다. `--state-dir` 변경으로 프로젝트 소유권을 우회할 수 없으며 이전 상태 DB가 누락·손상되면 저장소 전환을 막습니다. 기존 `run`·`resume`은 여전히 Phase 1 예제용입니다. `workflow-run`·`workflow-resume`은 중단·실패 시 0이 아닌 종료 코드를 반환합니다.
+
+T3 당시 **검사 378개**, 추가 검사 113개, 실제 AI 호출 0회 근거는 [T3 검증 기록](Phase/Evidence/Phase3_Records.json)에 보존합니다. T4는 **전체 검사 465개**와 `pip check`, 실제 AI 호출 4회의 Task 2개 예제와 독립 요구사항 검사 6개를 통과했습니다. 결과는 [T4 검증 기록](Phase/Evidence/Phase3_Execution.json)과 [Phase 3](Phase/Phase3_Workflow.md)에 정리합니다. 실제 T4 예제를 명시적으로 재현하려면 `& $harnessPython scripts/verify_t4.py --live`를 실행합니다. 새 임시 프로젝트에서 실제 역할을 호출하며 T5 복구나 Phase 3 사용자 인수를 입증하는 스크립트는 아닙니다.
+
+T5는 **전체 회귀 검사 535개**, 마지막 복구 경계 검사 9개와 `pip check`를 통과했습니다. 임시 실제 예제는 **확인된 역할 호출 2회**로 통과했습니다. 실제 Developer 응답 저장 후 제어 프로그램을 강제 종료하고 추가 Developer 호출 없이 응답을 재사용해 격리 검사·독립 리뷰를 완료했습니다. Task·최종 검사 각 8개와 추가 독립 검사 6개가 통과했습니다. [T5 검증 기록](Phase/Evidence/Phase3_Recovery.json)은 기존 T4 근거와 별도로 보존합니다. 이 제한된 실제 복구 시험을 명시적으로 재현하려면 `& $harnessPython scripts/verify_t5.py --live`를 실행합니다. Phase 3 사용자 인수는 대기 중입니다.
+
+## Phase 3 결과·피드백·인수
+
+`workflow-report`는 프로젝트 파일·Workflow 기록·기존 DB 바이트를 변경하지 않고 최소 JSON 결과를 출력합니다. 성공·실패·중단·권한 문제 상황에서 변경 파일, 현재 테스트 결과, 미해결 지적·피드백, 필수 수동 확인과 실제 근거 경로를 보여줍니다. 누락된 파일과 내용 검사 오류도 표시합니다. 읽기 쉬운 보고서 표현 개선은 Phase 4에 남겨 둡니다.
+
+```powershell
+& $harnessPython -m development_harness --project $planningProject workflow-report
+```
+
+필수 수동 확인은 실행 승인 전에 선언합니다. 승인한 현재 Phase의 실제 요구사항 ID를 사용해 `$env:TEMP\harness-manual-checks.json` 같은 외부 파일에 JSON 배열을 작성합니다.
+
+```json
+[
+  {
+    "id": "M1",
+    "requirement_ids": ["R1"],
+    "procedure": "CLI에 음수를 입력하고 stdout·stderr·종료 코드를 확인한다.",
+    "expected": "숫자 stdout 없이 stderr 설명과 0이 아닌 종료 코드를 반환한다."
+  }
+]
+```
+
+```powershell
+# 새 Workflow에서 workflow-approve 전에 실행합니다.
+& $harnessPython -m development_harness --project $planningProject workflow-prepare --manual-checks "$env:TEMP\harness-manual-checks.json"
+```
+
+선언한 수동 확인은 모두 필수이며 승인 정책에 고정됩니다. 기술적 완료 후 직접 확인하고 실제 결과를 기록합니다. 현재 `reuse` 요구사항은 구현 Task가 없어도 각각 `workflow-report`의 실제 최종 통과 검사 ID와 연결한 설명이 필요합니다. 다음 ID·관찰 내용은 설명용이며 실제 보고서의 ID와 확인 근거로 바꿉니다.
+
+```powershell
+& $harnessPython -m development_harness --project $planningProject workflow-reuse --requirement R1 --validation-ids '<final-validation-id>' --outcome passed --evidence '최종 양수·0 입력 검사가 재사용한 두 배 출력 동작을 확인한다.'
+& $harnessPython -m development_harness --project $planningProject workflow-manual --check M1 --outcome passed --evidence 'stdout 없음, stderr의 음수 입력 설명과 종료 코드 2를 확인했다.'
+& $harnessPython -m development_harness --project $planningProject workflow-report
+# 결과와 모든 필수 근거를 검토한 뒤에만 실행합니다.
+& $harnessPython -m development_harness --project $planningProject workflow-accept
+```
+
+실패·누락·이전 버전의 근거는 인수를 막습니다. 확인 기록은 계획·정책·코드·최종 완료에 연결되므로 일부 파일이 같아도 새 수정 후에는 이전 확인이 유효하지 않습니다. 최종 기록·JUnit·로그의 해시, 독립 리뷰 완료와 필수 미해결 지적도 검사합니다. 기술적으로 성공했어도 수동·재사용 확인은 대기 중일 수 있습니다. T4·T5의 이전 Run은 승인한 `result_version=1` 정책과 봉인된 근거가 없어 T6 인수에 대해서는 과거 기록·미검증으로 유지하며 새로 승인한 Workflow가 필요합니다. 보고서 조회로 자동 변경하거나 인수하지 않습니다.
+
+피드백은 AI 호출 없이 원문과 처리 이력을 보존합니다. 다음 중 상황에 맞는 경로를 선택합니다.
+
+```powershell
+# 같은 범위 결함: 승인을 유지하고 해당 Task의 남은 수정 횟수를 사용합니다.
+& $harnessPython -m development_harness --project $planningProject workflow-feedback --kind defect --task '<task-id>' --text '승인된 요구사항 안에서 관찰한 결함을 설명한다.'
+& $harnessPython -m development_harness --project $planningProject workflow-run
+# 요구사항 변경: 기존 승인은 이력으로 보존하고 새 계획을 시작합니다.
+& $harnessPython -m development_harness --project $planningProject workflow-feedback --kind requirements --text '변경할 요구사항을 설명한다.'
+# 재계획 전에 등록된 기획서 파일에 요청한 요구사항 변경을 반영합니다.
+& $harnessPython -m development_harness --project $planningProject workflow-replan
+& $harnessPython -m development_harness --project $planningProject plan
+```
+
+결함 피드백은 원래 Task 수정 한도를 공유하며 횟수를 초기화하지 않습니다. 앞선 Task를 고치면 이미 완료한 후속 Task도 다시 검사·리뷰하고 최종 검사 전체를 실행합니다. 요구사항 변경은 기존 실행 승인의 사용을 막습니다. `workflow-replan` 전에 등록된 기획서를 수정해야 합니다. 피드백은 요청 원문을 보존하지만 Planner가 근거로 읽는 기획서를 자동 수정하지 않습니다. 새 계획을 검토한 뒤 `plan-approve`, `workflow-prepare`, `workflow-approve`가 필요합니다. 재계획 과정에서 이미 생성한 코드의 기본 검사는 AppContainer에서 실행합니다. 기존 구현 파일·피드백·승인 이력은 보존합니다.
+
+T6는 **추가 검사 96개**를 포함한 **전체 검사 632개**와 `pip check`를 통과했습니다. **새 실제 AI 호출은 0회**입니다. 저장된 T5 실제 예제를 조회할 때 표시하는 호출 2회는 과거 이력이며 새로운 T6 실제 예제나 사용자 인수가 아닙니다. 현재 검증 상태는 [T6 검증 근거](Phase/Evidence/Phase3_Results.json)와 [Phase 3 상세](Phase/Phase3_Workflow.md)에 기록합니다. P3-T7–T8과 Phase 3 인수는 대기 중입니다.
 
 ## 목표 사용 흐름
 
@@ -109,7 +201,7 @@ OneDrive 밖에 새 예제 복사본을 만들고 실제 AI를 두 번 호출합
 
 ## 첫 MVP 범위
 
-첫 MVP는 한 프로젝트의 순차 Task와 한 종류의 검증 기술 구성을 다룹니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1입니다. 계획 Adapter는 ChatGPT 인증의 Codex CLI이며 검토 버전은 0.154.0과 0.155.1입니다. 실제 구현·리뷰와 작업 권한 분리는 Phase 3에서 다룹니다.
+첫 MVP는 한 프로젝트의 순차 Task와 한 종류의 검증 기술 구성을 다룹니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1입니다. Adapter는 ChatGPT 인증의 Codex CLI이며 검토 버전은 0.154.0과 0.155.1입니다. 실제 역할·격리·실행 승인·제한된 순차 실행·명시적 중단 복구·최소 JSON 보고서·피드백·인수 조건을 구현했습니다. 외부 예제 인수와 고정 실행본은 Phase 3에 남아 있습니다.
 
 | 영역 | P0 구현 예정 동작 |
 | --- | --- |
@@ -195,7 +287,7 @@ P0·P1·P2는 우선순위이며, **MVP2는 후속 제품 범위**입니다. 모
 ## 기획 문서
 
 - [전체 개발 Phase 개요](Phase/Overview.md): 4개 개발 Phase, 요구사항 대응표, dogfooding 진입 조건. 각 문서에 영문·국문 전체 내용을 함께 제공합니다.
-- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): 진행 중, P3-T1–T2 검증 완료·P3-T3–T8 대기. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
+- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): 진행 중, P3-T1–T6 구현, T7–T8 대기. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
 - [축소 MVP 계획서 — 0.4](Draft/ai-development-harness-lean-mvp-plan.md): 범위, 우선순위, 인수 규칙, 개발 단계, dogfooding, MVP2, 기획 변경 이력. 이 문서부터 확인하세요.
 - [과거 기획 문서](Draft/archive/): 이전 설계와 결정 기록입니다. 과거 문서의 더 넓은 범위가 축소 MVP에도 적용된다고 가정하지 않습니다.
 
@@ -224,4 +316,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Phase 2 사용자 인수를 완료했습니다. Phase 3 실행 계약·예제·재현 가능한 권한 조사를 준비했습니다. 실제 Developer·Reviewer 연결에는 더 강한 권한 수단의 검증이 필요하며, 텍스트 전용 Planner 경계만으로 작업·테스트 권한 분리를 입증하지 않습니다.
+Phase 2 사용자 인수를 완료했습니다. Phase 3는 실제 역할·격리된 검사·실행 승인·영속 기록·제한된 순차 수정·명시적 중단 복구·최소 보고서·피드백·근거에 연결된 결과 인수를 연결합니다. 외부 예제 인수·고정 실행본은 P3-T7–T8에 남아 있으며 Phase 3 사용자 인수는 대기 중입니다.

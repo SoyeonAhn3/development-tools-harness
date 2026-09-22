@@ -3,11 +3,14 @@
 import ctypes
 from ctypes import wintypes
 import json
+import math
 import msvcrt
 import os
 from pathlib import Path
+import re
 import sqlite3
 import tempfile
+import uuid
 
 import psutil
 
@@ -21,8 +24,12 @@ def identity(pid=None):
 
 
 def alive(record):
-    if not record:
+    if record is None:
         return False
+    if (not isinstance(record, dict) or type(record.get("pid")) is not int or record["pid"] <= 0
+            or type(record.get("created")) not in {int, float}
+            or not math.isfinite(record["created"]) or record["created"] < 0):
+        raise HarnessError("Invalid recorded process identity; unsafe to resume.")
     try:
         process = psutil.Process(record["pid"])
         return abs(process.create_time() - record["created"]) < 0.001 and process.is_running()
@@ -30,6 +37,41 @@ def alive(record):
         return False
     except psutil.AccessDenied as exc:
         raise HarnessError("Cannot inspect a recorded process; unsafe to resume.") from exc
+
+
+def ensure_stopped(attempts):
+    """Read-only recovery guard; never terminate a process to obtain ownership.
+
+    A dead root PID alone cannot prove its children ended. New invocations also
+    record a named kill-on-close job, so recovery can inspect its membership.
+    Older, fully finished records remain usable; unfinished legacy roots need
+    explicit inspection rather than an assumed clean exit.
+    """
+    for attempt in attempts:
+        if not isinstance(attempt, dict):
+            raise HarnessError("Invalid attempt process evidence; unsafe to resume.")
+        process = attempt.get("process")
+        result = attempt.get("process_result") or {}
+        descendants = attempt.get("descendants", [])
+        if not isinstance(result, dict) or not isinstance(descendants, list):
+            raise HarnessError("Invalid attempt process evidence; unsafe to resume.")
+        containment = attempt.get("containment", result.get("containment"))
+        for recorded in [process, *descendants]:
+            if recorded is not None and alive(recorded):
+                raise HarnessError("A recorded process is still active; unsafe to resume.")
+        if process is None and ("process_registered" in attempt.get("journal_phases", {})
+                                or attempt.get("dispatch_status") == "uncertain"):
+            raise HarnessError("Dispatched attempt has no recorded process identity; unsafe to resume.")
+        if containment is not None:
+            if (not isinstance(containment, dict) or containment.get("kind") != "windows_job_v1"
+                    or containment.get("kill_on_close") is not True
+                    or not isinstance(containment.get("name"), str)
+                    or not re.fullmatch(r"Local\\development-harness-[0-9a-f]{32}", containment["name"])):
+                raise HarnessError("Invalid recorded process containment; unsafe to resume.")
+            if Job.active_processes(containment["name"]):
+                raise HarnessError("Recorded process descendants are still active; unsafe to resume.")
+        elif process and "finished" not in attempt.get("journal_phases", {}):
+            raise HarnessError("Unfinished process has no descendant containment evidence; inspect before resuming.")
 
 
 def _ownership_record(raw, path):
@@ -87,13 +129,19 @@ class ProjectLock:
             previous_db = previous.get("database")
             if previous_db and previous_db != str(self.store.path):
                 path = Path(previous_db)
-                if path.exists():
+                if not path.is_file():
+                    raise HarnessError("Previous ownership database is missing; inspect before changing state directory: " + previous_db)
+                try:
                     db = sqlite3.connect(path.as_uri() + "?mode=ro", uri=True)
                     try:
+                        if db.execute("PRAGMA quick_check").fetchone() != ("ok",):
+                            raise HarnessError("Previous ownership database is corrupt; inspect before changing state directory: " + previous_db)
                         if db.execute("SELECT 1 FROM runs WHERE active=1").fetchone():
                             raise HarnessError("An unfinished run exists in another state directory: " + previous_db)
                     finally:
                         db.close()
+                except (sqlite3.Error, OSError, ValueError) as exc:
+                    raise HarnessError("Cannot inspect previous ownership database; state directory was not changed: " + previous_db) from exc
             _write_ownership(record_path, {"database": str(self.store.path), "owner": identity()})
         except BaseException:
             self.__exit__(None, None, None)
@@ -124,6 +172,13 @@ class _ExtendedLimits(ctypes.Structure):
                 ("peak_process", ctypes.c_size_t), ("peak_job", ctypes.c_size_t)]
 
 
+class _BasicAccounting(ctypes.Structure):
+    _fields_ = [(name, ctypes.c_int64) for name in
+                ("user_time", "kernel_time", "period_user_time", "period_kernel_time")] + [
+                (name, wintypes.DWORD) for name in
+                ("page_faults", "total_processes", "active_processes", "terminated_processes")]
+
+
 class Job:
     """All validation descendants die when the controlling harness exits.
 
@@ -141,7 +196,9 @@ class Job:
         for name, (args, result) in specs.items():
             fn = getattr(self.kernel, name)
             fn.argtypes, fn.restype = args, result
-        self.handle = self.kernel.CreateJobObjectW(None, None)
+        self.name = "Local\\development-harness-" + uuid.uuid4().hex
+        self.record = {"kind": "windows_job_v1", "name": self.name, "kill_on_close": True}
+        self.handle = self.kernel.CreateJobObjectW(None, self.name)
         if not self.handle:
             raise HarnessError("Cannot create validation process job.")
         limits = _ExtendedLimits()
@@ -164,3 +221,27 @@ class Job:
         if self.handle:
             self.kernel.CloseHandle(self.handle)
             self.handle = None
+
+    @staticmethod
+    def active_processes(name):
+        """Inspect an existing job without retaining a lifetime-extending handle."""
+        kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel.OpenJobObjectW.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.LPCWSTR]
+        kernel.OpenJobObjectW.restype = wintypes.HANDLE
+        kernel.QueryInformationJobObject.argtypes = [wintypes.HANDLE, ctypes.c_int,
+                                                     ctypes.c_void_p, wintypes.DWORD, ctypes.c_void_p]
+        kernel.QueryInformationJobObject.restype = wintypes.BOOL
+        kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+        kernel.CloseHandle.restype = wintypes.BOOL
+        handle = kernel.OpenJobObjectW(0x0004, False, name)  # JOB_OBJECT_QUERY only.
+        if not handle:
+            if ctypes.get_last_error() == 2:  # No handles remain; kill-on-close applied.
+                return 0
+            raise HarnessError("Cannot inspect recorded process containment; unsafe to resume.")
+        try:
+            value = _BasicAccounting()
+            if not kernel.QueryInformationJobObject(handle, 1, ctypes.byref(value), ctypes.sizeof(value), None):
+                raise HarnessError("Cannot inspect recorded process descendants; unsafe to resume.")
+            return value.active_processes
+        finally:
+            kernel.CloseHandle(handle)
