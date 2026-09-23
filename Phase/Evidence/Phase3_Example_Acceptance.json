@@ -1,0 +1,254 @@
+{
+  "date": "2026-09-23",
+  "recorded_at": "2026-09-23T11:51:57.078842+09:00",
+  "phase": "Phase3",
+  "task": "P3-T7",
+  "status": "Accepted and completed",
+  "user_statement": "결과 인수한다",
+  "scope": "External CLI example only; T8 and overall Phase 3 acceptance remain pending",
+  "workflow_run_id": "02ee4d614527425fa2235542d76637fb",
+  "plan_hash": "b8d7765abaaa8eb1bf1756b0cc74cc8a87f3b690691399045dedd6ab058762fb",
+  "policy_hash": "c26908d1b4158d64ee965d5266c2c08cc0158b50f56e7abcbd18092a161cb04b",
+  "content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+  "acceptance": {
+    "scope": "result_acceptance",
+    "plan_hash": "b8d7765abaaa8eb1bf1756b0cc74cc8a87f3b690691399045dedd6ab058762fb",
+    "policy_hash": "c26908d1b4158d64ee965d5266c2c08cc0158b50f56e7abcbd18092a161cb04b",
+    "content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+    "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb",
+    "validation_ids": [
+      "20f5154c0ed4480a807a3bc3cec71f0f"
+    ],
+    "reuse_evidence_ids": [
+      "t7-user-r1-c2cc52b6323c"
+    ],
+    "manual_check_ids": [
+      "t7-user-m1-c2cc52b6323c"
+    ],
+    "at": 1790131918.2417285
+  },
+  "acceptance_status": {
+    "ready": true,
+    "accepted": true,
+    "technical_ready": true,
+    "blockers": [],
+    "reuse": [
+      {
+        "requirement_id": "R1",
+        "text": {
+          "en": "Preserve positive and zero doubling, missing-argument and non-integer rejection.",
+          "ko": "양수와 0의 두 배 출력 및 인수 누락·정수가 아닌 입력 거부를 유지한다."
+        },
+        "verification": {
+          "en": "Run the registered command-level pytest suite without skips or failures.",
+          "ko": "등록된 명령 수준 pytest 검사를 실패와 생략 없이 실행한다."
+        },
+        "status": "passed",
+        "evidence": {
+          "id": "t7-user-r1-c2cc52b6323c",
+          "requirement_id": "R1",
+          "outcome": "passed",
+          "evidence": "사용자가 기존 동작 유지·음수 오류 설명과 실제 실행 결과를 전달받은 뒤 \"결과 인수한다\"고 명시적으로 인수했다. 최종 등록 검사 20f5154c0ed4480a807a3bc3cec71f0f의 통과한 8개 테스트는 양수 3→6, 0→0 및 argparse의 인수 누락·비정수 거부를 확인한다. 별도 JUnit의 실제 명령 6개도 동일 동작을 확인한다. 이 설명은 사용자에게 제시한 결과와 그에 대한 인수 응답을 기록한다.",
+          "plan_hash": "b8d7765abaaa8eb1bf1756b0cc74cc8a87f3b690691399045dedd6ab058762fb",
+          "policy_hash": "c26908d1b4158d64ee965d5266c2c08cc0158b50f56e7abcbd18092a161cb04b",
+          "content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+          "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb",
+          "source": "user",
+          "validation_ids": [
+            "20f5154c0ed4480a807a3bc3cec71f0f"
+          ],
+          "check_hashes": [
+            "eeb208cbe3b397212cb4a848fbc29634781bb8e99d5f21b9bb9e2aae6eb84303"
+          ],
+          "at": 1790131917.4155118
+        }
+      }
+    ],
+    "manual": [
+      {
+        "id": "M1",
+        "requirement_ids": [
+          "R2"
+        ],
+        "procedure": "Inspect the actual isolated CLI observations for -1 and -42 in report.json and their linked JUnit evidence; confirm the message clearly explains that negative input is forbidden.",
+        "expected": "Both inputs exit nonzero, produce no stdout, and explain the nonnegative input requirement on stderr.",
+        "status": "passed",
+        "evidence": {
+          "id": "t7-user-m1-c2cc52b6323c",
+          "check_id": "M1",
+          "outcome": "passed",
+          "evidence": "사용자에게 -1·-42 입력의 실제 결과(종료 코드 2, 빈 stdout, stderr의 value must be nonnegative)를 표시하고 오류 설명 확인을 요청했으며 사용자가 \"결과 인수한다\"고 응답했다. M1은 저장된 실행 결과의 오류 메시지 검토이며 사용자가 명령을 직접 실행했다는 주장은 하지 않는다.",
+          "plan_hash": "b8d7765abaaa8eb1bf1756b0cc74cc8a87f3b690691399045dedd6ab058762fb",
+          "policy_hash": "c26908d1b4158d64ee965d5266c2c08cc0158b50f56e7abcbd18092a161cb04b",
+          "content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+          "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb",
+          "source": "user",
+          "at": 1790131917.8461473
+        }
+      }
+    ],
+    "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb"
+  },
+  "user_decision": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\user-decision.json",
+    "sha256": "7bf43533b9c275b4a240a5f1c945d199c60a70ef064c0f7b34829f870d295300"
+  },
+  "commands": [
+    {
+      "argv": [
+        "%LOCALAPPDATA%\\development-tools-harness\\venv\\Scripts\\python.exe",
+        "-m",
+        "development_harness",
+        "--project",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\project",
+        "--state-dir",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state",
+        "workflow-reuse",
+        "--requirement",
+        "R1",
+        "--validation-ids",
+        "20f5154c0ed4480a807a3bc3cec71f0f",
+        "--outcome",
+        "passed",
+        "--record-id",
+        "t7-user-r1-c2cc52b6323c",
+        "--evidence-file",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\reuse-evidence.txt"
+      ],
+      "exit_code": 0,
+      "stdout": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\reuse.stdout.json",
+        "sha256": "1a28eec58222a36b54e068db752e7d2e448911c8f8102de40f356fbfb001dd01"
+      },
+      "stderr": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\reuse.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "argv": [
+        "%LOCALAPPDATA%\\development-tools-harness\\venv\\Scripts\\python.exe",
+        "-m",
+        "development_harness",
+        "--project",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\project",
+        "--state-dir",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state",
+        "workflow-manual",
+        "--check",
+        "M1",
+        "--outcome",
+        "passed",
+        "--record-id",
+        "t7-user-m1-c2cc52b6323c",
+        "--evidence-file",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\manual-evidence.txt"
+      ],
+      "exit_code": 0,
+      "stdout": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\manual.stdout.json",
+        "sha256": "2b0778eaaa57c0d1e8f1e8c936e8d467f6709f8a6034fdfa0172885da354ec1d"
+      },
+      "stderr": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\manual.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "argv": [
+        "%LOCALAPPDATA%\\development-tools-harness\\venv\\Scripts\\python.exe",
+        "-m",
+        "development_harness",
+        "--project",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\project",
+        "--state-dir",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state",
+        "workflow-accept"
+      ],
+      "exit_code": 0,
+      "stdout": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\accept.stdout.json",
+        "sha256": "f87c5d9f0fa51d0f93c630888364f32ec9bedffeaecfd9c97c88290fee2f759d"
+      },
+      "stderr": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\accept.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "argv": [
+        "%LOCALAPPDATA%\\development-tools-harness\\venv\\Scripts\\python.exe",
+        "-m",
+        "development_harness",
+        "--project",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\project",
+        "--state-dir",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state",
+        "workflow-report"
+      ],
+      "exit_code": 0,
+      "stdout": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\verify.stdout.json",
+        "sha256": "f87c5d9f0fa51d0f93c630888364f32ec9bedffeaecfd9c97c88290fee2f759d"
+      },
+      "stderr": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\verify.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "accepted_run": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\accepted-run.json",
+    "sha256": "d98a8d9a13ce960dd1364724ca594b243f26c4adc5c5d4498f4943b40c5f47da"
+  },
+  "accepted_report": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\accepted-report.json",
+    "sha256": "f7a74e2e37c79d49dc7d847598059dcce5abbfe5a6654ca19a5db905ed66b2ef"
+  },
+  "additional_ai_calls": 0,
+  "additional_test_executions": 0,
+  "prior_attempts_preserved": true,
+  "execution_approval_preserved": true,
+  "project_files_preserved": true,
+  "ownership_released": true,
+  "original_live_artifacts_preserved": true,
+  "regression": {
+    "status": "passed",
+    "total": 632,
+    "passed": 632,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "duration_seconds": 1206.462,
+    "console_duration_seconds": 1206.69,
+    "exit_code": 0,
+    "command": [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "--junitxml=%LOCALAPPDATA%\\development-tools-harness\\t7-regression\\523159eeaa3d\\pytest.xml"
+    ],
+    "report": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-regression\\523159eeaa3d\\pytest.xml",
+      "sha256": "ead9d617329f773b893fb21944aca5dc6721b5e7101ce4c35addb7a185f567f8"
+    },
+    "log": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-regression\\523159eeaa3d\\pytest.log",
+      "sha256": "29538caf069b58b411fbb77a09121977bbad9944a8597dab6ead89a53565173b"
+    },
+    "source_manifest": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-regression\\523159eeaa3d\\source-at-start.json",
+      "sha256": "1e4c5c418f588ac97cd6a15cbe4756324dfaa982949a545fe59ff70afc42f513"
+    },
+    "source_files_verified_unchanged": 77,
+    "source_mismatches": [],
+    "pip_check": "passed",
+    "note": "One complete suite on unchanged source/test files. The eight final example tests and six independent CLI checks are separate evidence, not additions to this suite count."
+  },
+  "path_notation": {
+    "%LOCALAPPDATA%": "Local application-data directory of the machine that recorded the evidence.",
+    "%REPOSITORY_ROOT%": "Root of the development-tools-harness checkout.",
+    "note": "Only publication path prefixes are normalized; original runtime artifacts and their SHA-256 values are unchanged."
+  }
+}

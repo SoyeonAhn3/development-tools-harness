@@ -8,7 +8,7 @@ Markdown 기획서를 단계별 개발 계획으로 바꾸고, 승인된 작업�
 
 ## 현재 상태
 
-**Phase 1–2는 인수·완료했으며 Phase 3는 진행 중입니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬을 사용한 버전별 영문·국문 계획 생성을 수행합니다. 2026-09-21 P3-T1–T2 준비·실제 역할·격리된 pytest를 **검사 265개 통과**와 실제 호출 2회의 예제로 검증했습니다. P3-T3는 실행 승인·영속 기록을 추가했고 2026-09-22 **전체 검사 378개**와 `pip check`를 통과했습니다. P3-T4는 `workflow-run`으로 순차 개발·격리된 검사·독립 리뷰·제한된 수정·최종 검사를 연결합니다. P3-T5는 `workflow-resume`으로 명시적인 중단 복구를 추가합니다. P3-T6는 최소 JSON 보고서·피드백 처리·근거에 연결된 사용자 인수 조건을 구현했습니다. P3-T7–T8의 외부 예제 인수와 검증된 고정 실행용 A는 남아 있습니다. [구현과 검증](Phase/Phase3_Workflow.md).
+**Phase 1–2는 인수·완료했으며 Phase 3는 진행 중입니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬을 사용한 버전별 영문·국문 계획 생성을 수행합니다. 2026-09-21 P3-T1–T2 준비·실제 역할·격리된 pytest를 **검사 265개 통과**와 실제 호출 2회의 예제로 검증했습니다. P3-T3는 실행 승인·영속 기록을 추가했고 2026-09-22 **전체 검사 378개**와 `pip check`를 통과했습니다. P3-T4는 `workflow-run`으로 순차 개발·격리된 검사·독립 리뷰·제한된 수정·최종 검사를 연결합니다. P3-T5는 `workflow-resume`으로 명시적인 중단 복구를 추가합니다. P3-T6는 최소 JSON 보고서·피드백 처리·근거에 연결된 사용자 인수 조건을 구현했습니다. P3-T7 외부 예제는 실제 역할 호출 2회·중단 및 응답 재사용 1회·최종 검사 8개·독립 검사 6개로 기술 검증을 통과했습니다. 2026-09-23 R1·M1 확인과 명시적 사용자 인수를 기록해 T7을 완료했으며 P3-T8 고정 실행용 A는 미시작입니다. [구현과 검증](Phase/Phase3_Workflow.md).
 
 아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. 사용 안내에 구현된 동작을 구분했습니다.
 
@@ -88,7 +88,7 @@ T2에서 실제 AI 역할과 격리된 테스트를 구성요소로 구현했습
 & $harnessPython scripts/verify_t2.py --live
 ```
 
-OneDrive 밖에 새 예제 복사본을 만들고 실제 AI를 두 번 호출합니다. 기본 검사 후 허용한 파일 변경만 적용하고 격리된 테스트·독립 검사를 거쳐 별도 읽기 전용 리뷰를 받습니다. 출력에 보고서 저장 위치를 표시합니다. 검토한 Python·pytest 의존성을 지원하며 테스트 출력은 scratch를 사용합니다. 이 T2 스크립트는 구성요소 검사이며 T4는 실행을, T5는 아래 중단 복구를 연결합니다. T6는 인수 조건을 구현했고 외부 예제 인수는 P3-T7에 남아 있습니다. [T2 검증 근거](Phase/Evidence/Phase3_Workers.json)를 참고하세요.
+OneDrive 밖에 새 예제 복사본을 만들고 실제 AI를 두 번 호출합니다. 기본 검사 후 허용한 파일 변경만 적용하고 격리된 테스트·독립 검사를 거쳐 별도 읽기 전용 리뷰를 받습니다. 출력에 보고서 저장 위치를 표시합니다. 검토한 Python·pytest 의존성을 지원하며 테스트 출력은 scratch를 사용합니다. 이 T2 스크립트는 구성요소 검사이며 T4는 실행을, T5는 아래 중단 복구를 연결합니다. T6는 인수 조건을 구현했고 P3-T7에서 아래 외부 예제 인수를 완료했습니다. [T2 검증 근거](Phase/Evidence/Phase3_Workers.json)를 참고하세요.
 
 ## Phase 3 실행·수정과 기록
 
@@ -180,7 +180,18 @@ T5는 **전체 회귀 검사 535개**, 마지막 복구 경계 검사 9개와 `p
 
 결함 피드백은 원래 Task 수정 한도를 공유하며 횟수를 초기화하지 않습니다. 앞선 Task를 고치면 이미 완료한 후속 Task도 다시 검사·리뷰하고 최종 검사 전체를 실행합니다. 요구사항 변경은 기존 실행 승인의 사용을 막습니다. `workflow-replan` 전에 등록된 기획서를 수정해야 합니다. 피드백은 요청 원문을 보존하지만 Planner가 근거로 읽는 기획서를 자동 수정하지 않습니다. 새 계획을 검토한 뒤 `plan-approve`, `workflow-prepare`, `workflow-approve`가 필요합니다. 재계획 과정에서 이미 생성한 코드의 기본 검사는 AppContainer에서 실행합니다. 기존 구현 파일·피드백·승인 이력은 보존합니다.
 
-T6는 **추가 검사 96개**를 포함한 **전체 검사 632개**와 `pip check`를 통과했습니다. **새 실제 AI 호출은 0회**입니다. 저장된 T5 실제 예제를 조회할 때 표시하는 호출 2회는 과거 이력이며 새로운 T6 실제 예제나 사용자 인수가 아닙니다. 현재 검증 상태는 [T6 검증 근거](Phase/Evidence/Phase3_Results.json)와 [Phase 3 상세](Phase/Phase3_Workflow.md)에 기록합니다. P3-T7–T8과 Phase 3 인수는 대기 중입니다.
+T6는 **추가 검사 96개**를 포함한 **전체 검사 632개**와 `pip check`를 통과했습니다. **새 실제 AI 호출은 0회**입니다. 저장된 T5 실제 예제를 조회할 때 표시하는 호출 2회는 과거 이력이며 새로운 T6 실제 예제나 사용자 인수가 아닙니다. 현재 검증 상태는 [T6 검증 근거](Phase/Evidence/Phase3_Results.json)와 [Phase 3 상세](Phase/Phase3_Workflow.md)에 기록합니다. T7 기술 검증과 사용자 인수는 아래 기록했으며 T8과 Phase 3 전체 인수는 대기 중입니다.
+
+## Phase 3 외부 예제
+
+```powershell
+# 저장소 루트에서 준비된 하네스 환경으로 실행합니다.
+& $harnessPython scripts/verify_t7.py --live
+```
+
+`%LOCALAPPDATA%/development-tools-harness/t7-live/<id>`에 새 CLI 예제를 만들고 앞서 검토한 음수 거부 Task 1개를 실행합니다. 제어 프로그램이 계획을 작성하며 **Planner 호출은 0회**입니다. 현재 결과 정책과 수동 확인 M1을 고정하고 실제 Developer·Reviewer를 호출합니다. Developer 응답 저장 직후 의도적으로 중단한 뒤 공개 `workflow-resume`으로 응답을 재사용하고 기본 AppContainer 검증을 마칩니다. 스크립트는 근거를 저장하고 R1 재사용 확인·M1 수동 확인·실제 사용자 결과 인수는 대기 상태로 남깁니다. `--live`를 실행할 때마다 새 예제를 만들므로 기존 결과는 기록된 프로젝트·상태 경로의 `workflow-report`로 조회합니다.
+
+2026-09-23 예제 `c2cc52b6323c`는 **실제 호출 2회·최종 검사 8개·독립 CLI 검사 6개**로 `technically_complete`에 도달했습니다. 수정·리뷰 지적은 0개이며 저장소 원본 예제는 유지했습니다. 하네스 운영 소스 수정은 필요하지 않았습니다. 실제 stdout·stderr·종료 코드는 [사용자 검토 자료](Phase/Evidence/Phase3_Example_Review.md), 해시·명령·실행 기록 경로는 [T7 근거](Phase/Evidence/Phase3_Example.json)에 있습니다. 전체 회귀 검사 632개는 실패·오류·생략 없이 통과했습니다. 사용자가 2026-09-23 제시한 결과를 “결과 인수한다”로 명시적으로 인수했습니다. 공개 R1·M1 확인과 `workflow-accept`로 T7을 완료했으며 현재 보고서는 `stage=accepted`, 차단 조건 없음입니다. [인수 근거](Phase/Evidence/Phase3_Example_Acceptance.json)에 새 AI 호출·테스트 실행 없이 기록을 보존했습니다. T8은 미시작이며 Phase 3 전체 인수는 대기 중입니다.
 
 ## 목표 사용 흐름
 
@@ -201,7 +212,7 @@ T6는 **추가 검사 96개**를 포함한 **전체 검사 632개**와 `pip chec
 
 ## 첫 MVP 범위
 
-첫 MVP는 한 프로젝트의 순차 Task와 한 종류의 검증 기술 구성을 다룹니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1입니다. Adapter는 ChatGPT 인증의 Codex CLI이며 검토 버전은 0.154.0과 0.155.1입니다. 실제 역할·격리·실행 승인·제한된 순차 실행·명시적 중단 복구·최소 JSON 보고서·피드백·인수 조건을 구현했습니다. 외부 예제 인수와 고정 실행본은 Phase 3에 남아 있습니다.
+첫 MVP는 한 프로젝트의 순차 Task와 한 종류의 검증 기술 구성을 다룹니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1입니다. Adapter는 ChatGPT 인증의 Codex CLI이며 검토 버전은 0.154.0과 0.155.1입니다. 실제 역할·격리·실행 승인·제한된 순차 실행·명시적 중단 복구·최소 JSON 보고서·피드백·인수 조건을 구현했습니다. 외부 예제는 인수했으며 고정 실행본이 Phase 3에 남아 있습니다.
 
 | 영역 | P0 구현 예정 동작 |
 | --- | --- |
@@ -287,7 +298,7 @@ P0·P1·P2는 우선순위이며, **MVP2는 후속 제품 범위**입니다. 모
 ## 기획 문서
 
 - [전체 개발 Phase 개요](Phase/Overview.md): 4개 개발 Phase, 요구사항 대응표, dogfooding 진입 조건. 각 문서에 영문·국문 전체 내용을 함께 제공합니다.
-- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): 진행 중, P3-T1–T6 구현, T7–T8 대기. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
+- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): 진행 중, P3-T1–T6 구현, T7 인수·완료, T8 미시작. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
 - [축소 MVP 계획서 — 0.4](Draft/ai-development-harness-lean-mvp-plan.md): 범위, 우선순위, 인수 규칙, 개발 단계, dogfooding, MVP2, 기획 변경 이력. 이 문서부터 확인하세요.
 - [과거 기획 문서](Draft/archive/): 이전 설계와 결정 기록입니다. 과거 문서의 더 넓은 범위가 축소 MVP에도 적용된다고 가정하지 않습니다.
 
@@ -316,4 +327,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Phase 2 사용자 인수를 완료했습니다. Phase 3는 실제 역할·격리된 검사·실행 승인·영속 기록·제한된 순차 수정·명시적 중단 복구·최소 보고서·피드백·근거에 연결된 결과 인수를 연결합니다. 외부 예제 인수·고정 실행본은 P3-T7–T8에 남아 있으며 Phase 3 사용자 인수는 대기 중입니다.
+Phase 2 사용자 인수를 완료했습니다. Phase 3는 실제 역할·격리된 검사·실행 승인·영속 기록·제한된 순차 수정·명시적 중단 복구·최소 보고서·피드백·근거에 연결된 결과 인수를 연결합니다. T7 외부 예제 기술 검증을 통과했고 R1·M1 사용자 확인과 명시적 결과 인수를 완료했습니다. 고정 실행용 A의 P3-T8은 미시작이며 Phase 3 사용자 인수는 대기 중입니다.

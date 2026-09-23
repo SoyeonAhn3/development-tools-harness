@@ -6,7 +6,7 @@
 
 **Technology**: Python + pytest, SQLite and the selected single AI Adapter.
 
-**Plan status**: P3-T1–T3 preparation, real roles, isolated validation, execution admission and durable records are implemented and verified. P3-T4 connects sequential execution, bounded corrections, explicit independent review assessments and final validation; its two-Task live example reached technical completion. P3-T5 implements explicit interruption recovery with preserved approvals, files and call history. P3-T6 implements minimum JSON reports, feedback routes, final reuse/manual evidence and explicit acceptance gates; current verification is recorded below. Validation uses standard-user AppContainer under the no-administrator constraint. The accepted external example and fixed runner A remain P3-T7–T8. Phase 2 is accepted; Phase 3 acceptance remains pending. The reviewed eight-Task, 18-requirement plan and its original AI/manual-review evidence are preserved.
+**Plan status**: P3-T1–T3 preparation, real roles, isolated validation, execution admission and durable records are implemented and verified. P3-T4 connects sequential execution, bounded corrections, explicit independent review assessments and final validation; its two-Task live example reached technical completion. P3-T5 implements explicit interruption recovery with preserved approvals, files and call history. P3-T6 implements minimum JSON reports, feedback routes, final reuse/manual evidence and explicit acceptance gates; current verification is recorded below. Validation uses standard-user AppContainer under the no-administrator constraint. P3-T7 completed technical verification and explicit user acceptance on 2026-09-23, including R1/M1 confirmations. Fixed runner A is P3-T8, which has not started. Phase 2 is accepted; Phase 3 acceptance remains pending. The reviewed eight-Task, 18-requirement plan and its original AI/manual-review evidence are preserved.
 
 ## Overview
 
@@ -19,11 +19,11 @@ Connect actual implementation, validation, separate review, bounded corrections 
 | 1 | Real sequential Developer/Validation Runner/Reviewer workflow | ✅ T4 implemented; current verification below |
 | 2 | Call/timing/finding records, corrections and process-aware resume | ✅ T3–T5 implemented; current recovery verification below |
 | 3 | Minimum success/failure report, feedback and result acceptance | ✅ T6 implemented; current verification below |
-| 4 | Accepted external example and verified fixed runner A | 🔲 |
+| 4 | Accepted external example and verified fixed runner A | 🚧 T7 accepted and completed; T8 not started |
 
 ## Verification & Exit Criteria
 
-The [reviewed plan](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) contains completion criteria, proposed paths and verification methods. [Review evidence](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md) preserves the original AI output and manual corrections. P3-T1 and P3-T2 components are verified, including two actual AI calls on a disposable example. P3-T3 admission/records are implemented and verified; the full suite passed 378 tests. P3-T4 implementation and its four-call live example are recorded in [execution evidence](Evidence/Phase3_Execution.json). P3-T5 recovery is implemented; its separate [recovery evidence](Evidence/Phase3_Recovery.json) is preserved. P3-T6 results, feedback and acceptance gates are implemented; [results evidence](Evidence/Phase3_Results.json) and current verification are recorded below. P3-T7–T8 implementation has not started.
+The [reviewed plan](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) contains completion criteria, proposed paths and verification methods. [Review evidence](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md) preserves the original AI output and manual corrections. P3-T1 and P3-T2 components are verified, including two actual AI calls on a disposable example. P3-T3 admission/records are implemented and verified; the full suite passed 378 tests. P3-T4 implementation and its four-call live example are recorded in [execution evidence](Evidence/Phase3_Execution.json). P3-T5 recovery is implemented; its separate [recovery evidence](Evidence/Phase3_Recovery.json) is preserved. P3-T6 results, feedback and acceptance gates are implemented; [results evidence](Evidence/Phase3_Results.json) and current verification are recorded below. P3-T7 technical execution and explicit user acceptance are complete, with evidence below. P3-T8 has not started.
 
 | Task | Planned work | Completion evidence |
 |---|---|---|
@@ -33,10 +33,10 @@ The [reviewed plan](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) conta
 | P3-T4 | Run Developer → validation → separate Reviewer sequentially with bounded corrections. | Implemented: real isolated validation, explicit finding assessments, shared correction limits, patch lineage and final-content checks. Four-call live example reached technical completion. [Evidence](Evidence/Phase3_Execution.json). |
 | P3-T5 | Recover partial implementation and interrupted validation safely. | Implemented: explicit resume, saved-response proof/reuse, checked partial files, process-tree inspection, separate recovery facts and preserved approval/correction counts. [Evidence](Evidence/Phase3_Recovery.json); current verification below. |
 | P3-T6 | Add minimum reports, feedback routing, final reuse checks and acceptance gates. | Implemented: read-only JSON results, preserved feedback/correction or replanning routes, final reuse/manual confirmations and version-bound acceptance gates. [Evidence](Evidence/Phase3_Results.json); current verification below. |
-| P3-T7 | Complete the external CLI example through actual roles, interruption/resume and user acceptance. | Full regressions, actual outputs, distinct role sessions and recorded user result acceptance. |
+| P3-T7 | Complete the external CLI example through actual roles, interruption/resume and user acceptance. | ✅ Completed: two actual role calls, one crash/reuse, eight final tests and six independent checks; R1/M1 confirmed and user acceptance recorded on 2026-09-23. [Technical evidence](Evidence/Phase3_Example.json), [acceptance evidence](Evidence/Phase3_Example_Acceptance.json). |
 | P3-T8 | Freeze runner A and prove isolation before Phase 4. | Independent installed origins, fixed artifacts, actual B/test write-denial evidence and installed workflow/resume checks. |
 
-P3-T2 verifies the worker components on an explicitly scoped disposable example. P3-T3 prepares and authorizes a specific plan/code/policy version without dispatching work. P3-T4 starts that authorized work through `workflow-run`; P3-T5 adds explicit `workflow-resume`; P3-T6 supplies minimum reports and result acceptance conditions. The external example's actual user acceptance remains T7 work. The unelevated candidate failed network denial; elevated setup remains excluded under company policy. No administrator setup or unrestricted fallback is used.
+P3-T2 verifies the worker components on an explicitly scoped disposable example. P3-T3 prepares and authorizes a specific plan/code/policy version without dispatching work. P3-T4 starts that authorized work through `workflow-run`; P3-T5 adds explicit `workflow-resume`; P3-T6 supplies minimum reports and result acceptance conditions. T7 completed the external example's actual user acceptance. The unelevated candidate failed network denial; elevated setup remains excluded under company policy. No administrator setup or unrestricted fallback is used.
 
 Verify the following behavior with pytest integration/regression tests and actual example runs:
 
@@ -260,9 +260,30 @@ New workflow records report `workflow_execution_enabled=true` and `orchestration
 
 **Regression verification (2026-09-22)**: All **632 tests passed** in **1801.44 seconds** as recorded by JUnit, with zero failures, errors or skips; `pip check` passed. T6 adds **96 cases** to T5's 536: 14 report integrations, 22 acceptance integrations, six feedback-flow integrations, 34 feedback unit cases and 20 replanning unit cases. All 70 source/test files match the manifest captured before this full run. The JUnit report is `%LOCALAPPDATA%/development-tools-harness/t6-regression/43c96f65d234/pytest.xml`, SHA-256 `f84d5bd39f393a72c230c56676ee5ce8ef0db86e4efe2266e51d5237bfe338c3`. [Phase3_Results.json](Evidence/Phase3_Results.json) records the final verification and historical live-result inspection separately. T6 adds zero actual AI calls. Historical T1–T5 evidence and the approved generated plan remain unchanged. P3-T7–T8 and Phase 3 user acceptance remain pending.
 
+### P3-T7 — Accepted External Example
+
+**Technical verification (2026-09-23)**: [verify_t7.py](../scripts/verify_t7.py) completed the previously reviewed negative-input change in a separate copy of the CLI fixture. Its controller-authored single-Task plan retained R1 as `reuse`; **Planner AI calls: 0**. The user's instruction to start T7 authorized this bounded plan and execution. Preparation pinned `result_version=1`, the two-correction limit and mandatory manual check M1 before execution approval. This verifies the approved-plan execution path; it does not claim a new real Planner run.
+
+- **Implementation**: only the external `cli.py` and `test_cli.py` changed. Negative values now call `parser.error("value must be nonnegative")`. The two existing positive/zero tests remain, with six negative/missing/non-integer cases added. The original repository fixture, specification and harness configuration remain unchanged. No production harness source changes were needed.
+- **Actual roles and recovery**: `gpt-6-astra` made exactly **two confirmed calls**, one Developer and one independent Reviewer in distinct sessions, with zero uncertain calls, corrections or findings. The controller exited with code 99 after saving the Developer response and before its finished journal entry. Public `workflow-resume --steps 1` reused that response without a new call; another `workflow-resume` finished execution, and resuming the completed run added no work or events.
+- **Validation**: public CLI execution used the default per-attempt AppContainer storage. Task and sealed final tests each passed **8 cases**. A separate content-matched copy passed **6 controller-written checks** in AppContainer. JUnit properties preserve actual argv, exit code, stdout and stderr; generated application code was not executed on the host. Inputs `3` and `0` returned `6\n` and `0\n` with exit 0; `-1`, `-42`, `not-an-int` and missing input returned exit 2 with empty stdout. Both negatives reported `value must be nonnegative`.
+- **Evidence**: local directory `%LOCALAPPDATA%/development-tools-harness/t7-live/c2cc52b6323c`; planning Run `5797e3ef9eff447fa874e2660304c768`; workflow Run `02ee4d614527425fa2235542d76637fb`. Final content SHA-256 is `26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1`, with final validation `20f5154c0ed4480a807a3bc3cec71f0f`. `report.json`, `workflow-result.json`, `final-run.json` and linked artifacts preserve commands, approval, call/session IDs, hashes and actual output. See [T7 evidence](Evidence/Phase3_Example.json) and the [user review packet](Evidence/Phase3_Example_Review.md).
+
+**User acceptance (2026-09-23)**: after receiving the observed behavior and verification results, the user explicitly accepted the example with “결과 인수한다”. Public `workflow-reuse` recorded R1 against the eight passing final tests and preserved positive/zero/argparse behavior; `workflow-manual` recorded M1 against the presented negative-input outputs. `workflow-accept` succeeded, and the current report has `stage=accepted`, `ready=true`, `accepted=true` and no blockers. [Acceptance evidence](Evidence/Phase3_Example_Acceptance.json) preserves the user decision and the accepted report; [T7 evidence](Evidence/Phase3_Example.json) records `t7_complete=true`. No new AI calls or test runs were needed; the final content, approval, attempts and original technical snapshots are preserved. T7 is complete. T8 has not started, and Phase 3 acceptance remains pending.
+
+**Full regression (2026-09-23)**: **632 tests passed** in **1206.46 seconds** (JUnit), with zero failures, errors or skips; `pip check` passed. All **77 source/test files** match the starting manifest. The fresh report is `%LOCALAPPDATA%/development-tools-harness/t7-regression/523159eeaa3d/pytest.xml`, SHA-256 `ead9d617329f773b893fb21944aca5dc6721b5e7101ce4c35addb7a185f567f8`. [T7 evidence](Evidence/Phase3_Example.json) records this run separately from historical T6 evidence and the actual example checks.
+
+```powershell
+# Creates a fresh example and makes real role calls; never accepts the result.
+& $harnessPython scripts/verify_t7.py --live
+# Inspect the saved example without creating a new run or making an AI call.
+$t7Directory = Join-Path $env:LOCALAPPDATA 'development-tools-harness/t7-live/c2cc52b6323c'
+& $harnessPython -m development_harness --project "$t7Directory/project" --state-dir "$t7Directory/state" workflow-report
+```
+
 ### Purpose / Implementation Files
 
-Extend the Phase 1 runner/storage and Phase 2 Adapter. P3-T1 preparation, P3-T2 components, P3-T3 `workflow.py`/`workflow_records.py` admission/journaling, P3-T4 `workflow_execution.py` scheduling and P3-T5 `workflow_recovery.py`/`workflow_attempt_recovery.py` reconciliation now exist. P3-T6 adds `results.py`, `workflow_feedback.py`, `workflow_acceptance.py` and their CLI/planning integration. Full existing/proposed paths are listed in the reviewed plan.
+Extend the Phase 1 runner/storage and Phase 2 Adapter. P3-T1 preparation, P3-T2 components, P3-T3 `workflow.py`/`workflow_records.py` admission/journaling, P3-T4 `workflow_execution.py` scheduling and P3-T5 `workflow_recovery.py`/`workflow_attempt_recovery.py` reconciliation now exist. P3-T6 adds `results.py`, `workflow_feedback.py`, `workflow_acceptance.py` and their CLI/planning integration. P3-T7 adds only the external example driver `scripts/verify_t7.py` and its evidence/documentation; production modules and repository fixtures remain unchanged. Full existing/proposed paths are listed in the reviewed plan.
 
 ### Design Decisions
 
@@ -273,7 +294,7 @@ Extend the Phase 1 runner/storage and Phase 2 Adapter. P3-T1 preparation, P3-T2 
 
 ### Usage Example
 
-The proposed Python CLI doubles an integer, with baseline tests for positive and zero input. The bounded change rejects negative input with a clear error and nonzero exit while preserving normal output. Use a separate temporary copy, review the generated Phase, approve execution, interrupt once, resume, inspect review/validation evidence and obtain user acceptance. P3-T1 records the exact commands and expected outputs before the live example.
+The prepared Python CLI doubles an integer. T7 implemented negative-input rejection in a separate temporary copy while preserving positive/zero and argparse behavior. The controller-reviewed plan, execution approval, actual roles, one interruption/reuse, final checks and explicit user confirmations/acceptance are recorded above.
 
 ## Prerequisites & Development Notes
 
@@ -294,6 +315,8 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | 2026-09-22 | Implemented P3-T4 sequential execution, shared correction budgets, checked patch lineage, explicit follow-up review and final validation. A two-Task live example passed with four real role calls; a default-storage AppContainer regression verified the Windows path-length fix. Current full regressions are recorded above. T5–T8 and Phase 3 acceptance remain pending. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
 | 2026-09-22 | Implemented P3-T5 explicit workflow-resume, artifact-proven response reuse, checked partial-file repair, process-tree/ownership guards and separate idempotent recovery facts. Preserved original approval, correction counts and historical T1–T4 evidence. Current verification is recorded above. Updated both languages and README; T6–T8 and Phase acceptance remain pending. Separate dev-log omitted because the skill is unavailable. |
 | 2026-09-22 | Implemented P3-T6 read-only minimum JSON reports, preserved same-scope/changed-requirements feedback, final reuse/manual evidence and explicit acceptance gates. Preserved T1–T5 evidence and the generated plan; zero new actual AI calls. Updated both languages and README; T7–T8 and Phase acceptance remain pending. Separate dev-log omitted because the skill is unavailable. |
+| 2026-09-23 | Added and ran the bounded P3-T7 external example script with a controller-reviewed one-Task plan, zero Planner calls, two actual role calls, one crash/response reuse, eight sealed final tests and six independent isolated checks. Recorded actual CLI output and preserved fixtures/production source and historical evidence. R1/M1 confirmations and genuine user acceptance remain pending; T8 has not started. All 632 full-regression tests passed on unchanged source/test files. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
+| 2026-09-23 | User explicitly accepted the reviewed T7 result with “결과 인수한다”. Recorded R1 reuse and M1 manual confirmations through the public CLI, then completed workflow-accept; the report is accepted with no blockers. T7 completed, T8 not started and overall Phase 3 acceptance pending. Preserved code, approval, calls and prior evidence; no new AI calls or test runs. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
 
 ---
 
@@ -305,7 +328,7 @@ Reuse earlier components with regression evidence. Core protections must work wi
 
 **기술 구성**: Python + pytest, SQLite, 선정한 단일 AI Adapter.
 
-**계획 상태**: P3-T1–T3 준비·실제 역할·격리된 검증·실행 승인·영속 기록의 구현·검증을 완료했다. P3-T4는 순차 실행·제한된 수정·독립 리뷰의 명시적 지적 평가·최종 검사를 연결했고 실제 Task 2개 예제가 기술적 완료에 도달했다. P3-T5는 승인·파일·호출 이력을 유지하는 명시적 중단 복구를 구현했다. P3-T6는 최소 JSON 보고서·피드백 처리·최종 재사용 및 수동 근거·명시적 인수 조건을 구현했으며 현재 검증 결과는 아래 기록한다. 회사 정책상 관리자 설정 없이 일반 사용자 AppContainer를 사용한다. 외부 예제 인수·고정 실행용 A는 P3-T7–T8에 남아 있다. Phase 2는 인수했으며 Phase 3 전체 인수는 대기 중이다. Task 8개·요구사항 18개의 검토 계획과 AI 원본·수동 검토 근거는 보존했다.
+**계획 상태**: P3-T1–T3 준비·실제 역할·격리된 검증·실행 승인·영속 기록의 구현·검증을 완료했다. P3-T4는 순차 실행·제한된 수정·독립 리뷰의 명시적 지적 평가·최종 검사를 연결했고 실제 Task 2개 예제가 기술적 완료에 도달했다. P3-T5는 승인·파일·호출 이력을 유지하는 명시적 중단 복구를 구현했다. P3-T6는 최소 JSON 보고서·피드백 처리·최종 재사용 및 수동 근거·명시적 인수 조건을 구현했으며 현재 검증 결과는 아래 기록한다. 회사 정책상 관리자 설정 없이 일반 사용자 AppContainer를 사용한다. 2026-09-23 P3-T7 외부 예제 기술 검증과 R1·M1 확인을 포함한 명시적 사용자 인수를 완료했다. 고정 실행용 A의 P3-T8은 미시작이다. Phase 2는 인수했으며 Phase 3 전체 인수는 대기 중이다. Task 8개·요구사항 18개의 검토 계획과 AI 원본·수동 검토 근거는 보존했다.
 
 ## 개요
 
@@ -318,11 +341,11 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | 1 | 실제 Developer·Validation Runner·Reviewer 순차 Workflow | ✅ T4 구현, 현재 검증 결과는 아래 기록 |
 | 2 | 호출·시간·지적 기록, 수정·프로세스 확인을 포함한 재개 | ✅ T3–T5 구현, 현재 복구 검증 결과는 아래 기록 |
 | 3 | 최소 성공·실패 보고서, 피드백·결과 인수 | ✅ T6 구현, 현재 검증 결과는 아래 기록 |
-| 4 | 인수한 외부 예제와 검증된 고정 실행용 A | 🔲 |
+| 4 | 인수한 외부 예제와 검증된 고정 실행용 A | 🚧 T7 인수·완료, T8 미시작 |
 
 ## 검증 및 종료 조건
 
-[검토한 계획](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md)에 완료 기준·제안 경로·검증 방법을 기록했다. [검토 근거](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md)에 AI 원본과 수동 보완을 보존했다. P3-T1·T2 구성요소를 검증했으며 임시 예제에서 실제 AI 호출 2회를 확인했다. P3-T3 실행 승인·기록을 구현·검증했으며 전체 검사 378개를 통과했다. P3-T4 구현과 실제 호출 4회의 예제는 [실행 근거](Evidence/Phase3_Execution.json)에 기록했다. P3-T5 복구를 구현했으며 별도 [복구 근거](Evidence/Phase3_Recovery.json)를 보존한다. P3-T6 결과·피드백·인수 조건을 구현했으며 [결과 근거](Evidence/Phase3_Results.json)와 현재 검증 결과는 아래에 기록한다. P3-T7–T8 구현은 미시작이다.
+[검토한 계획](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md)에 완료 기준·제안 경로·검증 방법을 기록했다. [검토 근거](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md)에 AI 원본과 수동 보완을 보존했다. P3-T1·T2 구성요소를 검증했으며 임시 예제에서 실제 AI 호출 2회를 확인했다. P3-T3 실행 승인·기록을 구현·검증했으며 전체 검사 378개를 통과했다. P3-T4 구현과 실제 호출 4회의 예제는 [실행 근거](Evidence/Phase3_Execution.json)에 기록했다. P3-T5 복구를 구현했으며 별도 [복구 근거](Evidence/Phase3_Recovery.json)를 보존한다. P3-T6 결과·피드백·인수 조건을 구현했으며 [결과 근거](Evidence/Phase3_Results.json)와 현재 검증 결과는 아래에 기록한다. P3-T7 기술 실행 검증과 명시적 사용자 인수를 완료했으며 근거는 아래에 기록한다. P3-T8은 미시작이다.
 
 | Task | 개발 내용 | 완료 근거 |
 |---|---|---|
@@ -332,10 +355,10 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | P3-T4 | Developer → 검증 → 별도 Reviewer 순차 실행과 제한된 수정. | 구현: 실제 격리 검사·명시적 지적 평가·공통 수정 한도·변경 이력·최종 코드 검사. 실제 호출 4회의 예제가 기술적 완료에 도달했다. [근거](Evidence/Phase3_Execution.json). |
 | P3-T5 | 부분 구현과 중단된 검사의 안전한 재개. | 구현: 명시적 재개·저장 응답 검증 및 재사용·부분 파일 확인·프로세스와 자식 검사·별도 복구 사실·승인 및 수정 횟수 유지. [근거](Evidence/Phase3_Recovery.json), 현재 검증 결과는 아래 기록. |
 | P3-T6 | 최소 보고서·피드백 처리·최종 재사용 확인·인수 조건 추가. | 구현: 읽기 전용 JSON 결과, 피드백 보존·수정 및 재계획 경로, 최종 재사용·수동 확인과 버전에 연결된 인수 조건. [근거](Evidence/Phase3_Results.json), 현재 검증 결과는 아래 기록. |
-| P3-T7 | 외부 CLI 예제의 실제 역할 실행·중단·재개·사용자 인수. | 전체 회귀 검사, 실제 출력·별도 역할 세션과 사용자 결과 인수 기록. |
+| P3-T7 | 외부 CLI 예제의 실제 역할 실행·중단·재개·사용자 인수. | ✅ 완료: 실제 역할 호출 2회, 중단·응답 재사용 1회, 최종 검사 8개·독립 검사 6개. 2026-09-23 R1·M1 확인과 사용자 인수를 기록했다. [기술 근거](Evidence/Phase3_Example.json), [인수 근거](Evidence/Phase3_Example_Acceptance.json). |
 | P3-T8 | 실행용 A 고정과 Phase 4 이전 분리 입증. | 독립 설치 위치·고정 산출물, 실제 B·테스트 쓰기 차단, 설치본의 흐름·재개 검사. |
 
-P3-T2에서 범위가 명확한 임시 예제로 실제 작업 구성요소를 검증했다. P3-T3는 특정 계획·코드·정책 버전을 준비·승인하며 작업 호출은 시작하지 않는다. P3-T4는 `workflow-run`으로 승인한 작업을 시작하고 P3-T5는 명시적 `workflow-resume`, P3-T6는 최소 보고서·결과 인수 조건을 추가한다. 외부 예제의 실제 사용자 인수는 T7에 남아 있다. unelevated 후보는 통신 차단에 실패했으며 elevated 설정은 회사 정책상 제외한다. 관리자 설정이나 제한 없는 실행으로 대체하지 않는다.
+P3-T2에서 범위가 명확한 임시 예제로 실제 작업 구성요소를 검증했다. P3-T3는 특정 계획·코드·정책 버전을 준비·승인하며 작업 호출은 시작하지 않는다. P3-T4는 `workflow-run`으로 승인한 작업을 시작하고 P3-T5는 명시적 `workflow-resume`, P3-T6는 최소 보고서·결과 인수 조건을 추가한다. T7에서 외부 예제의 실제 사용자 인수를 완료했다. unelevated 후보는 통신 차단에 실패했으며 elevated 설정은 회사 정책상 제외한다. 관리자 설정이나 제한 없는 실행으로 대체하지 않는다.
 
 pytest 통합·회귀 검사와 실제 예제 실행으로 다음 동작을 확인한다.
 
@@ -559,9 +582,30 @@ $harnessPython = "$env:LOCALAPPDATA\development-tools-harness\venv\Scripts\pytho
 
 **회귀 검증(2026-09-22)**: JUnit 기록 기준 **전체 검사 632개가 1801.44초에 통과**했고 실패·오류·생략은 0개이며 `pip check`도 통과했다. T5의 536개보다 **T6 검사 96개**가 늘었다. 보고서 통합 14개, 인수 통합 22개, 피드백 흐름 통합 6개, 피드백 단위 34개와 재계획 단위 20개다. 소스·테스트 70개 파일 모두 전체 실행 시작 시 저장한 목록의 해시와 일치한다. JUnit 보고서는 `%LOCALAPPDATA%/development-tools-harness/t6-regression/43c96f65d234/pytest.xml`이며 SHA-256은 `f84d5bd39f393a72c230c56676ee5ce8ef0db86e4efe2266e51d5237bfe338c3`이다. [Phase3_Results.json](Evidence/Phase3_Results.json)에 최종 검증과 과거 실제 결과 조회를 구분해 기록했다. T6의 새 실제 AI 호출은 0회다. T1–T5 과거 근거와 승인한 생성 계획은 변경하지 않는다. P3-T7–T8과 Phase 3 사용자 인수는 대기 중이다.
 
+### P3-T7 — 사용자 인수를 완료한 외부 예제
+
+**기술 검증(2026-09-23)**: [verify_t7.py](../scripts/verify_t7.py)로 별도 CLI 예제 복사본에서 앞서 검토한 음수 거부 변경을 완료했다. 제어 프로그램이 작성한 Task 1개 계획은 R1을 `reuse`로 유지하며 **Planner AI 호출은 0회**다. 사용자의 T7 시작 지시를 근거로 이 한정된 계획과 실행을 승인했다. 실행 승인 전 `result_version=1`, 수정 한도 2회와 필수 수동 확인 M1을 고정했다. 승인한 계획의 실행 경로를 검증했으며 새 실제 Planner 실행으로 기록하지 않는다.
+
+- **구현**: 외부 `cli.py`·`test_cli.py`만 변경했다. 음수는 `parser.error("value must be nonnegative")`로 거부한다. 기존 양수·0 검사 2개를 유지하고 음수·인수 누락·비정수 검사 6개를 추가했다. 저장소 원본 예제·기획서·하네스 설정은 유지했으며 하네스 운영 소스 수정은 필요하지 않았다.
+- **실제 역할과 복구**: `gpt-6-astra`의 확인된 호출은 서로 다른 세션의 Developer 1회·독립 Reviewer 1회로 **총 2회**다. 미확정 호출·수정·리뷰 지적은 0개다. Developer 응답을 저장하고 finished 이력을 남기기 전에 제어 프로그램을 종료 코드 99로 중단했다. 공개 `workflow-resume --steps 1`이 추가 호출 없이 응답을 재사용했고, 다음 `workflow-resume`이 실행을 마쳤다. 완료 후 재개는 작업·이벤트를 추가하지 않았다.
+- **검증**: 공개 CLI에서 기본 호출별 AppContainer 저장 경로를 사용했다. Task 검사와 봉인된 최종 검사는 각각 **8개**, 같은 내용을 복사한 별도 AppContainer의 제어 프로그램 작성 검사는 **6개** 통과했다. JUnit 속성에 실제 인수·종료 코드·stdout·stderr를 보존했고 생성한 애플리케이션 코드는 호스트에서 실행하지 않았다. 입력 `3`·`0`은 종료 0과 `6\n`·`0\n`을 반환했고 `-1`·`-42`·`not-an-int`·인수 누락은 종료 2와 빈 stdout을 반환했다. 음수 두 입력의 오류는 `value must be nonnegative`다.
+- **근거**: 로컬 폴더 `%LOCALAPPDATA%/development-tools-harness/t7-live/c2cc52b6323c`, 계획 Run `5797e3ef9eff447fa874e2660304c768`, Workflow Run `02ee4d614527425fa2235542d76637fb`. 최종 내용 SHA-256은 `26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1`, 최종 검사 ID는 `20f5154c0ed4480a807a3bc3cec71f0f`다. `report.json`·`workflow-result.json`·`final-run.json`과 연결된 파일에 명령·승인·호출 및 세션 ID·해시·실제 출력을 보존했다. [T7 근거](Evidence/Phase3_Example.json)와 [사용자 검토 자료](Evidence/Phase3_Example_Review.md)를 참고한다.
+
+**사용자 인수(2026-09-23)**: 실제 동작과 검증 결과를 전달받은 사용자가 “결과 인수한다”로 예제를 명시적으로 인수했다. 공개 `workflow-reuse`로 통과한 최종 검사 8개와 양수·0·argparse 동작 유지에 R1을 연결하고, `workflow-manual`로 제시한 음수 입력 결과에 M1을 연결해 기록했다. `workflow-accept`가 성공했으며 현재 보고서는 `stage=accepted`, `ready=true`, `accepted=true`, 차단 조건 없음이다. [인수 근거](Evidence/Phase3_Example_Acceptance.json)에 사용자 결정과 인수된 보고서를 보존하고 [T7 근거](Evidence/Phase3_Example.json)에 `t7_complete=true`를 기록했다. 새 AI 호출·테스트 실행 없이 최종 코드·승인·호출 기록·원래 기술 실행 보고서를 보존했다. T7은 완료, T8은 미시작이며 Phase 3 인수는 대기 중이다.
+
+**전체 회귀 검사(2026-09-23)**: JUnit 기준 **632개 검사가 1206.46초에 통과**했고 실패·오류·생략은 0개이며 `pip check`도 통과했다. 소스·테스트 **77개 파일**이 시작 시점 해시와 일치한다. 새 보고서는 `%LOCALAPPDATA%/development-tools-harness/t7-regression/523159eeaa3d/pytest.xml`, SHA-256은 `ead9d617329f773b893fb21944aca5dc6721b5e7101ce4c35addb7a185f567f8`이다. [T7 근거](Evidence/Phase3_Example.json)에 과거 T6 검사 및 실제 예제 검사와 구분해 기록했다.
+
+```powershell
+# 새 예제를 만들고 실제 역할을 호출하며 결과를 자동 인수하지 않는다.
+& $harnessPython scripts/verify_t7.py --live
+# 새 Run이나 AI 호출 없이 저장된 예제를 조회한다.
+$t7Directory = Join-Path $env:LOCALAPPDATA 'development-tools-harness/t7-live/c2cc52b6323c'
+& $harnessPython -m development_harness --project "$t7Directory/project" --state-dir "$t7Directory/state" workflow-report
+```
+
 ### 목적 / 구현 파일
 
-Phase 1 Runner·저장 계층과 Phase 2 Adapter를 확장한다. P3-T1 준비, P3-T2 구성요소, P3-T3 `workflow.py`·`workflow_records.py` 실행 승인·기록, P3-T4 `workflow_execution.py` 순차 실행과 P3-T5 `workflow_recovery.py`·`workflow_attempt_recovery.py` 복구를 구현했다. P3-T6에서 `results.py`·`workflow_feedback.py`·`workflow_acceptance.py`와 CLI·계획 연결을 추가했다. 기존·신규 경로 전체는 검토 계획에 기록했다.
+Phase 1 Runner·저장 계층과 Phase 2 Adapter를 확장한다. P3-T1 준비, P3-T2 구성요소, P3-T3 `workflow.py`·`workflow_records.py` 실행 승인·기록, P3-T4 `workflow_execution.py` 순차 실행과 P3-T5 `workflow_recovery.py`·`workflow_attempt_recovery.py` 복구를 구현했다. P3-T6에서 `results.py`·`workflow_feedback.py`·`workflow_acceptance.py`와 CLI·계획 연결을 추가했다. P3-T7은 외부 예제 실행용 `scripts/verify_t7.py`와 근거·문서만 추가하며 운영 모듈과 저장소 예제는 유지했다. 기존·신규 경로 전체는 검토 계획에 기록했다.
 
 ### 설계 결정 사항
 
@@ -572,7 +616,7 @@ Phase 1 Runner·저장 계층과 Phase 2 Adapter를 확장한다. P3-T1 준비, 
 
 ### 사용 예시
 
-제안 Python CLI는 정수를 두 배로 출력하며 기본 검사는 양수·0을 다룬다. 정상 출력을 유지하면서 음수에 명확한 오류와 0이 아닌 종료 코드를 반환하는 변경 하나를 요청한다. 별도 임시 복사본에서 생성 Phase 검토·실행 승인 후 한 차례 중단·재개하고 리뷰·검증 근거 확인과 사용자 인수까지 진행한다. P3-T1에서 실제 예제 실행 전에 정확한 명령·기대 출력을 기록한다.
+준비된 Python CLI는 정수를 두 배로 출력한다. T7에서 별도 임시 복사본의 음수 거부를 구현하고 양수·0 및 argparse 동작을 유지했다. 제어 프로그램이 작성하고 검토한 계획, 실행 승인, 실제 역할, 한 차례 중단·응답 재사용, 최종 검사와 명시적 사용자 확인·인수를 위에 기록했다.
 
 ## 선행 조건 및 개발 시 주의사항
 
@@ -593,3 +637,5 @@ Phase 1 Runner·저장 계층과 Phase 2 Adapter를 확장한다. P3-T1 준비, 
 | 2026-09-22 | P3-T4 순차 실행·공통 수정 한도·변경 이력 검사·명시적 후속 리뷰·최종 검사를 구현했다. Task 2개·실제 호출 4회의 예제가 통과했고 기본 저장 경로 AppContainer 회귀 검사로 Windows 경로 길이 수정을 확인했다. 현재 전체 회귀 결과는 위에 기록한다. T5–T8·Phase 3 인수는 대기 중이다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
 | 2026-09-22 | P3-T5 명시적 workflow-resume, 근거를 확인한 응답 재사용, 부분 파일 검사·복구, 프로세스와 자식·소유권 검사 및 중복 없는 별도 복구 사실을 구현했다. 원래 승인·수정 횟수와 T1–T4 과거 근거를 유지했다. 현재 검증 결과는 위에 기록한다. 영문·국문과 README를 갱신했으며 T6–T8·Phase 인수는 대기 중이다. dev-log 스킬이 없어 별도 로그는 생략했다. |
 | 2026-09-22 | P3-T6 읽기 전용 최소 JSON 보고서, 같은 범위·요구사항 변경 피드백 보존, 최종 재사용·수동 근거와 명시적 인수 조건을 구현했다. T1–T5 근거·생성 계획을 보존했고 새 실제 AI 호출은 0회다. 영문·국문과 README를 갱신했으며 T7–T8·Phase 인수는 대기 중이다. dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-09-23 | P3-T7 외부 예제 스크립트를 추가·실행했다. 제어 프로그램이 작성하고 검토한 Task 1개 계획, Planner 호출 0회, 실제 역할 호출 2회, 중단·응답 재사용 1회, 봉인된 최종 검사 8개와 독립 격리 검사 6개를 기록했다. 실제 CLI 출력과 원본 예제·운영 소스·과거 근거를 보존했다. R1·M1 확인과 실제 사용자 인수는 대기 중이며 T8은 미시작이다. 소스·테스트를 유지한 전체 회귀 검사 632개를 통과했다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-09-23 | 사용자가 검토한 T7 결과를 “결과 인수한다”로 명시적으로 인수했다. 공개 CLI로 R1 재사용·M1 수동 확인 후 workflow-accept를 완료했으며 보고서는 차단 조건 없이 accepted다. T7 완료, T8 미시작, Phase 3 전체 인수 대기를 반영했다. 코드·승인·호출·이전 근거를 보존했으며 새 AI 호출·테스트 실행은 없다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
