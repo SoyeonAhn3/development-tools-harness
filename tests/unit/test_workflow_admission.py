@@ -22,6 +22,23 @@ def approved(planning_workspace, fast_baseline):
     return planner, source, Workflow(planner.project, planner.store.home)
 
 
+def test_fixed_runner_identity_is_approved_and_cannot_change_on_resume(approved, monkeypatch):
+    _, _, workflow = approved
+    monkeypatch.setattr("development_harness.workflow.current_artifact_id", lambda: "fixed-A")
+    prepared = workflow.prepare()
+    assert prepared["policy"]["runner_artifact_id"] == "fixed-A"
+    run = workflow.approve()
+    assert run["approval"]["policy_hash"] == digest(run["policy"])
+    before = workflow.get()
+    events = workflow.store.events(before["id"])
+    for identity in ("fixed-B", None):
+        monkeypatch.setattr("development_harness.workflow.current_artifact_id", lambda: identity)
+        with pytest.raises(HarnessError, match="different fixed runner"):
+            workflow._check(workflow.get())
+        assert workflow.get() == before
+        assert workflow.store.events(before["id"]) == events
+
+
 def test_admission_and_approval_are_separate_idempotent_and_do_not_dispatch(approved, monkeypatch):
     planner, source, workflow = approved
     before = snapshot(planner.project)

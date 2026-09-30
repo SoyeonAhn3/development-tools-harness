@@ -8,6 +8,7 @@ import time
 import uuid
 
 from .files import require_snapshot, snapshot, target
+from .frozen_entry import current_artifact_id
 from .isolated_validation import IsolatedValidator, pytest_arguments, review_evidence
 from .model import HarnessError, digest
 from .phase_docs import validate_profile
@@ -19,6 +20,7 @@ from .store import Store
 from .worker_contract import TaskScope, REVIEWER_FOLLOWUP_SCHEMA
 from .workers import CodexWorker, INSTRUCTIONS, REVIEWER_FOLLOWUP_INSTRUCTIONS
 from .workflow_records import WorkflowRecords, effective_attempt, reconciled_retry
+from .validation_profiles import require_host_manual_check
 
 
 class Workflow:
@@ -81,8 +83,10 @@ class Workflow:
                     self._check(active)
                     if max_corrections is not None and max_corrections != active["policy"]["max_corrections"]:
                         raise HarnessError("Correction limit is pinned; cancel and prepare a new execution policy.")
-                    if manual_checks is not None and manual_checks != active["policy"].get("manual_checks", []):
-                        raise HarnessError("Manual checks are pinned; prepare and approve a new execution policy.")
+                    if manual_checks is not None:
+                        proposed = require_host_manual_check(active["config"]["validation"], active["plan"], manual_checks)
+                        if proposed != active["policy"].get("manual_checks", []):
+                            raise HarnessError("Manual checks are pinned; prepare and approve a new execution policy.")
                     return active
                 raise HarnessError("An unfinished run exists; inspect or explicitly cancel it first.")
             planner = Planning(self.project, self.store.home)
@@ -97,6 +101,8 @@ class Workflow:
             config = copy.deepcopy(source["config"])
             for check in config["validation"]:
                 pytest_arguments(check)
+            manual_checks = require_host_manual_check(config["validation"], plan, manual_checks)
+            validate_manual_checks(manual_checks, plan)
             policy = {"validation": config["validation"], "max_corrections": 2 if max_corrections is None else max_corrections,
                       "worker_boundary": "text-only-v1", "role_instructions_hash": digest(INSTRUCTIONS),
                       "validation_backend": "appcontainer", "workflow_version": 1,
@@ -104,6 +110,9 @@ class Workflow:
                       "review_followup_hash": digest({"schema": REVIEWER_FOLLOWUP_SCHEMA,
                                                      "instructions": REVIEWER_FOLLOWUP_INSTRUCTIONS})}
             now, run_id = time.time(), uuid.uuid4().hex
+            runner_artifact = current_artifact_id()
+            if runner_artifact is not None:
+                policy["runner_artifact_id"] = runner_artifact
             expected = snapshot(self.project)
             run = {"id": run_id, "kind": "workflow", "project_id": self.store.project_id,
                    "project": str(self.project), "phase_id": plan["current_phase"],
@@ -152,6 +161,11 @@ class Workflow:
         if (digest(run["policy"]) != run["policy_hash"] or run["policy"]["validation"] != config["validation"] or
                 run["policy"]["role_instructions_hash"] != digest(INSTRUCTIONS)):
             raise HarnessError("Execution policy or role instructions changed.")
+        manual = run["policy"].get("manual_checks", [])
+        if require_host_manual_check(config["validation"], run["plan"], manual) != manual:
+            raise HarnessError("Mandatory harness host-regression check is missing.")
+        if "runner_artifact_id" in run["policy"] and run["policy"]["runner_artifact_id"] != current_artifact_id():
+            raise HarnessError("Workflow belongs to a different fixed runner; preserve its original installation and records.")
         if "review_followup_hash" in run["policy"] and run["policy"]["review_followup_hash"] != digest({
                 "schema": REVIEWER_FOLLOWUP_SCHEMA, "instructions": REVIEWER_FOLLOWUP_INSTRUCTIONS}):
             raise HarnessError("Pinned follow-up review contract changed.")

@@ -1,0 +1,284 @@
+{
+  "date": "2026-09-30",
+  "phase": "Phase3",
+  "task": "Post-T8 acceptance-risk issue 1: private temporary directories",
+  "authorization": "User requested implementation after reviewing the proposed issue 1 correction.",
+  "status": "Implemented and verified; issue 2 and overall Phase 3 acceptance remain pending",
+  "phase3_accepted": false,
+  "self_development": false,
+  "actual_ai_calls": 0,
+  "implementation_files": [
+    "src/development_harness/appcontainer_temp.py",
+    "src/development_harness/isolated_validation.py",
+    "src/development_harness/validation_entry.py",
+    "src/development_harness/windows_appcontainer.py",
+    "src/development_harness/fixed_runner_verify.py",
+    "tests/unit/test_appcontainer_temp.py",
+    "tests/integration/test_isolated_temporary_directories.py"
+  ],
+  "behavior": {
+    "scope": "Only copied validation Python inside AppContainer and new mkdir(0o700) descendants of the granted scratch tree",
+    "private_acl": "Protected owner/system/administrator ACL plus the actual token's AppContainer SID",
+    "scratch_grant": "(OI)(CI)(M,WDAC); only the disposable scratch directory receives WRITE_DAC",
+    "reason_for_write_dac": "Original four-case reproduction still failed without it below a private parent inheriting OWNER RIGHTS",
+    "startup": "Private, hashed sitecustomize hook; validation requires initialization before importing project tests",
+    "child_python": "Normal and -I child/grandchild startup verified; TEMP/TMP restored to the controller scratch tree",
+    "host_python": "Verified inert even with the marker set",
+    "boundary": "Windows AppContainer permissions, not the hook or environment marker, enforce isolation"
+  },
+  "reproduction": {
+    "original": {
+      "path": "%LOCALAPPDATA%\\harness-risk\\p-_q76kimr\\risk-proof.json",
+      "sha256": "a589af6e7f22ca4f04cf7c1b267b806333f8bb15700c5e5ab950d1e1415eec99"
+    },
+    "original_junit": {
+      "path": "%LOCALAPPDATA%\\harness-risk\\p-_q76kimr\\v\\c-4e41a3b3f933\\pytest.xml",
+      "sha256": "c3a329fb24c3d3f3511833324b53e715c989a12d1d08cbe451bb77371bdeea1b",
+      "tests": 4,
+      "failures": 1,
+      "errors": 1,
+      "skipped": 0,
+      "seconds": 1.067
+    },
+    "fixed": {
+      "path": "%LOCALAPPDATA%\\harness-risk\\fixed-final-bn51bn1f\\proof.json",
+      "sha256": "79d066d69e3d7eaa4e7b11543d0ddb632da5e12c277e5049663fa32621b230ff"
+    },
+    "fixed_junit": {
+      "path": "%LOCALAPPDATA%\\harness-risk\\fixed-final-bn51bn1f\\v\\c-77fdb5d31cf8\\pytest.xml",
+      "sha256": "65c895956d0cd76f8f5013d9cda6c315a313a6e579d794b2d4c8f3750cb7fe42",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 0.042
+    },
+    "original_source_files": {
+      "test_temporary_files.py": "dcb8b7ad233dfb62dd76d8042c79ca4927fd2226faae01dcccd2fdf1eb3f5a5d"
+    },
+    "original_source_unchanged": true,
+    "private_tempfile_parent": true
+  },
+  "regression": {
+    "run": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-regression\\20260930-03\\run.json",
+      "sha256": "0c99c810446ca5fa354a57f64352bad4b2a58f28dbad0afd615538796bf074b1"
+    },
+    "details": {
+      "argv": [
+        "%LOCALAPPDATA%\\development-tools-harness\\venv\\Scripts\\python.exe",
+        "-u",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "--tb=short",
+        "--basetemp",
+        "%LOCALAPPDATA%\\harness-t8-tmp\\fix-e7697035",
+        "--junitxml",
+        "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-regression\\20260930-03\\pytest.xml",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "selected_codex": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-06\\tools\\codex.exe",
+      "started": "2026-09-30T04:43:23.911176+00:00",
+      "source_files": 93,
+      "exit_code": 0,
+      "ended": "2026-09-30T05:06:22.860982+00:00",
+      "inputs_unchanged": true
+    },
+    "junit": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-regression\\20260930-03\\pytest.xml",
+      "sha256": "af40619231ebf633ad27d43ac3e9da9b3429c49099c44563e3ff5f482ff050b7",
+      "tests": 670,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1378.128
+    },
+    "stdout": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-regression\\20260930-03\\pytest.log",
+      "sha256": "37dc13aad6b5e88f27b1646b02b9b8891cf1ef44ffcc4f13bd9e44f082e8f543"
+    },
+    "input_files": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-regression\\20260930-03\\input-files.json",
+      "sha256": "b886a931e1f4fe74b4ef88c363a92a6b68c189a2961280239159a26c5623e789"
+    },
+    "input_file_count": 93,
+    "inputs_unchanged": true,
+    "new_cases": {
+      "test_appcontainer_temp": 9,
+      "test_isolated_temporary_directories": 3
+    },
+    "pip_check": {
+      "command": "venv/Scripts/python.exe -B -m pip check",
+      "exit_code": 0,
+      "stdout": "No broken requirements found.",
+      "evidence": "Observed tool execution output in this development session"
+    }
+  },
+  "installed_verification": {
+    "report": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-installed\\20260930-03\\report.json",
+      "sha256": "b9a152d111d5441f15d1c619b5ae813243479b27b65747b332819b85eeb52bfa"
+    },
+    "passed": true,
+    "workflow_junit": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-installed\\20260930-03\\installed-workflow\\pytest.xml",
+      "sha256": "11554b85ec423c0311ae1cd9b2f2b30cbbe03e11254ca658daa4a04a552171eb",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 352.86
+    },
+    "fixtures_match_repository": true,
+    "protected_write_denials": 20,
+    "scratch_database_succeeded": true,
+    "role_probes": {
+      "developer": {
+        "ready": true,
+        "actual_ai_calls": 0
+      },
+      "reviewer": {
+        "ready": true,
+        "actual_ai_calls": 0
+      }
+    },
+    "t7_acceptance": {
+      "path": "%REPOSITORY%\\Phase\\Evidence\\Phase3_Example_Acceptance.json",
+      "sha256": "460900bad4adbd339d78917efb9cdb9349343a08838aeffeac64a683f9b0f930",
+      "accepted_report_sha256": "f7a74e2e37c79d49dc7d847598059dcce5abbfe5a6654ca19a5db905ed66b2ef",
+      "new_acceptance": false
+    }
+  },
+  "runner": {
+    "directory": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-06",
+    "artifact_id": "6f068344f7b30cbcc0bde90ccf1d9653745a51569ed9e54b4361052e1aa58b0f",
+    "manifest": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-06\\runner-manifest.json",
+      "sha256": "76cbbd6b6851cc5c659f8d73f86acf340f0415d6bbd357899c61fd0b85c8d97f"
+    },
+    "installed_file_count": 1236,
+    "source_matches_current_package": true,
+    "python_version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "dependencies": {
+      "pytest": "9.1.1",
+      "pluggy": "1.6.0",
+      "iniconfig": "2.3.0",
+      "packaging": "26.3",
+      "pygments": "2.21.0",
+      "colorama": "0.4.6",
+      "psutil": "7.2.2"
+    },
+    "codex": {
+      "version": "codex-cli 0.155.1",
+      "sha256": "eba0f32c976667cb9298efafd98513e823eeda7b576a03ec658bb8be8d336316"
+    },
+    "build_logs": "%LOCALAPPDATA%\\development-tools-harness\\runner-builds\\t8-wfx2d_xw",
+    "unchanged_after_verification": true,
+    "previous_runner": {
+      "directory": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04",
+      "artifact_id": "5cfcf2e92afa6fd9d3bc0e0220a49eff5dad807611b812aeee08f5fd21048ecc",
+      "manifest": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04\\runner-manifest.json",
+        "sha256": "71326565b6ab71114ceb362e79d8a45663471b07475ec3de385b9ac737e4d536"
+      },
+      "unchanged": true
+    },
+    "active_workflows": "Preserve original artifact binding; no migration or automatic replacement"
+  },
+  "coverage": [
+    "pytest tmp_path, tmp_path_factory, tmpdir and tmpdir_factory",
+    "tempfile.TemporaryDirectory with Unicode/spaces and cleanup",
+    "ordinary and private OWNER RIGHTS parent directories",
+    "normal and -I child/grandchild Python",
+    "independent protected ACL inspection: only system, administrators, owner rights and current AppContainer SID",
+    "existing-directory, missing-parent, invalid-mode, bytes and relative-path behavior",
+    "outside paths, ambiguous device/stream names, junctions and audit veto",
+    "protected source/runtime write and DACL-removal denial, including forged child marker",
+    "host interpreter inert and validator fails closed without initialization"
+  ],
+  "failed_or_interrupted_attempts": [
+    {
+      "kind": "test driver encoding",
+      "reason": "Child diagnostic text used the Windows default encoding while the parent decoded UTF-8.",
+      "resolution": "Test child commands now use -X utf8; the protected writes were already denied.",
+      "stdout": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t2-tests\\bf396ed2e6c7\\validator\\c-9c723c09a78f\\process\\stdout.log",
+        "sha256": "24424b5adf30c91bd98e00be33a3642983daa48a6176ee2968ea0696388320a8"
+      }
+    },
+    {
+      "kind": "path normalization",
+      "reason": "Three new unit checks exposed Windows normalization of reserved/trailing-dot/trailing-space names before validation.",
+      "resolution": "Validate the supplied raw components first; final full regression includes these passing cases."
+    },
+    {
+      "kind": "intermediate runner A05",
+      "proof": {
+        "path": "%LOCALAPPDATA%\\harness-risk\\fixed-aadpw0vi\\proof.json",
+        "sha256": "277ab9e48ebc2f9bbc99be2678a340aaaf0ab6a71395c5f5bfb4293f21b66841"
+      },
+      "reason": "Ordinary-parent checks passed but the unchanged reproduction still had one failure and one error under private parent permissions.",
+      "resolution": "M,WDAC on scratch only; final A06 passes both parent forms. A05 remains preserved and is not the final candidate."
+    },
+    {
+      "kind": "interrupted regression 01",
+      "run": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-regression\\20260930-01\\run.json",
+        "sha256": "07037a16e1c99b5cf73294c4669df9429e584b30141cfc02f3baf4edc6161d9d"
+      },
+      "reason": "Stopped to correct the private-parent defect; not counted as passing."
+    },
+    {
+      "kind": "invalid manual proof invocation",
+      "record": {
+        "path": "%LOCALAPPDATA%\\harness-risk\\fixed-final-52febb1r\\invocation-error.json",
+        "sha256": "0254513bb5ad1f0ee39f7817e400766c53a93973637a8beb58c97da0b378e096"
+      },
+      "reason": "Driver used timeout_seconds instead of supported timeout; no tests launched; corrected in the final proof."
+    },
+    {
+      "kind": "conversation-interrupted regression 02",
+      "run": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-regression\\20260930-02\\run.json",
+        "sha256": "2c0f46d0966b5289dbfcdfd77af336fffee2e130dd500f37d94ff4b67fdab720"
+      },
+      "reason": "No completed JUnit; not counted as passing; rerun 03 completed with unchanged inputs."
+    },
+    {
+      "kind": "conversation-interrupted installed verification 02",
+      "record": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\temp-compat-installed\\20260930-02\\interruption.json",
+        "sha256": "45384d15f19cff3f38518c9978260c5e255ffbc219d62685d9b2fa4c8a0f2557"
+      },
+      "reason": "Incomplete report retained; final installed verification is attempt 03."
+    }
+  ],
+  "limitations_and_remaining_work": [
+    {
+      "id": "issue-2",
+      "status": "open",
+      "evidence": {
+        "path": "%LOCALAPPDATA%\\harness-risk\\r-ptt240un\\risk-proof.json",
+        "sha256": "e9fa8bcde7abecc1a663978ddb4ea7792e6eb121060a2754a8052ef896c8619c"
+      },
+      "description": "Harness B full self-tests still need reviewed resources/path arrangements inside A; copied .agents/skills/phase-doc is excluded and some tests expect locations outside the grant. No Phase 4 completion is claimed."
+    },
+    {
+      "id": "child-startup-opt-out",
+      "status": "unsupported",
+      "description": "A child using -S or removing DEVELOPMENT_HARNESS_TEST_SCRATCH skips the private startup compatibility; other interpreters are outside its scope. Windows isolation remains enforced."
+    },
+    {
+      "id": "phase3-acceptance",
+      "status": "pending",
+      "description": "Technical correction does not record user acceptance."
+    }
+  ],
+  "upstream_context": [
+    "https://github.com/python/cpython/issues/134587",
+    "https://github.com/python/cpython/pull/148804"
+  ]
+}

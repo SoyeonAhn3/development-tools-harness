@@ -8,6 +8,18 @@ import sys
 
 def main():
     configuration = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+    from _harness_appcontainer_temp import require
+    require(configuration["scratch"])
+    plugins = []
+    if configuration.get("profile"):
+        from _harness_test_collection import CollectionEvidence
+        plugins.append(CollectionEvidence(configuration["collection"]))
+        # These variables belong only to this test process and its children.
+        # B's default SQLite/ownership paths must remain inside granted scratch.
+        state = Path(configuration["scratch"]) / "test-user"
+        state.mkdir()
+        os.environ.update(LOCALAPPDATA=str(state), APPDATA=str(state),
+                          PYTHONPATH=str(Path(configuration["project"]) / "src"))
     # Import the pinned pytest installation before adding project imports.
     import pytest
     project = Path(configuration["project"])
@@ -21,7 +33,7 @@ def main():
     sys.path.insert(0, str(project))
     if (project / "src").is_dir():
         sys.path.insert(0, str(project / "src"))
-    return pytest.main(configuration["args"])
+    return pytest.main(configuration["args"], plugins=plugins)
 
 
 if __name__ == "__main__":

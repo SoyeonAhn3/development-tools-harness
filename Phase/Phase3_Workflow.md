@@ -6,7 +6,7 @@
 
 **Technology**: Python + pytest, SQLite and the selected single AI Adapter.
 
-**Plan status**: P3-T1–T3 preparation, real roles, isolated validation, execution admission and durable records are implemented and verified. P3-T4 connects sequential execution, bounded corrections, explicit independent review assessments and final validation; its two-Task live example reached technical completion. P3-T5 implements explicit interruption recovery with preserved approvals, files and call history. P3-T6 implements minimum JSON reports, feedback routes, final reuse/manual evidence and explicit acceptance gates; current verification is recorded below. Validation uses standard-user AppContainer under the no-administrator constraint. P3-T7 completed technical verification and explicit user acceptance on 2026-09-23, including R1/M1 confirmations. Fixed runner A is P3-T8, which has not started. Phase 2 is accepted; Phase 3 acceptance remains pending. The reviewed eight-Task, 18-requirement plan and its original AI/manual-review evidence are preserved.
+**Plan status**: P3-T1–T3 preparation, real roles, isolated validation, execution admission and durable records are implemented and verified. P3-T4 connects sequential execution, bounded corrections, explicit independent review assessments and final validation; its two-Task live example reached technical completion. P3-T5 implements explicit interruption recovery with preserved approvals, files and call history. P3-T6 implements minimum JSON reports, feedback routes, final reuse/manual evidence and explicit acceptance gates; current verification is recorded below. Validation uses standard-user AppContainer under the no-administrator constraint. P3-T7 completed technical verification and explicit user acceptance on 2026-09-23, including R1/M1 confirmations. P3-T8 implements verified independent fixed runner A, with isolation and installed recovery evidence. Its private-temporary-directory correction is verified. The B resource/profile/host-check correction is verified on separate A08: 473 isolated tests and 691 full regressions passed. Phase 2 is accepted; Phase 3 acceptance remains pending. The reviewed eight-Task, 18-requirement plan and its original AI/manual-review evidence are preserved.
 
 ## Overview
 
@@ -19,11 +19,11 @@ Connect actual implementation, validation, separate review, bounded corrections 
 | 1 | Real sequential Developer/Validation Runner/Reviewer workflow | ✅ T4 implemented; current verification below |
 | 2 | Call/timing/finding records, corrections and process-aware resume | ✅ T3–T5 implemented; current recovery verification below |
 | 3 | Minimum success/failure report, feedback and result acceptance | ✅ T6 implemented; current verification below |
-| 4 | Accepted external example and verified fixed runner A | 🚧 T7 accepted and completed; T8 not started |
+| 4 | Accepted external example and verified fixed runner A | ✅ T7 accepted; T8 fixed runner verified |
 
 ## Verification & Exit Criteria
 
-The [reviewed plan](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) contains completion criteria, proposed paths and verification methods. [Review evidence](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md) preserves the original AI output and manual corrections. P3-T1 and P3-T2 components are verified, including two actual AI calls on a disposable example. P3-T3 admission/records are implemented and verified; the full suite passed 378 tests. P3-T4 implementation and its four-call live example are recorded in [execution evidence](Evidence/Phase3_Execution.json). P3-T5 recovery is implemented; its separate [recovery evidence](Evidence/Phase3_Recovery.json) is preserved. P3-T6 results, feedback and acceptance gates are implemented; [results evidence](Evidence/Phase3_Results.json) and current verification are recorded below. P3-T7 technical execution and explicit user acceptance are complete, with evidence below. P3-T8 has not started.
+The [reviewed plan](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) contains completion criteria, proposed paths and verification methods. [Review evidence](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md) preserves the original AI output and manual corrections. P3-T1 and P3-T2 components are verified, including two actual AI calls on a disposable example. P3-T3 admission/records are implemented and verified; the full suite passed 378 tests. P3-T4 implementation and its four-call live example are recorded in [execution evidence](Evidence/Phase3_Execution.json). P3-T5 recovery is implemented; its separate [recovery evidence](Evidence/Phase3_Recovery.json) is preserved. P3-T6 results, feedback and acceptance gates are implemented; [results evidence](Evidence/Phase3_Results.json) and current verification are recorded below. P3-T7 technical execution and explicit user acceptance are complete, with evidence below. P3-T8 is implemented and verified.
 
 | Task | Planned work | Completion evidence |
 |---|---|---|
@@ -34,7 +34,7 @@ The [reviewed plan](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) conta
 | P3-T5 | Recover partial implementation and interrupted validation safely. | Implemented: explicit resume, saved-response proof/reuse, checked partial files, process-tree inspection, separate recovery facts and preserved approval/correction counts. [Evidence](Evidence/Phase3_Recovery.json); current verification below. |
 | P3-T6 | Add minimum reports, feedback routing, final reuse checks and acceptance gates. | Implemented: read-only JSON results, preserved feedback/correction or replanning routes, final reuse/manual confirmations and version-bound acceptance gates. [Evidence](Evidence/Phase3_Results.json); current verification below. |
 | P3-T7 | Complete the external CLI example through actual roles, interruption/resume and user acceptance. | ✅ Completed: two actual role calls, one crash/reuse, eight final tests and six independent checks; R1/M1 confirmed and user acceptance recorded on 2026-09-23. [Technical evidence](Evidence/Phase3_Example.json), [acceptance evidence](Evidence/Phase3_Example_Acceptance.json). |
-| P3-T8 | Freeze runner A and prove isolation before Phase 4. | Independent installed origins, fixed artifacts, actual B/test write-denial evidence and installed workflow/resume checks. |
+| P3-T8 | Freeze runner A and prove isolation before Phase 4. | Implemented with private-temp correction: independent installation, fixed artifacts, 20 protected write denials, 12 installed checks and **670 full regression tests passed**. [Initial evidence](Evidence/Phase3_FixedRunner.json), [correction evidence](Evidence/Phase3_TemporaryDirectories.json). |
 
 P3-T2 verifies the worker components on an explicitly scoped disposable example. P3-T3 prepares and authorizes a specific plan/code/policy version without dispatching work. P3-T4 starts that authorized work through `workflow-run`; P3-T5 adds explicit `workflow-resume`; P3-T6 supplies minimum reports and result acceptance conditions. T7 completed the external example's actual user acceptance. The unelevated candidate failed network denial; elevated setup remains excluded under company policy. No administrator setup or unrestricted fallback is used.
 
@@ -281,6 +281,61 @@ $t7Directory = Join-Path $env:LOCALAPPDATA 'development-tools-harness/t7-live/c2
 & $harnessPython -m development_harness --project "$t7Directory/project" --state-dir "$t7Directory/state" workflow-report
 ```
 
+### P3-T8 — Independent Fixed Runner and Isolation Proof
+
+**Implementation (2026-09-30)**: [freeze_runner.py](../scripts/freeze_runner.py) builds a local wheel without a package-index request and prepares a fresh installation outside OneDrive and the development checkout. [fixed_runner.py](../src/development_harness/fixed_runner.py) copies Python 3.12, seven pinned runtime/test dependencies, the wheel's package and writing resources, and a reviewed Codex executable. A manifest records every installed file, source/build identities, versions and an artifact ID. Existing destinations are rejected; failed candidates and build logs remain available for inspection. No installation replaces a previous runner.
+
+[frozen_entry.py](../src/development_harness/frozen_entry.py), copied to A's `run.py`, requires A's Python with `-I -B`, checks the manifest and installed origins, and rejects altered/missing/extra files, linked paths, overlapping A/B/state directories and an alternate Codex executable. Role instructions, follow-up rules and the writing profile are checked against the packaged policy. The hash check detects changes; generated-code write denial is supplied by the existing AppContainer boundary. Newly prepared fixed-runner workflows include `runner_artifact_id` in their approved policy. Another fixed runner or the development installation cannot resume them. Existing historical runs are not rewritten or migrated.
+
+**Verification**: [verify_t8.py](../scripts/verify_t8.py) dispatches the installed [verification module](../src/development_harness/fixed_runner_verify.py). Actual B source is copied into a disposable project and imported by its isolated tests. The test and child process attempt writes to a protected A replica's Python, adapter, package, dependency, launcher, manifest, roles and policy, plus a synthetic approval DB and log. Host-side hashes must remain unchanged, while B's real `Store` must successfully use a scratch DB. The pinned Developer/Reviewer CLI boundaries are probed without AI-service calls. Copied regression fixtures exercise installed A's public admission/report/resume commands, durable-response reuse, interrupted real validation and final-content validation. Their role responses are deterministic local subprocess fixtures; T7 remains the preserved real-AI/user-acceptance evidence.
+
+The first freeze attempt correctly rejected the machine's newly installed Codex `0.158.0`. A previously reviewed local `0.155.1` executable was explicitly selected and copied into A; supported-version policy and global CLI configuration were not changed. An initial full-suite collection found duplicate new test module names; the unit file was renamed to `test_frozen_integrity.py`. Installed verification caught a local worker fixture creating encoding bytecode in A; that fixture now uses `-I -B`. Nested Windows temporary paths were shortened and their parent is explicitly created. Failed candidates and incomplete regression attempts are preserved and are not counted as passing. The initial T8 verified A was `A-20260930-04`, artifact ID `5cfcf2e92afa6fd9d3bc0e0220a49eff5dad807611b812aeee08f5fd21048ecc`. All interventions and final results are recorded in [fixed-runner evidence](Evidence/Phase3_FixedRunner.json).
+
+```powershell
+# Inspect the prepared A without creating a workflow or calling an AI service.
+$fixedRunner = Join-Path $env:LOCALAPPDATA 'development-tools-harness/runners/A-20260930-06'
+& "$fixedRunner/runtime/python.exe" -I -B "$fixedRunner/run.py" --runner-info
+
+# Recheck this installation in a new disposable evidence directory.
+& $harnessPython scripts/verify_t8.py --runner $fixedRunner
+```
+
+**Installed verification**: Nine workflow/CLI/recovery tests passed in 172.60 seconds. All 20 protected writes by B's test and child were denied; the temporary DB worked. Both pinned role probes passed with zero AI-service calls. The final manifest was unchanged, and the accepted T7 report still matched its recorded hash. Full suite: **658 tests passed**, with zero failures, errors or skips.
+
+**Initial T8 regression (2026-09-30)**: JUnit records 658 tests in 941.30 seconds, with zero failures, errors or skips. `pip check` passed. All source, test and script files match their starting hashes; the frozen package also matches source at that checkpoint. The detailed report and hashes are in [T8 evidence](Evidence/Phase3_FixedRunner.json).
+
+The registered validation/state policy stays in its original protected Run records; B tests use separate temporary records. Active approvals and the accepted T7 example are preserved. T8 technical work is complete. Overall Phase 3 user acceptance and Phase 4 self-development remain pending. Separate dev-log is omitted because that skill is unavailable.
+
+### Post-T8 Correction — Private Temporary Directories
+
+**Problem and scope (2026-09-30)**: The acceptance-risk investigation reproduced `PermissionError` from Python 3.12.10's `mkdir(mode=0o700)` inside AppContainer. Its protected directory ACL omitted the current container SID, breaking pytest's temporary fixtures and `tempfile.TemporaryDirectory`. The original four-case reproduction had two passes, one failure and one setup error despite the earlier 658-test T8 regression passing. This correction addresses issue 1 from that review.
+
+[appcontainer_temp.py](../src/development_harness/appcontainer_temp.py) is copied into the private validation runtime and loaded by its trusted `sitecustomize.py` before project imports. It reads the actual AppContainer SID from the process token and creates new private directories inside the granted scratch tree with the existing owner/system/administrator permissions plus that SID. Protected ACLs remain private. Ambiguous device/stream paths and linked paths are rejected; normal Python errors and audit vetoes remain observable. The host interpreter remains unchanged. The copied hook is included in runtime hashes and the fixed-runner manifest, and validation refuses to start if initialization is missing.
+
+An intermediate `A-20260930-05` candidate worked under ordinary parent permissions but still failed the original reproduction under a private `tempfile` parent. The final implementation therefore grants `M,WDAC` only to the disposable scratch tree: `WDAC` permits creating the required protected ACL when the parent inherits `OWNER RIGHTS`. Source copies, runtime files, approval records and runner A do not receive that permission. Real tests check both parent forms, inspect the resulting ACL independently, and verify that attempts to remove protected source/runtime ACLs are denied.
+
+Normal child and grandchild Python startup, including `-I`, loads the same compatibility hook and restores `TEMP`/`TMP` to the controller's scratch directory. A child explicitly using `-S` or dropping `DEVELOPMENT_HARNESS_TEST_SCRATCH` opts out of this startup support; the compatibility guarantee does not cover that case. Windows permissions remain the isolation boundary, including when a test forges the marker.
+
+**Verification**: The unchanged original reproduction now passes all four cases under a private `tempfile` parent. All **670 regression tests** passed in 1378.13 seconds, including nine new unit cases and three real-environment integration cases. All **12 installed tests** passed in 352.86 seconds, and 20 protected writes were denied. The new integration cases cover temporary fixtures, Unicode paths, cleanup, children, private ACLs and protected ACL-change denial. `pip check` passed; all 93 source/test/script/config input files retained their starting hashes. Installed source matches the current package, and the original A04 runner and accepted T7 evidence remain unchanged. Exact reports and hashes are in [temporary-directory evidence](Evidence/Phase3_TemporaryDirectories.json). Failed candidates and interrupted checks are retained separately and are not counted as passing; the conversation-interrupted attempts were rerun to completion with unchanged inputs.
+
+The new verified installation is `A-20260930-06`, artifact ID `6f068344f7b30cbcc0bde90ccf1d9653745a51569ed9e54b4361052e1aa58b0f`. Earlier runners remain intact, and existing workflows retain their original artifact binding; this is a separate installation for new runs. No new AI-service calls or user acceptance are recorded.
+
+**Issue 2 at this checkpoint**: B's own tests still needed explicit resources and environment separation. The next correction addresses that gap; the 670-test result above remains historical issue-1 evidence.
+
+### Post-T8 Correction — Harness Self-test Resources and Host Checks
+
+The `harness-self-v1` pytest profile in [validation_profiles.py](../src/development_harness/validation_profiles.py) declares the isolated suite and each deferred host module. Exactly the phase-doc skill and template are copied as read-only B test data; other `.agents` files remain excluded. A keeps its own packaged instructions. Test-only `LOCALAPPDATA`, `APPDATA`, `TEMP` and `TMP` point inside scratch, including B's default SQLite and ownership records.
+
+Actual execution exposed another Windows compatibility issue: a permitted scratch file can be opened while `Path.resolve(strict=True)` fails at DOS volume-name lookup. The private runtime now obtains the normalized NT name from an opened handle and translates only paths physically inside the same verified scratch root. Missing-file/access errors remain observable; no additional permissions are granted and host Python is unchanged. The existing 461 isolated unit cases passed after this correction. [Windows API reference](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfinalpathnamebyhandlew).
+
+The controller records discovered, selected and executed pytest nodes. Skips, deselection, silent item removal, missing modules, incomplete execution or failures prevent a complete isolated result. Workflow reports expose the input hash, module groups and `host_verification=pending`. Isolated success always retains `all_tests_complete=false`.
+
+[self_test_verify.py](../src/development_harness/self_test_verify.py) runs directly from frozen A's Python with `-I -B -m development_harness.self_test_verify`; it never loads a launcher from B. `isolated` runs ordinary B unit tests. `reviewed-host` requires the exact reviewed input hash and a development Python with pinned dependencies; it runs all B tests on a disposable copy with host permissions. This is an explicit operator action, never an automatic fallback from failed isolation. Installation, native junction, CLI, process-recovery and AppContainer-creation checks are included in that host stage. `report` checks both raw JUnit/collection artifacts, their hashes, complete module coverage, current B inputs and the same A artifact. Only the declared source/test/build/resource inputs are copied, so unversioned prose or reports cannot silently affect a test. Other resource locations need explicit profile support. The report does not accept the Phase.
+
+Register `{"kind":"pytest","argv":["{python}","-m","pytest","-q"],"timeout":600,"profile":"harness-self-v1"}`. Workflow preparation pins the mandatory `HARNESS_HOST_REGRESSION` manual check. Before acceptance the operator reviews final B source/tests and confirms the matching combined report. Later changes invalidate that confirmation through the existing final-version gate. Hashes identify the reviewed inputs and stale evidence; they do not attest that arbitrary generated host code is safe. Host execution requires prior source/test review.
+
+**Final verification (2026-09-30)**: A08 passed **473 isolated self-tests**, **691 full reviewed-host regressions** (1051.16 seconds), **12 installed checks**, 20 protected write denials and `pip check`, with zero final failures, errors or skips. Collection/execution coverage and all 108 declared input hashes match. A08 artifact ID is `48c0b11e27b79757f82f015946e94668da61f91b92e3d81b72aee7ee1b9487dc`. A04/A06/A07 and accepted T7 evidence are preserved. During concurrent verification one `icacls` permission grant exceeded 15 seconds; the validator correctly stayed unverified. The complete host suite was rerun alone on identical inputs without changing timeouts or test expectations. Intermediate failures and interrupted runs are retained and are not passing evidence. The combined report covers both test stages; it does not accept Phase 3. No live AI calls or Phase 4 self-development occurred. [Self-test evidence](Evidence/Phase3_SelfTests.json).
+
 ### Purpose / Implementation Files
 
 Extend the Phase 1 runner/storage and Phase 2 Adapter. P3-T1 preparation, P3-T2 components, P3-T3 `workflow.py`/`workflow_records.py` admission/journaling, P3-T4 `workflow_execution.py` scheduling and P3-T5 `workflow_recovery.py`/`workflow_attempt_recovery.py` reconciliation now exist. P3-T6 adds `results.py`, `workflow_feedback.py`, `workflow_acceptance.py` and their CLI/planning integration. P3-T7 adds only the external example driver `scripts/verify_t7.py` and its evidence/documentation; production modules and repository fixtures remain unchanged. Full existing/proposed paths are listed in the reviewed plan.
@@ -317,6 +372,9 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | 2026-09-22 | Implemented P3-T6 read-only minimum JSON reports, preserved same-scope/changed-requirements feedback, final reuse/manual evidence and explicit acceptance gates. Preserved T1–T5 evidence and the generated plan; zero new actual AI calls. Updated both languages and README; T7–T8 and Phase acceptance remain pending. Separate dev-log omitted because the skill is unavailable. |
 | 2026-09-23 | Added and ran the bounded P3-T7 external example script with a controller-reviewed one-Task plan, zero Planner calls, two actual role calls, one crash/response reuse, eight sealed final tests and six independent isolated checks. Recorded actual CLI output and preserved fixtures/production source and historical evidence. R1/M1 confirmations and genuine user acceptance remain pending; T8 has not started. All 632 full-regression tests passed on unchanged source/test files. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
 | 2026-09-23 | User explicitly accepted the reviewed T7 result with “결과 인수한다”. Recorded R1 reuse and M1 manual confirmations through the public CLI, then completed workflow-accept; the report is accepted with no blockers. T7 completed, T8 not started and overall Phase 3 acceptance pending. Preserved code, approval, calls and prior evidence; no new AI calls or test runs. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
+| 2026-09-30 | Implemented P3-T8 offline fixed runner, manifest/origin checks and artifact-bound execution policy. Verified 20 protected write denials, temporary B records, two pinned role boundaries, nine installed CLI/workflow/recovery cases and preserved T7 acceptance. All 658 regressions passed; Phase 3 acceptance and Phase 4 remain pending. Documented corrected verification fixtures/paths and preserved failed candidates. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
+| 2026-09-30 | Corrected acceptance-risk issue 1: private temporary directories inside AppContainer, including private parents and child Python. Verified unchanged four-case reproduction, 670 regressions, 12 installed checks and 20 protected write denials; created separate A06 and preserved A04/T7 evidence. Recorded intermediate failures and interrupted runs. Issue 2, Phase 3 acceptance and Phase 4 remain pending. Synchronized both languages and README; separate dev-log omitted because the skill is unavailable. |
+| 2026-09-30 | Corrected issue 2 with explicit copied/hash-bound B resources, temporary state, isolated collection coverage, reviewed-host verification and a mandatory acceptance check. A08 passed 473 isolated tests, 691 full regressions, 12 installed checks and 20 write denials. Preserved intermediate failures, the ACL-timeout rerun, earlier runners and T7. Phase 3 acceptance/Phase 4 remain pending. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
 
 ---
 
@@ -328,7 +386,7 @@ Reuse earlier components with regression evidence. Core protections must work wi
 
 **기술 구성**: Python + pytest, SQLite, 선정한 단일 AI Adapter.
 
-**계획 상태**: P3-T1–T3 준비·실제 역할·격리된 검증·실행 승인·영속 기록의 구현·검증을 완료했다. P3-T4는 순차 실행·제한된 수정·독립 리뷰의 명시적 지적 평가·최종 검사를 연결했고 실제 Task 2개 예제가 기술적 완료에 도달했다. P3-T5는 승인·파일·호출 이력을 유지하는 명시적 중단 복구를 구현했다. P3-T6는 최소 JSON 보고서·피드백 처리·최종 재사용 및 수동 근거·명시적 인수 조건을 구현했으며 현재 검증 결과는 아래 기록한다. 회사 정책상 관리자 설정 없이 일반 사용자 AppContainer를 사용한다. 2026-09-23 P3-T7 외부 예제 기술 검증과 R1·M1 확인을 포함한 명시적 사용자 인수를 완료했다. 고정 실행용 A의 P3-T8은 미시작이다. Phase 2는 인수했으며 Phase 3 전체 인수는 대기 중이다. Task 8개·요구사항 18개의 검토 계획과 AI 원본·수동 검토 근거는 보존했다.
+**계획 상태**: P3-T1–T3 준비·실제 역할·격리된 검증·실행 승인·영속 기록의 구현·검증을 완료했다. P3-T4는 순차 실행·제한된 수정·독립 리뷰의 명시적 지적 평가·최종 검사를 연결했고 실제 Task 2개 예제가 기술적 완료에 도달했다. P3-T5는 승인·파일·호출 이력을 유지하는 명시적 중단 복구를 구현했다. P3-T6는 최소 JSON 보고서·피드백 처리·최종 재사용 및 수동 근거·명시적 인수 조건을 구현했으며 현재 검증 결과는 아래 기록한다. 회사 정책상 관리자 설정 없이 일반 사용자 AppContainer를 사용한다. 2026-09-23 P3-T7 외부 예제 기술 검증과 R1·M1 확인을 포함한 명시적 사용자 인수를 완료했다. 고정 실행용 A의 P3-T8은 구현·검증을 완료했다. 이후 임시 폴더 호환 수정도 검증했다. 별도의 A08에서 B 자료·검사 설정·호스트 확인 수정을 검증했으며 격리 검사 473개와 전체 회귀 691개가 통과했다. Phase 2는 인수했으며 Phase 3 전체 인수는 대기 중이다. Task 8개·요구사항 18개의 검토 계획과 AI 원본·수동 검토 근거는 보존했다.
 
 ## 개요
 
@@ -341,11 +399,11 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | 1 | 실제 Developer·Validation Runner·Reviewer 순차 Workflow | ✅ T4 구현, 현재 검증 결과는 아래 기록 |
 | 2 | 호출·시간·지적 기록, 수정·프로세스 확인을 포함한 재개 | ✅ T3–T5 구현, 현재 복구 검증 결과는 아래 기록 |
 | 3 | 최소 성공·실패 보고서, 피드백·결과 인수 | ✅ T6 구현, 현재 검증 결과는 아래 기록 |
-| 4 | 인수한 외부 예제와 검증된 고정 실행용 A | 🚧 T7 인수·완료, T8 미시작 |
+| 4 | 인수한 외부 예제와 검증된 고정 실행용 A | ✅ T7 인수·완료, T8 고정 실행본 검증 완료 |
 
 ## 검증 및 종료 조건
 
-[검토한 계획](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md)에 완료 기준·제안 경로·검증 방법을 기록했다. [검토 근거](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md)에 AI 원본과 수동 보완을 보존했다. P3-T1·T2 구성요소를 검증했으며 임시 예제에서 실제 AI 호출 2회를 확인했다. P3-T3 실행 승인·기록을 구현·검증했으며 전체 검사 378개를 통과했다. P3-T4 구현과 실제 호출 4회의 예제는 [실행 근거](Evidence/Phase3_Execution.json)에 기록했다. P3-T5 복구를 구현했으며 별도 [복구 근거](Evidence/Phase3_Recovery.json)를 보존한다. P3-T6 결과·피드백·인수 조건을 구현했으며 [결과 근거](Evidence/Phase3_Results.json)와 현재 검증 결과는 아래에 기록한다. P3-T7 기술 실행 검증과 명시적 사용자 인수를 완료했으며 근거는 아래에 기록한다. P3-T8은 미시작이다.
+[검토한 계획](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md)에 완료 기준·제안 경로·검증 방법을 기록했다. [검토 근거](Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md)에 AI 원본과 수동 보완을 보존했다. P3-T1·T2 구성요소를 검증했으며 임시 예제에서 실제 AI 호출 2회를 확인했다. P3-T3 실행 승인·기록을 구현·검증했으며 전체 검사 378개를 통과했다. P3-T4 구현과 실제 호출 4회의 예제는 [실행 근거](Evidence/Phase3_Execution.json)에 기록했다. P3-T5 복구를 구현했으며 별도 [복구 근거](Evidence/Phase3_Recovery.json)를 보존한다. P3-T6 결과·피드백·인수 조건을 구현했으며 [결과 근거](Evidence/Phase3_Results.json)와 현재 검증 결과는 아래에 기록한다. P3-T7 기술 실행 검증과 명시적 사용자 인수를 완료했으며 근거는 아래에 기록한다. P3-T8은 구현·검증을 완료했다.
 
 | Task | 개발 내용 | 완료 근거 |
 |---|---|---|
@@ -356,7 +414,7 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | P3-T5 | 부분 구현과 중단된 검사의 안전한 재개. | 구현: 명시적 재개·저장 응답 검증 및 재사용·부분 파일 확인·프로세스와 자식 검사·별도 복구 사실·승인 및 수정 횟수 유지. [근거](Evidence/Phase3_Recovery.json), 현재 검증 결과는 아래 기록. |
 | P3-T6 | 최소 보고서·피드백 처리·최종 재사용 확인·인수 조건 추가. | 구현: 읽기 전용 JSON 결과, 피드백 보존·수정 및 재계획 경로, 최종 재사용·수동 확인과 버전에 연결된 인수 조건. [근거](Evidence/Phase3_Results.json), 현재 검증 결과는 아래 기록. |
 | P3-T7 | 외부 CLI 예제의 실제 역할 실행·중단·재개·사용자 인수. | ✅ 완료: 실제 역할 호출 2회, 중단·응답 재사용 1회, 최종 검사 8개·독립 검사 6개. 2026-09-23 R1·M1 확인과 사용자 인수를 기록했다. [기술 근거](Evidence/Phase3_Example.json), [인수 근거](Evidence/Phase3_Example_Acceptance.json). |
-| P3-T8 | 실행용 A 고정과 Phase 4 이전 분리 입증. | 독립 설치 위치·고정 산출물, 실제 B·테스트 쓰기 차단, 설치본의 흐름·재개 검사. |
+| P3-T8 | 실행용 A 고정과 Phase 4 이전 분리 입증. | 임시 폴더 수정을 포함해 구현: 독립 설치·고정 산출물, 보호 대상 쓰기 20회 차단, 설치본 검사 12개와 **전체 회귀 검사 670개 통과**. [최초 근거](Evidence/Phase3_FixedRunner.json), [수정 근거](Evidence/Phase3_TemporaryDirectories.json). |
 
 P3-T2에서 범위가 명확한 임시 예제로 실제 작업 구성요소를 검증했다. P3-T3는 특정 계획·코드·정책 버전을 준비·승인하며 작업 호출은 시작하지 않는다. P3-T4는 `workflow-run`으로 승인한 작업을 시작하고 P3-T5는 명시적 `workflow-resume`, P3-T6는 최소 보고서·결과 인수 조건을 추가한다. T7에서 외부 예제의 실제 사용자 인수를 완료했다. unelevated 후보는 통신 차단에 실패했으며 elevated 설정은 회사 정책상 제외한다. 관리자 설정이나 제한 없는 실행으로 대체하지 않는다.
 
@@ -603,6 +661,61 @@ $t7Directory = Join-Path $env:LOCALAPPDATA 'development-tools-harness/t7-live/c2
 & $harnessPython -m development_harness --project "$t7Directory/project" --state-dir "$t7Directory/state" workflow-report
 ```
 
+### P3-T8 — 독립 고정 실행본과 분리 입증
+
+**구현(2026-09-30)**: [freeze_runner.py](../scripts/freeze_runner.py)는 패키지 저장소에 요청하지 않고 로컬 wheel을 빌드하며 OneDrive와 개발 저장소 밖에 새 설치본을 준비한다. [fixed_runner.py](../src/development_harness/fixed_runner.py)는 Python 3.12, 버전이 고정된 실행·검사 의존성 7개, wheel의 패키지·문서 작성 리소스, 검토된 Codex 실행 파일을 복사한다. 매니페스트에 설치 파일 전체의 지문, 소스·빌드 식별 정보, 버전과 산출물 ID를 기록한다. 기존 경로는 거부하며 실패한 후보와 빌드 로그도 확인할 수 있도록 보존한다. 이전 실행본을 덮어쓰지 않는다.
+
+A의 `run.py`로 복사되는 [frozen_entry.py](../src/development_harness/frozen_entry.py)는 A의 Python과 `-I -B`를 요구한다. 매니페스트·실제 모듈 위치를 확인하고 파일 변경·누락·추가, 연결 경로, A·B·상태 저장소의 경로 중첩, 다른 Codex 실행 파일을 거부한다. 역할 지침·후속 리뷰 규칙·문서 작성 프로필도 패키지의 정책과 대조한다. 파일 지문은 변경을 감지하며 생성 코드의 쓰기 권한은 기존 AppContainer가 제한한다. 고정 실행본으로 새로 준비한 Workflow의 승인 정책에는 `runner_artifact_id`를 포함해 다른 고정 실행본이나 개발 환경에서의 재개를 차단한다. 과거 Run은 수정·이전하지 않는다.
+
+**검증**: [verify_t8.py](../scripts/verify_t8.py)가 설치본의 [검증 모듈](../src/development_harness/fixed_runner_verify.py)을 실행한다. 실제 B 소스를 임시 프로젝트에 복사하고 격리된 테스트에서 가져온다. 테스트와 자식 프로세스는 보호된 A 복제본의 Python·Adapter·패키지·의존성·실행 진입점·매니페스트·역할 지침·정책 및 가짜 승인 DB·로그에 쓰기를 시도한다. 호스트에서 원래 파일 지문이 유지되는지 확인하고, B의 실제 `Store`는 허용된 임시 DB에서 정상 기록해야 한다. 고정된 Developer·Reviewer CLI의 도구 차단도 AI 서비스 호출 없이 확인한다. 별도로 복사한 회귀 검사에서는 설치본 A의 공개 승인·보고·재개 명령, 저장된 응답 재사용, 실제 검증 프로세스 중단·재개 및 최종 내용 재검사를 실행한다. 이 검사의 역할 응답은 로컬 자식 프로세스의 고정 응답이며 실제 AI·사용자 인수 근거는 보존된 T7 기록이다.
+
+첫 고정 시도에서는 PC의 Codex가 새 `0.158.0`이어서 의도한 대로 중단했다. 로컬에 남아 있던 기존 검토 버전 `0.155.1`을 명시적으로 선택해 A에 복사했으며 지원 버전 정책과 전역 CLI 설정은 변경하지 않았다. 최초 전체 검사 수집에서 새 테스트 파일의 이름 중복을 발견해 단위 검사 파일을 `test_frozen_integrity.py`로 변경했다. 설치본 검증에서는 로컬 역할 응답용 Python이 A에 인코딩 바이트코드를 생성하는 것을 감지해 해당 검사 프로세스에 `-I -B`를 적용했다. Windows 임시 경로는 짧게 분리하고 상위 폴더를 명시적으로 생성하도록 수정했다. 실패한 후보와 중단한 회귀 검사도 보존하며 통과로 계산하지 않는다. T8 최초 검증 A는 `A-20260930-04`, 산출물 ID는 `5cfcf2e92afa6fd9d3bc0e0220a49eff5dad807611b812aeee08f5fd21048ecc`다. 수동 조치와 최종 결과는 [고정 실행본 근거](Evidence/Phase3_FixedRunner.json)에 기록한다.
+
+```powershell
+# Workflow 생성이나 AI 서비스 호출 없이 준비된 A를 확인한다.
+$fixedRunner = Join-Path $env:LOCALAPPDATA 'development-tools-harness/runners/A-20260930-06'
+& "$fixedRunner/runtime/python.exe" -I -B "$fixedRunner/run.py" --runner-info
+
+# 새 임시 근거 디렉터리에서 해당 설치본을 다시 검사한다.
+& $harnessPython scripts/verify_t8.py --runner $fixedRunner
+```
+
+**설치본 검증**: Workflow·CLI·복구 검사 9개가 172.60초에 통과했다. B 테스트와 자식의 보호 대상 쓰기 시도 20회를 모두 차단했고 임시 DB 기록은 성공했다. 고정된 두 역할의 경계 검사도 AI 서비스 호출 없이 통과했다. 최종 매니페스트는 유지됐고 인수한 T7 보고서도 기록된 해시와 일치했다. 전체 회귀 검사 **658개**가 실패·오류·생략 없이 통과했다.
+
+**T8 최초 회귀 검사(2026-09-30)**: JUnit 기준 658개 검사가 941.30초에 통과했으며 실패·오류·생략은 0개다. `pip check`도 통과했다. 소스·테스트·실행 스크립트 전체가 시작 시점 해시와 일치하며 고정 패키지도 해당 검증 시점의 소스와 일치한다. 상세 보고서와 해시는 [T8 근거](Evidence/Phase3_FixedRunner.json)에 기록했다.
+
+등록된 검사·상태 정책은 원래 보호된 Run 기록에 유지하고 B 테스트는 별도의 임시 기록을 사용한다. 활성 승인과 인수한 T7 예제는 보존한다. T8의 기술적 구현·검증을 완료했다. Phase 3 전체 사용자 인수와 Phase 4 자체 개발은 대기 중이다. dev-log 스킬이 없어 별도 로그는 생략한다.
+
+### T8 이후 수정 — 전용 임시 폴더
+
+**문제와 범위(2026-09-30)**: 인수 위험 조사에서 Python 3.12.10의 `mkdir(mode=0o700)`이 AppContainer 안에서 `PermissionError`를 내는 현상을 재현했다. 새 폴더의 보호된 접근 권한에 현재 컨테이너 SID가 빠져 pytest 임시 폴더 기능과 `tempfile.TemporaryDirectory`가 동작하지 않았다. 앞선 T8 회귀 검사 658개가 통과했어도 원래 재현 검사 4개는 통과 2개·실패 1개·준비 오류 1개였다. 이번 수정은 검토에서 제시한 1번 문제를 다룬다.
+
+[appcontainer_temp.py](../src/development_harness/appcontainer_temp.py)를 격리 검사용 Python에 복사하고 신뢰한 `sitecustomize.py`가 프로젝트를 가져오기 전에 로드한다. 실제 프로세스 토큰에서 AppContainer SID를 읽고 허용된 임시 영역에 새 전용 폴더를 만들 때 기존 소유자·시스템·관리자 권한에 해당 SID를 추가한다. 폴더 권한은 계속 비공개로 유지한다. 모호한 장치·스트림 경로와 링크 경로는 거부하며 Python의 일반 오류와 감사 이벤트 차단도 유지한다. 호스트 Python에는 적용하지 않는다. 복사한 코드도 런타임 해시와 고정 실행본 매니페스트로 확인하고 초기화가 빠지면 검사를 시작하지 않는다.
+
+중간 후보 `A-20260930-05`는 일반 상위 폴더에서 동작했지만 비공개 `tempfile` 상위 폴더에서는 원래 재현 검사가 여전히 실패했다. 최종 구현은 버릴 수 있는 검사 전용 임시 영역에만 `M,WDAC`를 부여한다. `WDAC`는 상위 폴더에서 `OWNER RIGHTS`를 상속한 경우 필요한 보호 권한을 만들어 주는 데 사용한다. 프로젝트 사본·검사용 Python·승인 기록·실행본 A에는 이 권한을 주지 않는다. 실제 검사로 두 상위 폴더 형태를 확인하고 생성된 권한을 별도로 읽어 검사하며, 보호된 소스·런타임의 권한을 없애려는 시도가 차단되는지도 확인한다.
+
+일반적인 자식·손자 Python 실행은 `-I`를 포함해 같은 호환 처리를 로드하고 `TEMP`·`TMP`를 제어 프로그램이 지정한 임시 폴더로 맞춘다. 자식을 명시적으로 `-S`로 실행하거나 `DEVELOPMENT_HARNESS_TEST_SCRATCH`를 제거하면 이 초기화가 생략되므로 해당 경우까지 호환 동작을 보장하지 않는다. 테스트가 이 환경 변수를 위조해도 격리 경계는 Windows 권한으로 유지된다.
+
+**검증 결과**: 변경하지 않은 원래 재현 검사 4개가 비공개 `tempfile` 상위 폴더에서도 모두 통과했다. **전체 회귀 검사 670개**가 1378.13초에 통과했으며 새 단위 검사 9개와 실제 환경 통합 검사 3개를 포함한다. **설치본 검사 12개**가 352.86초에 통과했고 보호 대상 쓰기 20회를 차단했다. 새 통합 검사에는 임시 폴더 기능·한글 경로·정리·자식 실행·비공개 권한과 보호된 권한 변경 차단을 포함한다. `pip check`를 통과했고 소스·테스트·스크립트·설정 입력 93개 파일의 시작 해시를 유지했다. 설치 패키지는 현재 소스와 일치하며 기존 A04와 인수한 T7 근거도 보존했다. 실제 보고서와 해시는 [임시 폴더 수정 근거](Evidence/Phase3_TemporaryDirectories.json)에 기록한다. 실패 후보와 중단한 검사는 별도로 보존하고 통과로 계산하지 않는다. 대화 중단으로 끝나지 못한 검사는 같은 입력으로 다시 실행해 완료했다.
+
+새로 검증한 설치본은 `A-20260930-06`이며 산출물 ID는 `6f068344f7b30cbcc0bde90ccf1d9653745a51569ed9e54b4361052e1aa58b0f`다. 기존 실행본은 보존하며 진행 중인 Workflow는 원래 산출물에 계속 연결한다. 새 Run에 사용할 별도 설치본이다. 새 AI 서비스 호출이나 사용자 인수는 기록하지 않는다.
+
+**이 시점의 2번 문제**: B 자체 검사에는 명시적인 자료 제공과 실행 환경 분리가 더 필요했다. 다음 수정에서 이 문제를 다루며 위 검사 670개 결과는 1번 수정 당시의 근거로 보존한다.
+
+### T8 이후 수정 — 하네스 자체 검사 자료와 호스트 검사
+
+[validation_profiles.py](../src/development_harness/validation_profiles.py)의 `harness-self-v1` pytest 설정은 격리할 검사와 별도 호스트 검사 파일을 명시한다. phase-doc 스킬·템플릿 두 파일만 읽기 전용 B 테스트 자료로 복사하고 다른 `.agents` 파일은 계속 제외한다. A는 자신의 설치된 작성 규칙을 유지한다. 테스트의 `LOCALAPPDATA`·`APPDATA`·`TEMP`·`TMP`는 B의 기본 SQLite·소유권 기록을 포함해 임시 영역 안을 가리킨다.
+
+실제 실행에서 추가 Windows 호환 문제를 발견했다. 허용된 임시 파일은 열 수 있지만 DOS 볼륨 이름 조회 때문에 `Path.resolve(strict=True)`가 실패했다. 전용 검사용 Python은 파일 핸들에서 실제 NT 경로를 얻고, 확인된 같은 임시 루트 안의 실제 경로만 변환한다. 파일 없음·접근 거부 오류를 유지하며 권한을 추가하지 않고 호스트 Python도 변경하지 않는다. 이 수정 후 기존 격리 대상 단위 검사 461개가 통과했다. [Windows API 설명](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfinalpathnamebyhandlew).
+
+제어 프로그램은 pytest가 발견한 검사·선택한 검사·실제 실행한 검사를 기록한다. 생략·선택 해제·조용한 항목 삭제·검사 파일 누락·실행 미완료·실패가 있으면 격리 검사 완료로 표시하지 않는다. Workflow 보고서는 입력 해시, 검사 그룹과 `host_verification=pending`을 표시한다. 격리 검사만 통과한 결과의 `all_tests_complete`는 항상 `false`다.
+
+[self_test_verify.py](../src/development_harness/self_test_verify.py)는 고정 실행본 A의 Python에서 `-I -B -m development_harness.self_test_verify`로 직접 실행하며 B의 실행 스크립트를 가져오지 않는다. `isolated`는 B의 일반 단위 검사를 수행한다. `reviewed-host`는 검토한 입력 해시와 고정 의존성을 설치한 개발 Python을 명시해야 하며, 버릴 수 있는 사본에서 B 전체 검사를 사용자 PC 권한으로 실행한다. 격리 실패 후 자동 전환하지 않고 사용자가 의도적으로 실행하는 단계다. 설치·네이티브 junction·CLI·프로세스 복구·AppContainer 생성 검사는 이 단계에 포함한다. `report`는 두 실행의 실제 JUnit·수집 기록, 파일 해시, 전체 검사 파일 포함 여부, 현재 B 입력과 A 산출물의 일치를 확인한다. 명시한 소스·테스트·빌드·자료 입력만 복사하므로 버전에 포함하지 않은 문서나 보고서가 검사에 영향을 주지 않는다. 다른 자료 위치는 설정에서 명시적으로 지원해야 한다. 이 명령은 Phase를 인수하지 않는다.
+
+등록할 설정은 `{"kind":"pytest","argv":["{python}","-m","pytest","-q"],"timeout":600,"profile":"harness-self-v1"}`다. Workflow 준비 시 필수 수동 확인 `HARNESS_HOST_REGRESSION`을 승인 정책에 고정한다. 인수 전에 최종 B 소스·테스트를 검토하고 같은 버전의 통합 보고서를 확인해야 한다. 이후 수정은 기존 최종 버전 확인 절차에 따라 이전 확인을 무효로 만든다. 해시는 검토한 입력과 오래된 근거를 구별하며, 임의의 생성 코드를 사용자 PC 권한으로 실행해도 안전하다는 보장은 아니다. 호스트 실행 전 소스·테스트 검토가 필요하다.
+
+**최종 검증(2026-09-30)**: A08에서 **격리 자체 검사 473개**, **검토 후 실행한 전체 회귀 검사 691개**(1051.16초), **설치본 검사 12개**, 보호 대상 쓰기 차단 20회와 `pip check`를 통과했다. 최종 실패·오류·생략은 0개다. 검사 수집·실행 범위와 명시한 입력 108개 파일의 해시가 일치한다. A08 산출물 ID는 `48c0b11e27b79757f82f015946e94668da61f91b92e3d81b72aee7ee1b9487dc`다. A04·A06·A07과 인수한 T7 근거를 보존했다. 검증을 동시에 수행하던 중 `icacls` 권한 설정이 15초를 초과한 사례 1건이 있었고 검증은 올바르게 미확인 상태로 멈췄다. 시간 제한이나 테스트 기대값을 바꾸지 않고 같은 입력으로 전체 호스트 검사를 단독 재실행해 통과했다. 중간 실패·중단 기록은 별도로 보존하며 통과 근거에 포함하지 않는다. 통합 보고서는 두 단계의 검사 완료 근거이며 Phase 3 인수가 아니다. 실제 AI 호출과 Phase 4 자체 개발은 수행하지 않았다. [자체 검사 근거](Evidence/Phase3_SelfTests.json).
+
 ### 목적 / 구현 파일
 
 Phase 1 Runner·저장 계층과 Phase 2 Adapter를 확장한다. P3-T1 준비, P3-T2 구성요소, P3-T3 `workflow.py`·`workflow_records.py` 실행 승인·기록, P3-T4 `workflow_execution.py` 순차 실행과 P3-T5 `workflow_recovery.py`·`workflow_attempt_recovery.py` 복구를 구현했다. P3-T6에서 `results.py`·`workflow_feedback.py`·`workflow_acceptance.py`와 CLI·계획 연결을 추가했다. P3-T7은 외부 예제 실행용 `scripts/verify_t7.py`와 근거·문서만 추가하며 운영 모듈과 저장소 예제는 유지했다. 기존·신규 경로 전체는 검토 계획에 기록했다.
@@ -639,3 +752,6 @@ Phase 1 Runner·저장 계층과 Phase 2 Adapter를 확장한다. P3-T1 준비, 
 | 2026-09-22 | P3-T6 읽기 전용 최소 JSON 보고서, 같은 범위·요구사항 변경 피드백 보존, 최종 재사용·수동 근거와 명시적 인수 조건을 구현했다. T1–T5 근거·생성 계획을 보존했고 새 실제 AI 호출은 0회다. 영문·국문과 README를 갱신했으며 T7–T8·Phase 인수는 대기 중이다. dev-log 스킬이 없어 별도 로그는 생략했다. |
 | 2026-09-23 | P3-T7 외부 예제 스크립트를 추가·실행했다. 제어 프로그램이 작성하고 검토한 Task 1개 계획, Planner 호출 0회, 실제 역할 호출 2회, 중단·응답 재사용 1회, 봉인된 최종 검사 8개와 독립 격리 검사 6개를 기록했다. 실제 CLI 출력과 원본 예제·운영 소스·과거 근거를 보존했다. R1·M1 확인과 실제 사용자 인수는 대기 중이며 T8은 미시작이다. 소스·테스트를 유지한 전체 회귀 검사 632개를 통과했다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
 | 2026-09-23 | 사용자가 검토한 T7 결과를 “결과 인수한다”로 명시적으로 인수했다. 공개 CLI로 R1 재사용·M1 수동 확인 후 workflow-accept를 완료했으며 보고서는 차단 조건 없이 accepted다. T7 완료, T8 미시작, Phase 3 전체 인수 대기를 반영했다. 코드·승인·호출·이전 근거를 보존했으며 새 AI 호출·테스트 실행은 없다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-09-30 | P3-T8 오프라인 고정 실행본, 매니페스트·설치 위치 검사와 산출물 ID에 연결된 실행 정책을 구현했다. 보호 대상 쓰기 20회 차단, B 임시 기록, 고정된 두 역할의 경계, 설치본 CLI·Workflow·복구 검사 9개와 T7 인수 근거 보존을 확인했다. 전체 회귀 검사 658개를 통과했으며 Phase 3 인수·Phase 4는 대기 중이다. 검증용 응답·경로 수정과 실패 후보 보존을 기록했다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-09-30 | 인수 위험 1번인 AppContainer 임시 폴더 문제를 수정하고 비공개 상위 폴더·자식 Python까지 확인했다. 원래 재현 검사 4개·전체 회귀 670개·설치본 검사 12개·보호 대상 쓰기 차단 20회를 검증했다. 별도 A06을 만들고 A04·T7 근거와 중간 실패·중단 기록을 보존했다. 2번 문제·Phase 3 인수·Phase 4는 대기 중이다. 영문·국문과 README를 동기화했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-09-30 | 2번 문제의 B 자료 복사·해시 일치, 임시 상태 저장, 격리 검사 수집·실행 대조, 검토 후 호스트 검사와 필수 인수 확인을 구현했다. A08에서 격리 473개·전체 회귀 691개·설치본 12개·쓰기 차단 20회를 통과했다. 중간 실패, 권한 설정 시간 초과 후 재검증, 이전 실행본과 T7을 보존했다. Phase 3 인수·Phase 4는 대기 중이다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |

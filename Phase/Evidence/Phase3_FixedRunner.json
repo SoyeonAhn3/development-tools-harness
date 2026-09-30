@@ -1,0 +1,325 @@
+{
+  "date": "2026-09-30",
+  "phase": "Phase3",
+  "task": "P3-T8",
+  "status": "Implemented and verified; overall Phase 3 user acceptance pending",
+  "authorization": "User requested: 그럼 T8 개발을 시작해줘",
+  "scope": "Freeze independent runner A and verify isolation; no Phase 4 self-development or automatic version replacement",
+  "t8_complete": true,
+  "phase3_accepted": false,
+  "implementation_files": [
+    "src/development_harness/fixed_runner.py",
+    "src/development_harness/frozen_entry.py",
+    "src/development_harness/fixed_runner_verify.py",
+    "src/development_harness/workflow.py",
+    "scripts/freeze_runner.py",
+    "scripts/verify_t8.py"
+  ],
+  "runner": {
+    "directory": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04",
+    "artifact_id": "5cfcf2e92afa6fd9d3bc0e0220a49eff5dad807611b812aeee08f5fd21048ecc",
+    "manifest": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04\\runner-manifest.json",
+      "sha256": "71326565b6ab71114ceb362e79d8a45663471b07475ec3de385b9ac737e4d536"
+    },
+    "harness_version": "0.1.0",
+    "python_version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "dependencies": {
+      "pytest": "9.1.1",
+      "pluggy": "1.6.0",
+      "iniconfig": "2.3.0",
+      "packaging": "26.3",
+      "pygments": "2.21.0",
+      "colorama": "0.4.6",
+      "psutil": "7.2.2"
+    },
+    "build_dependency": {
+      "setuptools": "84.0.0"
+    },
+    "codex": {
+      "version": "codex-cli 0.155.1",
+      "sha256": "eba0f32c976667cb9298efafd98513e823eeda7b576a03ec658bb8be8d336316"
+    },
+    "installed_file_count": 1233,
+    "policy": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04\\policy.json",
+      "sha256": "7c253c7b7352a6fccbd43fa87f1eee8e6e061abb5f932d01d889fb8bf1f4b06a"
+    },
+    "build_logs": "%LOCALAPPDATA%\\development-tools-harness\\runner-builds\\t8-1lpez4yi",
+    "non_editable": true,
+    "source_matches_current_package": true,
+    "source_identity": {
+      "package": {
+        "__init__.py": "d6a5344d7422f425da18fef61cebfa774e98f342f437d7d097cf69781192e62f",
+        "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+        "appcontainer_probe.py": "b5e0a9889ad73b1f7c08883f321aea8ca15829fdada1bea857fd4a7cea26b9ab",
+        "appcontainer_probe_payload.py": "a2aaffdecf6958078691263577301dbd8e78e11e31cc9ef28ebeb4f1072155c8",
+        "cli.py": "46743e01c102c1ff087a0bba90dac807bed9b21bdaed02b61f615b721bd8e2ae",
+        "codex_adapter.py": "68dc3685bf48be782b5cf0674960172ca162c9eefa16488b55953270567b5353",
+        "codex_probe.py": "956a2e7b0140a943675c7bf9c2eda332c43105070d1ddb1c2be229ae656ac29b",
+        "files.py": "e52b6a3020347093fe4de93a7a04aefd9f2bccbf512f7b26cb26ba489c58725b",
+        "fixed_runner.py": "baad90f3d5901a716b35a6d383576052b3c642398760a091f676b4a59cc0882d",
+        "fixed_runner_verify.py": "76faa719cafafe5d0131d49132693e19aa5d18ace2fffaf37a100486c4766d58",
+        "frozen_entry.py": "a4d1a91cf7ddadd01b0f3c17e6eff189cefecfdc023940985f6667281d2b376b",
+        "gate.py": "a5f848ec3bbfb242e98ed5b02a755981dce196736051729c6d5fff6ad1ff0089",
+        "isolated_validation.py": "bd877b590c2bac30911ed3057c1e7842fca02c1871dc1bb26abce9f487a6a47f",
+        "model.py": "41010b9632eab38019c88cb1b340a2892d9cd510729184944bea1c210b56be6b",
+        "phase_docs.py": "98054970ea8bfe647bf0941fb625cc5c1a9f1e186cd2d717797e9d01f7884e8f",
+        "plan_schema.py": "7e1d5a2d0c8abdac6b2af16ae4b7ca5229e282e39db019e224efd22d5706e765",
+        "planning.py": "edc6c6d152ab7555f53434c7069ff02daf4bfb5ded59c9ac0dd7ec5f5f4ad74d",
+        "processes.py": "320feb4250b10ff827d44349ea02f7034375dc27bd44ecce2003ac178c793e77",
+        "project.py": "23e5fac98762b34e893089c08731bf9b7e0c52d662a15ade51e99ece101add46",
+        "results.py": "71ab75e63e663aa501c5d0e617db54b418e562f2296cbfb244e1a29a07134b02",
+        "runner.py": "28233156db1d4e0b2fd0d59f36f17d7e367bd19bf1dfd1f5822f8d35aef7148e",
+        "store.py": "d4c9ee557aa9380f179b6864ff735a6dd17df94b339c7663620dff9fa34d6834",
+        "validation.py": "077c1c7cc3f7c65e68b677d7f2d801e76647b7cd8b5bf67d0bf1338078a8907b",
+        "validation_entry.py": "ef0ae54b4d6743e4251ef59fff7e83454e28f2794b12a8f4725fd659ed79f743",
+        "windows_appcontainer.py": "2975cd1cc16067ea3f879f4ad0ed6faa6360709af2ac238537bc592adf571a6a",
+        "worker_contract.py": "b1329a5483a2b45845b624fb984ff3a0fb5cc3a088a7bc8dcdd456b0ff3ef665",
+        "worker_probe.py": "da4888bb1673e16a66767d9355be18df895658be7bc665f39491be49dc42ea9c",
+        "worker_probe_payload.py": "4aecd81671251c8f9b8a49b299a7c87ae7c138ef4b674574260e9f63e9fe624c",
+        "workers.py": "62a45e6d987202dce954199cd25e765be1fd74de5359d00181cb76e06653f451",
+        "workflow.py": "77c04b3a73c53571d9ab46216955a6c3f49fa125004efd525e534e39d933e1ed",
+        "workflow_acceptance.py": "896990133f724fb2d54449e09f932a546fa623ccc7c5479b8e099774574c3103",
+        "workflow_attempt_recovery.py": "c721c6c56a4d2df66f3e90487924c6a8b2a81fb625bf870977c82ba414790d53",
+        "workflow_execution.py": "03ecbd328a08f88926fc5aeff31c2c88f4aabea94a2ffb9b4c01a80355f6e272",
+        "workflow_feedback.py": "ed42b6f943490495d515d36c336e15280e97917e91fa05ccf60785d1ee30d6ed",
+        "workflow_records.py": "6bef36cf5f83cae9a47c31cb103fe2df64a5c75d99d488be0391d0c26980e939",
+        "workflow_recovery.py": "ab04fb04bfd226a07a7d83775900690179ba45f10815d766d1d0579befe8c205"
+      },
+      "writing_rules": {
+        "SKILL.md": "5b9cc1303b50469c85042eea3944ed72d7d39dd1551ed8b4cb7596e5d7ab116f",
+        "references/phase-template.md": "75b2ce2a656b463727458fa55568349750e66a44c4cadb95f133a638e4ce04ab"
+      },
+      "pyproject": "dbf13726079c8c1049109ef05107504a2fd8cda8ad1678a47868f1798bee767f",
+      "lock": "e4e44d7929da2d7569ad6ed861546a118f3694359f77427b4de7cf62ad24fd2a"
+    },
+    "unchanged_after_verification": true
+  },
+  "entry_command": [
+    "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04\\runtime\\python.exe",
+    "-I",
+    "-B",
+    "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04\\run.py",
+    "--runner-info"
+  ],
+  "freeze_command": [
+    "%LOCALAPPDATA%\\development-tools-harness\\venv\\Scripts\\python.exe",
+    "scripts/freeze_runner.py",
+    "--destination",
+    "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04",
+    "--codex-path",
+    "%APPDATA%/npm/node_modules/@openai/.codex-sfUVHbUm/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe"
+  ],
+  "verification_command": [
+    "%LOCALAPPDATA%\\development-tools-harness\\venv\\Scripts\\python.exe",
+    "scripts/verify_t8.py",
+    "--runner",
+    "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04"
+  ],
+  "verification_report": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\report.json",
+    "sha256": "a5123aaecd9e78c2ff8560488438d2c872bce297b8df724627feccfc31180de1"
+  },
+  "permissions": {
+    "passed": true,
+    "scope": "Actual B code/test and child; disposable A/storage replica",
+    "protected_categories": [
+      "launcher",
+      "manifest",
+      "python",
+      "adapter",
+      "package",
+      "roles",
+      "dependency",
+      "policy",
+      "approval",
+      "log"
+    ],
+    "denied_write_attempts": 20,
+    "parent": {
+      "pid": 16180,
+      "token": {
+        "appcontainer": true,
+        "capability_count": 0,
+        "elevated": false
+      },
+      "writes": {
+        "launcher": "denied",
+        "manifest": "denied",
+        "python": "denied",
+        "adapter": "denied",
+        "package": "denied",
+        "roles": "denied",
+        "dependency": "denied",
+        "policy": "denied",
+        "approval": "denied",
+        "log": "denied"
+      }
+    },
+    "child": {
+      "pid": 18180,
+      "token": {
+        "appcontainer": true,
+        "capability_count": 0,
+        "elevated": false
+      },
+      "writes": {
+        "launcher": "denied",
+        "manifest": "denied",
+        "python": "denied",
+        "adapter": "denied",
+        "package": "denied",
+        "roles": "denied",
+        "dependency": "denied",
+        "policy": "denied",
+        "approval": "denied",
+        "log": "denied"
+      }
+    },
+    "temporary_database": true,
+    "module_origin": "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\permissions\\validator\\c-05afc6fb4eda\\project\\src\\development_harness\\store.py",
+    "proof": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\permissions\\proof.json",
+      "sha256": "b99bd27321aaab795d6998294920d50fb150bde615e5e5a275bc3d509d7e6cd5"
+    }
+  },
+  "roles": {
+    "developer": {
+      "ready": true,
+      "version": "codex-cli 0.155.1",
+      "binary_hash": "eba0f32c976667cb9298efafd98513e823eeda7b576a03ec658bb8be8d336316",
+      "rejected_tools": [
+        "exec_command",
+        "shell",
+        "apply_patch",
+        "view_image",
+        "web.run",
+        "mcp__probe__send",
+        "spawn_agent"
+      ],
+      "probe_actual_ai_calls": 0
+    },
+    "reviewer": {
+      "ready": true,
+      "version": "codex-cli 0.155.1",
+      "binary_hash": "eba0f32c976667cb9298efafd98513e823eeda7b576a03ec658bb8be8d336316",
+      "rejected_tools": [
+        "exec_command",
+        "shell",
+        "apply_patch",
+        "view_image",
+        "web.run",
+        "mcp__probe__send",
+        "spawn_agent"
+      ],
+      "probe_actual_ai_calls": 0
+    }
+  },
+  "installed_workflow": {
+    "argv": [
+      "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04\\runtime\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\installed-workflow\\tests\\test_installed_t8.py",
+      "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\installed-workflow\\tests\\test_workflow.py::test_ordered_tasks_preserve_approval_and_validate_final_content",
+      "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\installed-workflow\\tests\\test_workflow_resume.py::test_saved_developer_result_is_reused_without_a_second_developer_call",
+      "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\installed-workflow\\tests\\test_workflow_resume.py::test_running_real_isolated_validation_is_retried_then_final_content_is_revalidated",
+      "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\installed-workflow\\tests\\test_workflow_admission_cli.py::test_cli_prepare_status_approve_cancel_preserve_planning_and_project",
+      "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\installed-workflow\\tests\\test_workflow_admission_cli.py::test_cli_plan_approval_does_not_imply_execution_authorization",
+      "--basetemp",
+      "%LOCALAPPDATA%\\harness-t8-tmp\\5c755d8a9c",
+      "--junitxml",
+      "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\installed-workflow\\pytest.xml",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "exit_code": 0,
+    "outcome": "passed",
+    "tests": 9,
+    "junit": "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d701d5c7c9\\installed-workflow\\pytest.xml",
+    "junit_sha256": "91c1e0934146362746b12d33d9dd9aa9f71534cce1aebd86a10e9ec1904f4114",
+    "fixtures": {
+      "runner.json": "70a88c83c936f2594ae51bc1ec769b7abf1b95d0056c22c5f60ddfc235683373",
+      "test_installed_t8.py": "57dbda0f0a8739004e971c2570e6ad2431e5a4860842be566c2a096671cf68d1",
+      "test_workflow.py": "e74b23c62b4b8aa6286520e0c7a84140e51fdc43eafeef1c0f7e5dfb318a3138",
+      "test_workflow_admission_cli.py": "3badebbe1ea1256fd79514fc066217d3b835fe00ddb9786c1323b4025d52d07c",
+      "test_workflow_resume.py": "041ca68d9bfc30c56d01386be8ed273bab477fc19c00626cffcc2769c2b2f476"
+    },
+    "actual_ai_calls": 0,
+    "role_transport": "Deterministic local subprocess fixtures",
+    "validation": "Actual AppContainer; installed A CLI and process-crash recovery"
+  },
+  "t7_acceptance_reverified": {
+    "path": "Phase/Evidence/Phase3_Example_Acceptance.json",
+    "sha256": "460900bad4adbd339d78917efb9cdb9349343a08838aeffeac64a683f9b0f930",
+    "accepted_report_sha256": "f7a74e2e37c79d49dc7d847598059dcce5abbfe5a6654ca19a5db905ed66b2ef",
+    "new_acceptance": false
+  },
+  "regression": {
+    "status": "passed",
+    "input_files": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t8-regression\\20260930-04\\input-files.json",
+      "sha256": "e182c52e69aebf12790ec5247883903489c5936f5b10ab021d98228c98235f2d"
+    },
+    "source_test_script_files_unchanged": true,
+    "argv": [
+      "%LOCALAPPDATA%\\development-tools-harness\\venv\\Scripts\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "-q",
+      "--tb=short",
+      "--basetemp",
+      "%LOCALAPPDATA%\\harness-t8-tmp\\full04",
+      "--junitxml",
+      "%LOCALAPPDATA%\\development-tools-harness\\t8-regression\\20260930-04\\pytest.xml"
+    ],
+    "selected_codex": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04\\tools\\codex.exe",
+    "tests": 658,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 941.303,
+    "junit": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t8-regression\\20260930-04\\pytest.xml",
+      "sha256": "27aa643d00602568417919e7c39b70d09e66ed5eb1a3ff1e8c92bff47dd2e3be"
+    },
+    "log": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t8-regression\\20260930-04\\pytest.log",
+      "sha256": "78b59bfb469aec9265d5ae29f630ee854d14f38edf0d1975e7edcd89923fd8e6"
+    }
+  },
+  "pip_check": {
+    "exit_code": 0,
+    "output": "No broken requirements found."
+  },
+  "actual_ai_service_calls": 0,
+  "manual_interventions": [
+    "Default machine Codex 0.158.0 was rejected; explicitly copied previously reviewed local 0.155.1. Supported-version policy and global installation unchanged.",
+    "Renamed the new unit test module to avoid a pytest import-name collision during initial collection.",
+    "First installed proof detected encoding bytecode created by a deterministic local worker fixture. Added -I -B to that fixture, preserved failed A-20260930-01, and built a new candidate.",
+    "Moved installed pytest temporary roots outside nested evidence directories to avoid Windows path-length failures; created the short parent explicitly after its first clean-environment setup failure.",
+    "Preserved all earlier candidates and failed proof reports. Two incomplete full-suite attempts were stopped for the corrected configuration; neither is reported as passing.",
+    "Implemented T8 with the existing coding tool. No harness self-development milestone, live AI rerun, Phase 3 acceptance, administrator setup, active approval edits, commit or push is claimed."
+  ],
+  "prior_failed_proofs": [
+    {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t8-proof\\20260930-01\\report.json",
+      "sha256": "085cc4306471271c4f6e93999371d2bfbb671ef663b1af494ef0c93d9f3d83d2"
+    },
+    {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t8-verification\\d717a718e8\\report.json",
+      "sha256": "d94c04d6deaae45ba9752782f0ccac691c745791e5843912e5c0b32dcbb27702"
+    }
+  ],
+  "limits": [
+    "Hash checks detect content drift; generated-process write denial is enforced by AppContainer.",
+    "Write attempts target disposable protected replicas; no destructive probe targets a live approval DB or the prepared A.",
+    "Installed workflow role responses are deterministic local subprocess fixtures; T7 retains the accepted real-AI evidence.",
+    "Version selection is manual for new runs. New fixed-runner approvals bind the artifact ID; historical runs are not migrated."
+  ]
+}

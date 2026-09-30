@@ -85,8 +85,8 @@ def validate_checks(checks):
         raise HarnessError("At least one registered validation command is required.")
     has_tests = False
     for check in checks:
-        if not isinstance(check, dict) or set(check) - {"argv", "kind", "timeout"}:
-            raise HarnessError("Validation entries contain argv, kind and optional timeout.")
+        if not isinstance(check, dict) or set(check) - {"argv", "kind", "timeout", "profile"}:
+            raise HarnessError("Validation entries contain argv, kind and optional timeout/profile.")
         argv = check.get("argv")
         if not isinstance(argv, list) or not argv or any(not isinstance(x, str) or not x for x in argv):
             raise HarnessError("argv must be a nonempty list of nonempty strings; no shell command strings.")
@@ -99,6 +99,8 @@ def validate_checks(checks):
                 raise HarnessError("pytest commands must use a Python executable followed by -m pytest.")
             if any(x.startswith(("--junit", "--override-ini", "-o")) for x in argv[3:]):
                 raise HarnessError("Harness-managed pytest evidence options cannot be overridden.")
+        from .validation_profiles import validate_profile_command
+        validate_profile_command(check)
         timeout = check.setdefault("timeout", 120)
         if type(timeout) not in {int, float} or not math.isfinite(timeout) or not 0 < timeout <= 3600:
             raise HarnessError("Validation timeout must be between 0 and 3600 seconds.")

@@ -140,8 +140,10 @@ class AppContainer:
             raise HarnessError("AppContainer probe path resolves outside its disposable tree.")
         return path
 
-    def grant(self, path, *, write=False):
+    def grant(self, path, *, write=False, private_temp=False):
         path = self.owned(path)
+        if private_temp and (not write or not path.is_dir()):
+            raise HarnessError("Private temporary permissions require a writable disposable directory.")
         for parent in path.parents:
             if not parent.is_relative_to(self.root):
                 break
@@ -151,7 +153,11 @@ class AppContainer:
                 # Never grant anything on ancestors outside this disposable root.
                 self._grant(parent, "RX")
                 self.traversed.add(parent)
-        rights = ("(OI)(CI)" if path.is_dir() else "") + ("M" if write else "RX")
+        # Creating protected private DACLs also needs WRITE_DAC when the parent
+        # inherits OWNER RIGHTS (as with tempfile.mkdtemp). This additional right
+        # belongs only to the newly created test scratch tree, never source/runtime.
+        permission = "(M,WDAC)" if private_temp else "M" if write else "RX"
+        rights = ("(OI)(CI)" if path.is_dir() else "") + permission
         self._grant(path, rights)
 
     def _grant(self, path, rights):
@@ -199,7 +205,7 @@ class AppContainer:
                 # Windows 10 AppContainer setup requires the user/profile path variables.
                 allowed = {"SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "USERPROFILE", "LOCALAPPDATA", "APPDATA"}
                 env = {k: v for k, v in os.environ.items() if k.upper() in allowed}
-                env.update(TEMP=str(scratch), TMP=str(scratch))
+                env.update(TEMP=str(scratch), TMP=str(scratch), DEVELOPMENT_HARNESS_TEST_SCRATCH=str(scratch))
                 environment = ctypes.create_unicode_buffer("\0".join(f"{k}={v}" for k, v in sorted(env.items())) + "\0\0")
                 command = ctypes.create_unicode_buffer(subprocess.list2cmdline([str(a) for a in argv]))
                 try:

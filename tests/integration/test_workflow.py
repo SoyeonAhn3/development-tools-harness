@@ -174,7 +174,7 @@ def scripted_workers(steps):
                       {"type": "turn.completed"}]
             output = "\n".join(json.dumps(event) for event in events)
             code = "import sys; sys.stdin.buffer.read(); print(" + repr(output) + ")"
-            return [sys.executable, "-c", code]
+            return [sys.executable, "-I", "-B", "-c", code]
 
     LocalWorker.calls = calls
     LocalWorker.pending = pending

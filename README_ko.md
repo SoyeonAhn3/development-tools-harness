@@ -8,7 +8,7 @@ Markdown 기획서를 단계별 개발 계획으로 바꾸고, 승인된 작업�
 
 ## 현재 상태
 
-**Phase 1–2는 인수·완료했으며 Phase 3는 진행 중입니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬을 사용한 버전별 영문·국문 계획 생성을 수행합니다. 2026-09-21 P3-T1–T2 준비·실제 역할·격리된 pytest를 **검사 265개 통과**와 실제 호출 2회의 예제로 검증했습니다. P3-T3는 실행 승인·영속 기록을 추가했고 2026-09-22 **전체 검사 378개**와 `pip check`를 통과했습니다. P3-T4는 `workflow-run`으로 순차 개발·격리된 검사·독립 리뷰·제한된 수정·최종 검사를 연결합니다. P3-T5는 `workflow-resume`으로 명시적인 중단 복구를 추가합니다. P3-T6는 최소 JSON 보고서·피드백 처리·근거에 연결된 사용자 인수 조건을 구현했습니다. P3-T7 외부 예제는 실제 역할 호출 2회·중단 및 응답 재사용 1회·최종 검사 8개·독립 검사 6개로 기술 검증을 통과했습니다. 2026-09-23 R1·M1 확인과 명시적 사용자 인수를 기록해 T7을 완료했으며 P3-T8 고정 실행용 A는 미시작입니다. [구현과 검증](Phase/Phase3_Workflow.md).
+**Phase 1–2는 인수·완료했으며 Phase 3는 진행 중입니다.** Windows/Python 3.12 CLI에서 프로젝트 등록·기본 검사·Codex와 프로젝트 phase-doc 스킬을 사용한 버전별 영문·국문 계획 생성을 수행합니다. 2026-09-21 P3-T1–T2 준비·실제 역할·격리된 pytest를 **검사 265개 통과**와 실제 호출 2회의 예제로 검증했습니다. P3-T3는 실행 승인·영속 기록을 추가했고 2026-09-22 **전체 검사 378개**와 `pip check`를 통과했습니다. P3-T4는 `workflow-run`으로 순차 개발·격리된 검사·독립 리뷰·제한된 수정·최종 검사를 연결합니다. P3-T5는 `workflow-resume`으로 명시적인 중단 복구를 추가합니다. P3-T6는 최소 JSON 보고서·피드백 처리·근거에 연결된 사용자 인수 조건을 구현했습니다. P3-T7 외부 예제는 실제 역할 호출 2회·중단 및 응답 재사용 1회·최종 검사 8개·독립 검사 6개로 기술 검증을 통과했습니다. 2026-09-23 R1·M1 확인과 명시적 사용자 인수를 기록해 T7을 완료했습니다. P3-T8 고정 실행용 A의 구현·검증도 완료했습니다. [구현과 검증](Phase/Phase3_Workflow.md).
 
 아래 로드맵은 [축소 MVP 계획서 0.4](Draft/ai-development-harness-lean-mvp-plan.md)를 요약합니다. 사용 안내에 구현된 동작을 구분했습니다.
 
@@ -180,7 +180,7 @@ T5는 **전체 회귀 검사 535개**, 마지막 복구 경계 검사 9개와 `p
 
 결함 피드백은 원래 Task 수정 한도를 공유하며 횟수를 초기화하지 않습니다. 앞선 Task를 고치면 이미 완료한 후속 Task도 다시 검사·리뷰하고 최종 검사 전체를 실행합니다. 요구사항 변경은 기존 실행 승인의 사용을 막습니다. `workflow-replan` 전에 등록된 기획서를 수정해야 합니다. 피드백은 요청 원문을 보존하지만 Planner가 근거로 읽는 기획서를 자동 수정하지 않습니다. 새 계획을 검토한 뒤 `plan-approve`, `workflow-prepare`, `workflow-approve`가 필요합니다. 재계획 과정에서 이미 생성한 코드의 기본 검사는 AppContainer에서 실행합니다. 기존 구현 파일·피드백·승인 이력은 보존합니다.
 
-T6는 **추가 검사 96개**를 포함한 **전체 검사 632개**와 `pip check`를 통과했습니다. **새 실제 AI 호출은 0회**입니다. 저장된 T5 실제 예제를 조회할 때 표시하는 호출 2회는 과거 이력이며 새로운 T6 실제 예제나 사용자 인수가 아닙니다. 현재 검증 상태는 [T6 검증 근거](Phase/Evidence/Phase3_Results.json)와 [Phase 3 상세](Phase/Phase3_Workflow.md)에 기록합니다. T7 기술 검증과 사용자 인수는 아래 기록했으며 T8과 Phase 3 전체 인수는 대기 중입니다.
+T6는 **추가 검사 96개**를 포함한 **전체 검사 632개**와 `pip check`를 통과했습니다. **새 실제 AI 호출은 0회**입니다. 저장된 T5 실제 예제를 조회할 때 표시하는 호출 2회는 과거 이력이며 새로운 T6 실제 예제나 사용자 인수가 아닙니다. 현재 검증 상태는 [T6 검증 근거](Phase/Evidence/Phase3_Results.json)와 [Phase 3 상세](Phase/Phase3_Workflow.md)에 기록합니다. T7 인수와 T8 검증은 아래 기록했으며 Phase 3 전체 인수는 대기 중입니다.
 
 ## Phase 3 외부 예제
 
@@ -191,7 +191,49 @@ T6는 **추가 검사 96개**를 포함한 **전체 검사 632개**와 `pip chec
 
 `%LOCALAPPDATA%/development-tools-harness/t7-live/<id>`에 새 CLI 예제를 만들고 앞서 검토한 음수 거부 Task 1개를 실행합니다. 제어 프로그램이 계획을 작성하며 **Planner 호출은 0회**입니다. 현재 결과 정책과 수동 확인 M1을 고정하고 실제 Developer·Reviewer를 호출합니다. Developer 응답 저장 직후 의도적으로 중단한 뒤 공개 `workflow-resume`으로 응답을 재사용하고 기본 AppContainer 검증을 마칩니다. 스크립트는 근거를 저장하고 R1 재사용 확인·M1 수동 확인·실제 사용자 결과 인수는 대기 상태로 남깁니다. `--live`를 실행할 때마다 새 예제를 만들므로 기존 결과는 기록된 프로젝트·상태 경로의 `workflow-report`로 조회합니다.
 
-2026-09-23 예제 `c2cc52b6323c`는 **실제 호출 2회·최종 검사 8개·독립 CLI 검사 6개**로 `technically_complete`에 도달했습니다. 수정·리뷰 지적은 0개이며 저장소 원본 예제는 유지했습니다. 하네스 운영 소스 수정은 필요하지 않았습니다. 실제 stdout·stderr·종료 코드는 [사용자 검토 자료](Phase/Evidence/Phase3_Example_Review.md), 해시·명령·실행 기록 경로는 [T7 근거](Phase/Evidence/Phase3_Example.json)에 있습니다. 전체 회귀 검사 632개는 실패·오류·생략 없이 통과했습니다. 사용자가 2026-09-23 제시한 결과를 “결과 인수한다”로 명시적으로 인수했습니다. 공개 R1·M1 확인과 `workflow-accept`로 T7을 완료했으며 현재 보고서는 `stage=accepted`, 차단 조건 없음입니다. [인수 근거](Phase/Evidence/Phase3_Example_Acceptance.json)에 새 AI 호출·테스트 실행 없이 기록을 보존했습니다. T8은 미시작이며 Phase 3 전체 인수는 대기 중입니다.
+2026-09-23 예제 `c2cc52b6323c`는 **실제 호출 2회·최종 검사 8개·독립 CLI 검사 6개**로 `technically_complete`에 도달했습니다. 수정·리뷰 지적은 0개이며 저장소 원본 예제는 유지했습니다. 하네스 운영 소스 수정은 필요하지 않았습니다. 실제 stdout·stderr·종료 코드는 [사용자 검토 자료](Phase/Evidence/Phase3_Example_Review.md), 해시·명령·실행 기록 경로는 [T7 근거](Phase/Evidence/Phase3_Example.json)에 있습니다. 전체 회귀 검사 632개는 실패·오류·생략 없이 통과했습니다. 사용자가 2026-09-23 제시한 결과를 “결과 인수한다”로 명시적으로 인수했습니다. 공개 R1·M1 확인과 `workflow-accept`로 T7을 완료했으며 현재 보고서는 `stage=accepted`, 차단 조건 없음입니다. [인수 근거](Phase/Evidence/Phase3_Example_Acceptance.json)에 새 AI 호출·테스트 실행 없이 기록을 보존했습니다. T8 구현과 현재 검증은 아래 기록하며 Phase 3 전체 인수는 대기 중입니다.
+
+## Phase 3 고정 실행용 A
+
+T8은 [오프라인 고정 설치](scripts/freeze_runner.py), 매니페스트를 확인하는 실행 진입점과 [설치본 분리·복구 검증](scripts/verify_t8.py)을 추가합니다. 별도의 Python, 버전이 고정된 의존성, 패키지 코드·지침과 검토된 Codex 실행 파일을 개발 저장소 밖에 둡니다. 새 고정 실행본의 승인에는 산출물 ID를 포함해 다른 설치본에서 해당 Workflow를 재개하지 못하게 합니다. 최종 검증은 [Phase 3](Phase/Phase3_Workflow.md)와 [T8 근거](Phase/Evidence/Phase3_FixedRunner.json)에 기록하며 Phase 3 전체 인수는 별도입니다.
+
+**T8 최초 검증(2026-09-30):** 전체 회귀 검사 658개와 설치본 흐름·복구 검사 9개를 통과했습니다. 이후 인수 위험 조사에서 비공개 임시 폴더 생성 결함을 발견했습니다.
+
+**임시 폴더 수정:** A06은 **전체 회귀 검사 670개**, **설치본 검사 12개**, 변경하지 않은 원래 재현 검사 4개, 보호 대상 쓰기 차단 20회와 `pip check`를 통과했습니다. AppContainer 안에서 pytest·tempfile 임시 폴더와 일반 자식 Python 실행을 지원하며 비공개 권한은 임시 영역에 한정합니다. 자식이 `-S`를 사용하거나 임시 영역 환경 변수를 지우면 호환 초기화를 생략합니다. 이 과거 결과는 [수정 근거](Phase/Evidence/Phase3_TemporaryDirectories.json)에 보존합니다. 후속 자체 검사 자료·경로 수정은 아래 설명하며 Phase 3 인수와 Phase 4는 대기 중입니다.
+
+```powershell
+$fixedRunner = Join-Path $env:LOCALAPPDATA 'development-tools-harness/runners/A-20260930-08'
+& "$fixedRunner/runtime/python.exe" -I -B "$fixedRunner/run.py" --runner-info
+& $harnessPython scripts/verify_t8.py --runner $fixedRunner
+
+# 소스 변경 검토 후 새 후보를 만든다. 기존 실행본은 보존한다.
+$newRunner = Join-Path $env:LOCALAPPDATA ('development-tools-harness/runners/A-' + [guid]::NewGuid().ToString('N'))
+& $harnessPython scripts/freeze_runner.py --destination $newRunner --codex-path "$fixedRunner/tools/codex.exe"
+```
+
+A의 `python.exe -I -B run.py` 뒤에 기존 CLI 인수를 붙여 실행합니다. A, 대상 B, 실행 기록 저장소는 서로 포함되지 않는 별도 디렉터리여야 합니다. 진입점은 설치 파일 전체를 검사하고 다른 Adapter를 거부합니다. PC의 CLI가 갱신되어도 복사한 `0.155.1`을 사용하며 인증은 기존 사용자 환경에 유지합니다. 고정·검증 과정에서 AI 서비스를 호출하거나 Phase 3를 인수하거나 Phase 4를 시작하지 않습니다. 검증에는 보호된 임시 복제본과 로컬 역할 응답을 사용하며 실제 AI 근거는 인수한 T7 예제 기록을 보존합니다. 실행 중인 Run은 원래 A를 유지하고, 새로 검증한 실행본은 새 Run부터 수동으로 선택합니다.
+
+## 하네스 B 자체 검사
+
+하네스 자체 개발에는 프로젝트 검사 설정에 `{"kind":"pytest","argv":["{python}","-m","pytest","-q"],"timeout":600,"profile":"harness-self-v1"}`을 등록합니다. phase-doc 스킬·템플릿 두 파일만 읽기 전용 B 테스트 자료로 복사하고 B의 기본 기록은 임시 영역에 저장합니다. 일반 단위 검사는 AppContainer 안에서 실행하고 설치·CLI·Windows 관련 별도 검사 목록도 표시합니다. A는 자신의 설치된 작성 규칙을 유지합니다.
+
+격리 검사만 통과하면 일부 검증 상태인 `host_verification=pending`, `all_tests_complete=false`입니다. Workflow 준비 시 필수 수동 확인 `HARNESS_HOST_REGRESSION`을 추가합니다. 최종 B 소스와 테스트를 검토한 뒤 아래 호스트 검사를 실행하고 같은 버전의 통합 보고서를 기존 수동 확인·인수 절차에서 확인합니다. 호스트 검사는 사용자 PC 권한으로 실행하며 격리 검사 실패 후 자동 전환하지 않습니다. 입력 버전이 바뀌면 다시 검토·검증해야 합니다.
+
+B의 실행 스크립트를 거치지 않고 고정 실행본 A에서 직접 실행합니다. 명시한 소스·테스트·빌드·자료 입력만 복사하고 해시를 확인하며 다른 자료 위치는 설정에서 명시적으로 지원해야 합니다. 두 보고서는 소스·테스트·설정·자료의 해시가 같아야 합니다. 생략·선택 해제·조용한 테스트 삭제·파일 누락·오래된 보고서·실패가 있으면 통합 성공을 허용하지 않습니다. 통합 보고서는 검사 근거이며 Phase 인수가 아닙니다.
+
+```powershell
+$selfRunner = Join-Path $env:LOCALAPPDATA 'development-tools-harness/runners/A-20260930-08'
+$proofRoot = Join-Path $env:LOCALAPPDATA ('h-self/' + [guid]::NewGuid().ToString('N').Substring(0,8))
+$repository = (Get-Location).Path
+& "$selfRunner/runtime/python.exe" -I -B -m development_harness.self_test_verify isolated --runner $selfRunner --repository $repository --directory "$proofRoot/i" --timeout 600
+$isolatedReport = Get-Content "$proofRoot/i/report.json" -Raw | ConvertFrom-Json
+
+# 위 입력 버전이 가리키는 B 소스와 테스트를 검토한 다음 실행합니다.
+& "$selfRunner/runtime/python.exe" -I -B -m development_harness.self_test_verify reviewed-host --runner $selfRunner --repository $repository --directory "$proofRoot/h" --python $harnessPython --reviewed-input-version $isolatedReport.profile.input_version
+& "$selfRunner/runtime/python.exe" -I -B -m development_harness.self_test_verify report --runner $selfRunner --repository $repository --directory "$proofRoot/combined" --isolated-report "$proofRoot/i/report.json" --host-report "$proofRoot/h/report.json"
+```
+
+최종 A08에서 **격리 자체 검사 473개**, **전체 회귀 691개**, **설치본 검사 12개**, 보호 대상 쓰기 차단 20회와 `pip check`를 통과했습니다. 동시 실행 중 권한 설정 명령의 시간 초과 기록을 보존했고, 입력을 바꾸지 않은 단독 전체 재실행은 통과했습니다. 큰 Windows 검증 명령은 순서대로 실행합니다. Phase 3 인수·Phase 4는 대기 중이며 새 AI 서비스 호출은 없습니다. [검증 근거](Phase/Evidence/Phase3_SelfTests.json).
 
 ## 목표 사용 흐름
 
@@ -212,7 +254,7 @@ T6는 **추가 검사 96개**를 포함한 **전체 검사 632개**와 `pip chec
 
 ## 첫 MVP 범위
 
-첫 MVP는 한 프로젝트의 순차 Task와 한 종류의 검증 기술 구성을 다룹니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1입니다. Adapter는 ChatGPT 인증의 Codex CLI이며 검토 버전은 0.154.0과 0.155.1입니다. 실제 역할·격리·실행 승인·제한된 순차 실행·명시적 중단 복구·최소 JSON 보고서·피드백·인수 조건을 구현했습니다. 외부 예제는 인수했으며 고정 실행본이 Phase 3에 남아 있습니다.
+첫 MVP는 한 프로젝트의 순차 Task와 한 종류의 검증 기술 구성을 다룹니다. 하네스 개발은 Python 3.12.10 + pytest 9.1.1입니다. Adapter는 ChatGPT 인증의 Codex CLI이며 검토 버전은 0.154.0과 0.155.1입니다. 실제 역할·격리·실행 승인·제한된 순차 실행·명시적 중단 복구·최소 JSON 보고서·피드백·인수 조건을 구현했습니다. 외부 예제는 인수했고 고정 실행본을 구현했으며 Phase 3 전체 인수는 대기 중입니다.
 
 | 영역 | P0 구현 예정 동작 |
 | --- | --- |
@@ -298,7 +340,7 @@ P0·P1·P2는 우선순위이며, **MVP2는 후속 제품 범위**입니다. 모
 ## 기획 문서
 
 - [전체 개발 Phase 개요](Phase/Overview.md): 4개 개발 Phase, 요구사항 대응표, dogfooding 진입 조건. 각 문서에 영문·국문 전체 내용을 함께 제공합니다.
-- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): 진행 중, P3-T1–T6 구현, T7 인수·완료, T8 미시작. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
+- [Phase 1 — 실행 기반](Phase/Phase1_Foundation.md): 인수 완료. [Phase 2 — 실제 연결과 계획](Phase/Phase2_Planning.md): 인수 완료. [Phase 3 — 전체 실행 흐름](Phase/Phase3_Workflow.md): 진행 중, P3-T1–T6 구현, T7 인수·완료, T8 구현·검증 완료. [Phase 4 — 자체 개발과 MVP 인수](Phase/Phase4_Dogfooding.md): 개요.
 - [축소 MVP 계획서 — 0.4](Draft/ai-development-harness-lean-mvp-plan.md): 범위, 우선순위, 인수 규칙, 개발 단계, dogfooding, MVP2, 기획 변경 이력. 이 문서부터 확인하세요.
 - [과거 기획 문서](Draft/archive/): 이전 설계와 결정 기록입니다. 과거 문서의 더 넓은 범위가 축소 MVP에도 적용된다고 가정하지 않습니다.
 
@@ -327,4 +369,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Phase 2 사용자 인수를 완료했습니다. Phase 3는 실제 역할·격리된 검사·실행 승인·영속 기록·제한된 순차 수정·명시적 중단 복구·최소 보고서·피드백·근거에 연결된 결과 인수를 연결합니다. T7 외부 예제 기술 검증을 통과했고 R1·M1 사용자 확인과 명시적 결과 인수를 완료했습니다. 고정 실행용 A의 P3-T8은 미시작이며 Phase 3 사용자 인수는 대기 중입니다.
+Phase 2 사용자 인수를 완료했습니다. Phase 3는 실제 역할·격리된 검사·실행 승인·영속 기록·제한된 순차 수정·명시적 중단 복구·최소 보고서·피드백·근거에 연결된 결과 인수를 연결합니다. T7 외부 예제 기술 검증을 통과했고 R1·M1 사용자 확인과 명시적 결과 인수를 완료했습니다. P3-T8 고정 실행용 A의 구현·검증을 완료했으며 Phase 3 사용자 인수는 대기 중입니다.

@@ -138,7 +138,7 @@ def report(workflow):
     evidence_by_id = {item["attempt_id"]: item["artifacts"] for item in evidence}
     validation = [{key: copy.deepcopy(item.get(key)) for key in (
         "id", "task_id", "check_hash", "argv", "outcome", "content_version", "tests", "exit_code",
-        "reason", "failure_kind", "started", "ended", "duration", "backend")} | {
+        "reason", "failure_kind", "started", "ended", "duration", "backend", "validation_profile")} | {
             "current": actual_version is not None and item.get("content_version") == actual_version,
             "final": item["id"] in final_ids, "evidence": evidence_by_id[item["id"]]}
         for item in attempts if item["role"] == "validation"]

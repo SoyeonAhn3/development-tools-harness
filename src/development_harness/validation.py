@@ -28,6 +28,17 @@ def pytest_result(path):
 
 def validate(check, project, directory, attempt, launched):
     directory = Path(directory)
+    if check.get("profile"):
+        # Registration/baseline checks use the same isolated profile as workflows.
+        # Never silently execute the self-test profile as an unrestricted command.
+        from .isolated_validation import IsolatedValidator
+        validator = IsolatedValidator(directory / (attempt["id"] + "-isolated"))
+        validator.verify()
+        def dispatched(record):
+            attempt.update(record)
+            launched(attempt)
+        attempt.update(validator.run(check, project, launched=dispatched, attempt_id=attempt["id"]))
+        return attempt
     log = directory / (attempt["id"] + ".log")
     result_path = directory / (attempt["id"] + ".result.json")
     junit = directory / (attempt["id"] + ".xml")
