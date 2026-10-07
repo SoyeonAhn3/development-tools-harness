@@ -1,4 +1,4 @@
-# Phase 3 — Workflow `🚧 In Progress`
+# Phase 3 — Workflow `✅ Completed`
 
 > Complete one real example Phase and prepare a verified fixed runner for self-development.
 
@@ -6,7 +6,11 @@
 
 **Technology**: Python + pytest, SQLite and the selected single AI Adapter.
 
-**Plan status**: P3-T1–T3 preparation, real roles, isolated validation, execution admission and durable records are implemented and verified. P3-T4 connects sequential execution, bounded corrections, explicit independent review assessments and final validation; its two-Task live example reached technical completion. P3-T5 implements explicit interruption recovery with preserved approvals, files and call history. P3-T6 implements minimum JSON reports, feedback routes, final reuse/manual evidence and explicit acceptance gates; current verification is recorded below. Validation uses standard-user AppContainer under the no-administrator constraint. P3-T7 completed technical verification and explicit user acceptance on 2026-09-23, including R1/M1 confirmations. P3-T8 implements verified independent fixed runner A, with isolation and installed recovery evidence. Its private-temporary-directory correction is verified. The B resource/profile/host-check correction is verified on separate A08: 473 isolated tests and 691 full regressions passed. Phase 2 is accepted; Phase 3 acceptance remains pending. The reviewed eight-Task, 18-requirement plan and its original AI/manual-review evidence are preserved.
+**Plan status**: P3-T1–T3 preparation, real roles, isolated validation, execution admission and durable records are implemented and verified. P3-T4 connects sequential execution, bounded corrections, explicit independent review assessments and final validation; its two-Task live example reached technical completion. P3-T5 implements explicit interruption recovery with preserved approvals, files and call history. P3-T6 implements minimum JSON reports, feedback routes, final reuse/manual evidence and explicit acceptance gates; current verification is recorded below. Validation uses standard-user AppContainer under the no-administrator constraint. P3-T7 completed technical verification and explicit user acceptance on 2026-09-23, including R1/M1 confirmations. P3-T8 implements verified independent fixed runner A, with isolation and installed recovery evidence. Its private-temporary-directory correction is verified. The B resource/profile/host-check correction is verified on separate A08: 473 isolated tests and 691 full regressions passed. Phases 2 and 3 are accepted. The reviewed eight-Task, 18-requirement plan and its original AI/manual-review evidence are preserved.
+
+**Completed**: 2026-10-07.
+
+**User acceptance (2026-10-07)**: After reviewing the meaning of the T8 fixed-runner, private-temporary-directory and self-test evidence, its recorded manual interventions and remaining limits, the user explicitly stated “그럼 일단 인수하겠다”. Before acceptance, all 51 raw artifacts referenced by those three evidence files were confirmed present with matching SHA-256 hashes. P3-T1–T8 and both post-T8 corrections are accepted, completing Phase 3; A08 (`48c0b11e…87dc`) is the verified runner for the next Phase. This records acceptance of the harness development Phase and is not a `workflow-accept` of any generated workflow. Accepted limits remain: reviewed-host self-tests need prior source/test review, hashes identify inputs rather than attest safety, and runner selection for new runs stays manual. No new AI calls or test runs were made for this acceptance. Phase 4 has not started.
 
 ## Overview
 
@@ -34,7 +38,7 @@ The [reviewed plan](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) conta
 | P3-T5 | Recover partial implementation and interrupted validation safely. | Implemented: explicit resume, saved-response proof/reuse, checked partial files, process-tree inspection, separate recovery facts and preserved approval/correction counts. [Evidence](Evidence/Phase3_Recovery.json); current verification below. |
 | P3-T6 | Add minimum reports, feedback routing, final reuse checks and acceptance gates. | Implemented: read-only JSON results, preserved feedback/correction or replanning routes, final reuse/manual confirmations and version-bound acceptance gates. [Evidence](Evidence/Phase3_Results.json); current verification below. |
 | P3-T7 | Complete the external CLI example through actual roles, interruption/resume and user acceptance. | ✅ Completed: two actual role calls, one crash/reuse, eight final tests and six independent checks; R1/M1 confirmed and user acceptance recorded on 2026-09-23. [Technical evidence](Evidence/Phase3_Example.json), [acceptance evidence](Evidence/Phase3_Example_Acceptance.json). |
-| P3-T8 | Freeze runner A and prove isolation before Phase 4. | Implemented with private-temp correction: independent installation, fixed artifacts, 20 protected write denials, 12 installed checks and **670 full regression tests passed**. [Initial evidence](Evidence/Phase3_FixedRunner.json), [correction evidence](Evidence/Phase3_TemporaryDirectories.json). |
+| P3-T8 | Freeze runner A and prove isolation before Phase 4. | ✅ Completed with both post-T8 corrections on A08: independent installation, fixed artifacts, 20 protected write denials, 12 installed checks, **473 isolated self-tests and 691 full regression tests passed**. [Initial evidence](Evidence/Phase3_FixedRunner.json), [temporary-directory evidence](Evidence/Phase3_TemporaryDirectories.json), [self-test evidence](Evidence/Phase3_SelfTests.json). |
 
 P3-T2 verifies the worker components on an explicitly scoped disposable example. P3-T3 prepares and authorizes a specific plan/code/policy version without dispatching work. P3-T4 starts that authorized work through `workflow-run`; P3-T5 adds explicit `workflow-resume`; P3-T6 supplies minimum reports and result acceptance conditions. T7 completed the external example's actual user acceptance. The unelevated candidate failed network denial; elevated setup remains excluded under company policy. No administrator setup or unrestricted fallback is used.
 
@@ -375,10 +379,11 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | 2026-09-30 | Implemented P3-T8 offline fixed runner, manifest/origin checks and artifact-bound execution policy. Verified 20 protected write denials, temporary B records, two pinned role boundaries, nine installed CLI/workflow/recovery cases and preserved T7 acceptance. All 658 regressions passed; Phase 3 acceptance and Phase 4 remain pending. Documented corrected verification fixtures/paths and preserved failed candidates. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
 | 2026-09-30 | Corrected acceptance-risk issue 1: private temporary directories inside AppContainer, including private parents and child Python. Verified unchanged four-case reproduction, 670 regressions, 12 installed checks and 20 protected write denials; created separate A06 and preserved A04/T7 evidence. Recorded intermediate failures and interrupted runs. Issue 2, Phase 3 acceptance and Phase 4 remain pending. Synchronized both languages and README; separate dev-log omitted because the skill is unavailable. |
 | 2026-09-30 | Corrected issue 2 with explicit copied/hash-bound B resources, temporary state, isolated collection coverage, reviewed-host verification and a mandatory acceptance check. A08 passed 473 isolated tests, 691 full regressions, 12 installed checks and 20 write denials. Preserved intermediate failures, the ACL-timeout rerun, earlier runners and T7. Phase 3 acceptance/Phase 4 remain pending. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
+| 2026-10-07 | Recorded the user's explicit Phase 3 acceptance (“그럼 일단 인수하겠다”) after evidence review; all 51 referenced raw artifacts matched their hashes. Marked Phase 3 completed with A08 as the verified runner and corrected the P3-T8 row from the A06 670-test figure to the A08 473/691 results. No new AI calls or test runs; Phase 4 not started. Synchronized both languages, the overview, README and Phase 4 prerequisite. |
 
 ---
 
-# Phase 3 — 전체 실행 흐름 `🚧 진행 중`
+# Phase 3 — 전체 실행 흐름 `✅ 완료`
 
 > 실제 예제 Phase 하나를 완료하고 자체 개발에 사용할 검증된 고정 실행본을 준비한다.
 
@@ -386,7 +391,11 @@ Reuse earlier components with regression evidence. Core protections must work wi
 
 **기술 구성**: Python + pytest, SQLite, 선정한 단일 AI Adapter.
 
-**계획 상태**: P3-T1–T3 준비·실제 역할·격리된 검증·실행 승인·영속 기록의 구현·검증을 완료했다. P3-T4는 순차 실행·제한된 수정·독립 리뷰의 명시적 지적 평가·최종 검사를 연결했고 실제 Task 2개 예제가 기술적 완료에 도달했다. P3-T5는 승인·파일·호출 이력을 유지하는 명시적 중단 복구를 구현했다. P3-T6는 최소 JSON 보고서·피드백 처리·최종 재사용 및 수동 근거·명시적 인수 조건을 구현했으며 현재 검증 결과는 아래 기록한다. 회사 정책상 관리자 설정 없이 일반 사용자 AppContainer를 사용한다. 2026-09-23 P3-T7 외부 예제 기술 검증과 R1·M1 확인을 포함한 명시적 사용자 인수를 완료했다. 고정 실행용 A의 P3-T8은 구현·검증을 완료했다. 이후 임시 폴더 호환 수정도 검증했다. 별도의 A08에서 B 자료·검사 설정·호스트 확인 수정을 검증했으며 격리 검사 473개와 전체 회귀 691개가 통과했다. Phase 2는 인수했으며 Phase 3 전체 인수는 대기 중이다. Task 8개·요구사항 18개의 검토 계획과 AI 원본·수동 검토 근거는 보존했다.
+**계획 상태**: P3-T1–T3 준비·실제 역할·격리된 검증·실행 승인·영속 기록의 구현·검증을 완료했다. P3-T4는 순차 실행·제한된 수정·독립 리뷰의 명시적 지적 평가·최종 검사를 연결했고 실제 Task 2개 예제가 기술적 완료에 도달했다. P3-T5는 승인·파일·호출 이력을 유지하는 명시적 중단 복구를 구현했다. P3-T6는 최소 JSON 보고서·피드백 처리·최종 재사용 및 수동 근거·명시적 인수 조건을 구현했으며 현재 검증 결과는 아래 기록한다. 회사 정책상 관리자 설정 없이 일반 사용자 AppContainer를 사용한다. 2026-09-23 P3-T7 외부 예제 기술 검증과 R1·M1 확인을 포함한 명시적 사용자 인수를 완료했다. 고정 실행용 A의 P3-T8은 구현·검증을 완료했다. 이후 임시 폴더 호환 수정도 검증했다. 별도의 A08에서 B 자료·검사 설정·호스트 확인 수정을 검증했으며 격리 검사 473개와 전체 회귀 691개가 통과했다. Phase 2·3을 인수했다. Task 8개·요구사항 18개의 검토 계획과 AI 원본·수동 검토 근거는 보존했다.
+
+**완료일**: 2026-10-07.
+
+**사용자 인수(2026-10-07)**: T8 고정 실행본·전용 임시 폴더·자체 검사 근거의 의미와 기록된 수동 조치·남은 한계를 확인한 사용자가 “그럼 일단 인수하겠다”라고 명시했다. 인수 전에 세 근거 파일이 가리키는 원본 51개가 모두 존재하고 SHA-256 해시가 일치함을 확인했다. P3-T1–T8과 T8 이후 두 수정을 인수해 Phase 3를 완료하며 A08(`48c0b11e…87dc`)을 다음 Phase의 검증된 실행본으로 한다. 이는 하네스 개발 Phase의 결과 인수이며 생성된 Workflow의 `workflow-accept`가 아니다. 인수한 한계는 유지된다. 검토 후 호스트 자체 검사는 사전 소스·테스트 검토가 필요하고, 해시는 입력을 식별할 뿐 안전성을 보증하지 않으며, 새 Run의 실행본 선택은 수동이다. 이번 인수를 위한 새 AI 호출·검사 실행은 없다. Phase 4는 미시작이다.
 
 ## 개요
 
@@ -414,7 +423,7 @@ Reuse earlier components with regression evidence. Core protections must work wi
 | P3-T5 | 부분 구현과 중단된 검사의 안전한 재개. | 구현: 명시적 재개·저장 응답 검증 및 재사용·부분 파일 확인·프로세스와 자식 검사·별도 복구 사실·승인 및 수정 횟수 유지. [근거](Evidence/Phase3_Recovery.json), 현재 검증 결과는 아래 기록. |
 | P3-T6 | 최소 보고서·피드백 처리·최종 재사용 확인·인수 조건 추가. | 구현: 읽기 전용 JSON 결과, 피드백 보존·수정 및 재계획 경로, 최종 재사용·수동 확인과 버전에 연결된 인수 조건. [근거](Evidence/Phase3_Results.json), 현재 검증 결과는 아래 기록. |
 | P3-T7 | 외부 CLI 예제의 실제 역할 실행·중단·재개·사용자 인수. | ✅ 완료: 실제 역할 호출 2회, 중단·응답 재사용 1회, 최종 검사 8개·독립 검사 6개. 2026-09-23 R1·M1 확인과 사용자 인수를 기록했다. [기술 근거](Evidence/Phase3_Example.json), [인수 근거](Evidence/Phase3_Example_Acceptance.json). |
-| P3-T8 | 실행용 A 고정과 Phase 4 이전 분리 입증. | 임시 폴더 수정을 포함해 구현: 독립 설치·고정 산출물, 보호 대상 쓰기 20회 차단, 설치본 검사 12개와 **전체 회귀 검사 670개 통과**. [최초 근거](Evidence/Phase3_FixedRunner.json), [수정 근거](Evidence/Phase3_TemporaryDirectories.json). |
+| P3-T8 | 실행용 A 고정과 Phase 4 이전 분리 입증. | ✅ 완료: T8 이후 두 수정을 포함해 A08에서 독립 설치·고정 산출물, 보호 대상 쓰기 20회 차단, 설치본 검사 12개, **격리 자체 검사 473개와 전체 회귀 검사 691개 통과**. [최초 근거](Evidence/Phase3_FixedRunner.json), [임시 폴더 근거](Evidence/Phase3_TemporaryDirectories.json), [자체 검사 근거](Evidence/Phase3_SelfTests.json). |
 
 P3-T2에서 범위가 명확한 임시 예제로 실제 작업 구성요소를 검증했다. P3-T3는 특정 계획·코드·정책 버전을 준비·승인하며 작업 호출은 시작하지 않는다. P3-T4는 `workflow-run`으로 승인한 작업을 시작하고 P3-T5는 명시적 `workflow-resume`, P3-T6는 최소 보고서·결과 인수 조건을 추가한다. T7에서 외부 예제의 실제 사용자 인수를 완료했다. unelevated 후보는 통신 차단에 실패했으며 elevated 설정은 회사 정책상 제외한다. 관리자 설정이나 제한 없는 실행으로 대체하지 않는다.
 
@@ -755,3 +764,4 @@ Phase 1 Runner·저장 계층과 Phase 2 Adapter를 확장한다. P3-T1 준비, 
 | 2026-09-30 | P3-T8 오프라인 고정 실행본, 매니페스트·설치 위치 검사와 산출물 ID에 연결된 실행 정책을 구현했다. 보호 대상 쓰기 20회 차단, B 임시 기록, 고정된 두 역할의 경계, 설치본 CLI·Workflow·복구 검사 9개와 T7 인수 근거 보존을 확인했다. 전체 회귀 검사 658개를 통과했으며 Phase 3 인수·Phase 4는 대기 중이다. 검증용 응답·경로 수정과 실패 후보 보존을 기록했다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
 | 2026-09-30 | 인수 위험 1번인 AppContainer 임시 폴더 문제를 수정하고 비공개 상위 폴더·자식 Python까지 확인했다. 원래 재현 검사 4개·전체 회귀 670개·설치본 검사 12개·보호 대상 쓰기 차단 20회를 검증했다. 별도 A06을 만들고 A04·T7 근거와 중간 실패·중단 기록을 보존했다. 2번 문제·Phase 3 인수·Phase 4는 대기 중이다. 영문·국문과 README를 동기화했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
 | 2026-09-30 | 2번 문제의 B 자료 복사·해시 일치, 임시 상태 저장, 격리 검사 수집·실행 대조, 검토 후 호스트 검사와 필수 인수 확인을 구현했다. A08에서 격리 473개·전체 회귀 691개·설치본 12개·쓰기 차단 20회를 통과했다. 중간 실패, 권한 설정 시간 초과 후 재검증, 이전 실행본과 T7을 보존했다. Phase 3 인수·Phase 4는 대기 중이다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-10-07 | 근거 검토 후 사용자의 명시적 Phase 3 인수(“그럼 일단 인수하겠다”)를 기록했다. 참조된 원본 51개의 해시가 모두 일치했다. Phase 3를 완료로 표시하고 A08을 검증된 실행본으로 정했으며 P3-T8 행의 A06 기준 670개를 A08의 473·691개 결과로 바로잡았다. 새 AI 호출·검사 실행은 없으며 Phase 4는 미시작이다. 영문·국문, 개요, README와 Phase 4 선행 조건을 동기화했다. |

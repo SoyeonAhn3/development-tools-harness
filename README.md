@@ -8,7 +8,7 @@ A planned local CLI for semi-automated development: turn a Markdown specificatio
 
 ## Current status
 
-**Phases 1–2 are accepted and completed; Phase 3 is in progress.** The Windows/Python 3.12 CLI registers prepared projects, runs baseline tests and generates versioned bilingual plans using Codex and the repository phase-doc skill. P3-T1–T2 preparation, actual roles and isolated pytest were verified on 2026-09-21 with **265 passing tests** and a two-call live example. P3-T3 added execution authorization and durable records, verified with **378 passing tests** and `pip check` on 2026-09-22. P3-T4 connects sequential development, isolated validation, independent review, bounded corrections and final checks through `workflow-run`. P3-T5 adds explicit interruption recovery through `workflow-resume`. P3-T6 implements minimum JSON reports, feedback routing and evidence-bound user acceptance. P3-T7 external-example technical verification passed with two real role calls, one interruption/reuse, eight final tests and six independent checks. R1/M1 confirmations and explicit user acceptance were recorded on 2026-09-23, completing T7; P3-T8 fixed runner A is implemented and verified. [Implementation and verification](Phase/Phase3_Workflow.md).
+**Phases 1–3 are accepted and completed; Phase 4 has not started.** The Windows/Python 3.12 CLI registers prepared projects, runs baseline tests and generates versioned bilingual plans using Codex and the repository phase-doc skill. P3-T1–T2 preparation, actual roles and isolated pytest were verified on 2026-09-21 with **265 passing tests** and a two-call live example. P3-T3 added execution authorization and durable records, verified with **378 passing tests** and `pip check` on 2026-09-22. P3-T4 connects sequential development, isolated validation, independent review, bounded corrections and final checks through `workflow-run`. P3-T5 adds explicit interruption recovery through `workflow-resume`. P3-T6 implements minimum JSON reports, feedback routing and evidence-bound user acceptance. P3-T7 external-example technical verification passed with two real role calls, one interruption/reuse, eight final tests and six independent checks. R1/M1 confirmations and explicit user acceptance were recorded on 2026-09-23, completing T7; P3-T8 fixed runner A is implemented and verified, with A08 as the current verified runner. The user accepted Phase 3 on 2026-10-07 after reviewing its evidence. [Implementation and verification](Phase/Phase3_Workflow.md).
 
 The roadmap below summarizes the [lean MVP plan, revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md). The usage sections identify implemented behavior.
 
@@ -233,7 +233,7 @@ $isolatedReport = Get-Content "$proofRoot/i/report.json" -Raw | ConvertFrom-Json
 & "$selfRunner/runtime/python.exe" -I -B -m development_harness.self_test_verify report --runner $selfRunner --repository $repository --directory "$proofRoot/combined" --isolated-report "$proofRoot/i/report.json" --host-report "$proofRoot/h/report.json"
 ```
 
-Final A08 verification passed **473 isolated self-tests**, **691 full regressions**, **12 installed checks**, 20 protected write denials and `pip check`. A concurrent ACL-command timeout was preserved; the complete host suite passed when rerun alone on unchanged inputs. Run large Windows verification commands sequentially. Phase 3 acceptance and Phase 4 remain pending; no new AI-service calls. [Verification evidence](Phase/Evidence/Phase3_SelfTests.json).
+Final A08 verification passed **473 isolated self-tests**, **691 full regressions**, **12 installed checks**, 20 protected write denials and `pip check`. A concurrent ACL-command timeout was preserved; the complete host suite passed when rerun alone on unchanged inputs. Run large Windows verification commands sequentially. No new AI-service calls; Phase 3 was accepted on 2026-10-07 and Phase 4 has not started. [Verification evidence](Phase/Evidence/Phase3_SelfTests.json).
 
 ## Intended workflow
 
@@ -340,7 +340,7 @@ P0/P1/P2 express priority; **MVP2 is a later product scope**, not a commitment t
 ## Planning documents
 
 - [Development Phase overview](Phase/Overview.md): four development Phases, requirements mapping, and dogfooding entry conditions. Each document contains full English and Korean sections.
-- [Phase 1 — execution foundation](Phase/Phase1_Foundation.md): accepted. [Phase 2 — real connection and planning](Phase/Phase2_Planning.md): accepted. [Phase 3 — workflow](Phase/Phase3_Workflow.md): in progress; P3-T1–T6 implemented, T7 accepted and completed, T8 implemented and verified. [Phase 4 — dogfooding and MVP acceptance](Phase/Phase4_Dogfooding.md): outline.
+- [Phase 1 — execution foundation](Phase/Phase1_Foundation.md): accepted. [Phase 2 — real connection and planning](Phase/Phase2_Planning.md): accepted. [Phase 3 — workflow](Phase/Phase3_Workflow.md): accepted on 2026-10-07; P3-T1–T8 completed with runner A08. [Phase 4 — dogfooding and MVP acceptance](Phase/Phase4_Dogfooding.md): outline.
 - [Lean MVP plan — revision 0.4](Draft/ai-development-harness-lean-mvp-plan.md): scope, priorities, acceptance rules, development stages, dogfooding, MVP2, and planning change history. Start here.
 - [Earlier planning documents](Draft/archive/): historical designs and decisions. Their broader scope should not be assumed to apply to the lean MVP.
 
@@ -369,4 +369,4 @@ development-tools-harness/
     └── archive/
 ```
 
-Phase 2 user acceptance is complete. Phase 3 connects actual roles, isolated tests, execution admission, durable records, bounded sequential corrections, explicit interruption recovery, minimum reports, feedback and evidence-bound result acceptance. T7 external-example technical verification passed, and R1/M1 user confirmations and explicit result acceptance are complete. Fixed runner A is implemented and verified in P3-T8; Phase 3 user acceptance is pending.
+Phase 2 user acceptance is complete. Phase 3 connects actual roles, isolated tests, execution admission, durable records, bounded sequential corrections, explicit interruption recovery, minimum reports, feedback and evidence-bound result acceptance. T7 external-example technical verification passed, and R1/M1 user confirmations and explicit result acceptance are complete. Fixed runner A is implemented and verified in P3-T8; Phase 3 user acceptance was recorded on 2026-10-07.

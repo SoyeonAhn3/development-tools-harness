@@ -1,6 +1,6 @@
 # Development Phases — Lean MVP
 
-**Revision**: 0.4 · **Date**: 2026-09-30 · **Status**: Phases 1–2 accepted and completed. Phase 3 in progress: P3-T1–T6 implemented, including minimum results, feedback and acceptance gates. Historical T4/T5 live evidence is preserved; T6 makes no new AI calls. P3-T7 is accepted and completed after technical verification with two real role calls and recorded R1/M1 user confirmations. P3-T8 and both post-review corrections are verified on A08: 473 isolated self-tests, 691 full regressions and 12 installed checks passed. Phase 4 has not started; Phase 3 acceptance remains pending. Current verification is recorded in [Phase 3](Phase3_Workflow.md).
+**Revision**: 0.4 · **Date**: 2026-10-07 · **Status**: Phases 1–3 accepted and completed. Phase 3: P3-T1–T6 implemented, including minimum results, feedback and acceptance gates. Historical T4/T5 live evidence is preserved; T6 makes no new AI calls. P3-T7 is accepted and completed after technical verification with two real role calls and recorded R1/M1 user confirmations. P3-T8 and both post-review corrections are verified on A08: 473 isolated self-tests, 691 full regressions and 12 installed checks passed. The user accepted Phase 3 on 2026-10-07; A08 is the verified runner for Phase 4. Phase 4 has not started. Current verification is recorded in [Phase 3](Phase3_Workflow.md).
 
 ## Goal & Decisions
 
@@ -20,6 +20,7 @@ Build the P0 local CLI described in the [lean MVP plan 0.4](../Draft/ai-developm
 - **Fixed runner (2026-09-30)**: P3-T8 creates an independent offline wheel/Python/dependency/adapter installation with a checked manifest and fixed role/policy resources. New execution approvals bind its artifact ID. Actual B tests and their child were denied all 20 protected writes and could use a scratch DB. Nine installed CLI/workflow/crash-recovery checks passed; all 658 regressions passed. T7 acceptance evidence is preserved. Zero new AI-service calls, no Phase 3 acceptance and no Phase 4 self-development. [T8 evidence](Evidence/Phase3_FixedRunner.json).
 - **Private temporary directories (2026-09-30)**: Corrected the post-T8 AppContainer `mkdir(0o700)` defect in copied validation Python, including private parents and normal child startup. The unchanged four-case reproduction, 670 regressions, 12 installed checks and 20 protected write denials passed. Separate A06 preserves A04 and active-run bindings. This is issue-1 evidence; the next correction covers B self-tests. Phase 3 acceptance and Phase 4 remain pending. [Correction evidence](Evidence/Phase3_TemporaryDirectories.json).
 - **Harness self-tests (2026-09-30)**: Explicit B test resources/state, scratch path compatibility, complete isolated collection evidence and separately reviewed host regression. A08 passed 473 isolated tests, 691 full regressions, 12 installed checks and 20 write denials. Mandatory host confirmation prevents partial isolated success from satisfying acceptance. [Self-test evidence](Evidence/Phase3_SelfTests.json).
+- **Phase 3 acceptance (2026-10-07)**: After reviewing the T8, temporary-directory and self-test evidence, manual interventions and remaining limits, the user explicitly accepted Phase 3. All 51 referenced raw artifacts matched their recorded hashes. No new AI calls or test runs were made for acceptance.
 - **Development method**: use existing coding tools for the initial foundation, then progressively use the harness. Refine these Phase documents during development; keep the `phase-doc` skill and template stable unless a necessary correction is demonstrated.
 
 ## Phase Plan
@@ -28,10 +29,10 @@ Build the P0 local CLI described in the [lean MVP plan 0.4](../Draft/ai-developm
 |---|---|---|---|
 | [1 — Foundation](Phase1_Foundation.md) ✅ | Python/test setup, SQLite state, versioned approvals, fake Adapter, validation runner, ownership and resume | Review the overall plan and Phase 1 scope | Met: 63 tests passed and the user accepted the foundation on 2026-09-18 |
 | [2 — Planning](Phase2_Planning.md) ✅ | Real Planner, permission/I/O checks, project registration, baseline, plans and code/requirements mapping | Phase 1 accepted; AI tool selected | Met: 172 tests and live planning verified, including project phase-doc integration; user accepted on 2026-09-21 |
-| [3 — Workflow](Phase3_Workflow.md) 🚧 | Eight Tasks: Developer → validation → separate Reviewer, corrections, records, resume, results and runner A. P3-T1–T6 implemented; T7 accepted; T8 and both corrections verified on A08; 691 regressions and 473 isolated self-tests passed | Phase 2 accepted; verified worker boundaries and version-bound execution admission | A separate example completes a small Phase including interruption/resume; runner A is verified and frozen |
+| [3 — Workflow](Phase3_Workflow.md) ✅ | Eight Tasks: Developer → validation → separate Reviewer, corrections, records, resume, results and runner A. P3-T1–T6 implemented; T7 accepted; T8 and both corrections verified on A08; 691 regressions and 473 isolated self-tests passed | Phase 2 accepted; verified worker boundaries and version-bound execution admission | Met: T7 example accepted with interruption/resume; runner A08 verified and frozen; user accepted on 2026-10-07 |
 | [4 — Dogfooding](Phase4_Dogfooding.md) | One small P0 self-development Phase, final report summaries, new/existing project acceptance and regressions | Phase 3 accepted; A/B isolation verified | Self-development is accepted and all MVP section 11 criteria have evidence |
 
-Phases 1–2 are completed; Phase 3 has an authorized eight-Task plan with 18 requirements and implemented P3-T1–T6 preparation, roles, records, sequential execution, explicit recovery, minimum results and acceptance gates. T7 has verified the external CLI example with one interruption/reuse and two real role calls; user confirmations and explicit result acceptance are complete. Workflow records advertise execution capability, while explicit execution approval remains required. Technical completion is separate from Phase 3 user acceptance. Phase 4 remains an outline to refine using actual Phase 3 results. No development dates or effort estimates are committed.
+Phases 1–3 are completed. Phase 3's authorized eight-Task plan with 18 requirements implemented P3-T1–T6 preparation, roles, records, sequential execution, explicit recovery, minimum results and acceptance gates. T7 has verified the external CLI example with one interruption/reuse and two real role calls; user confirmations and explicit result acceptance are complete. Workflow records advertise execution capability, while explicit execution approval remains required. Phase 3 user acceptance was recorded separately on 2026-10-07. Phase 4 remains an outline to refine using actual Phase 3 results. No development dates or effort estimates are committed.
 
 ## Requirements Mapping
 
@@ -83,12 +84,13 @@ Preserve pre-existing changes, stop on unexpected file differences, and keep run
 | 2026-09-30 | Added P3-T8 independent fixed installation, artifact-bound approvals and actual protected-replica/installed-recovery proofs. Nine installed tests and 20 write denials passed; all 658 final regression checks passed. Preserved T7 acceptance, prior candidates and manual-intervention evidence. Phase 3 acceptance/Phase 4 pending; bilingual documents and README synchronized. Separate dev-log omitted because the skill is unavailable. |
 | 2026-09-30 | Verified the post-T8 private-temporary-directory correction with 670 regressions, 12 installed checks, the unchanged four-case reproduction and 20 protected write denials. Prepared A06 while preserving A04/T7; recorded intermediate failures and interrupted attempts. B's own-test resource/path issue and Phase 3 acceptance remain pending. Bilingual documents/README synchronized; separate dev-log omitted because the skill is unavailable. |
 | 2026-09-30 | Corrected issue 2 with explicit copied/hash-bound B resources, temporary state, isolated collection coverage, reviewed-host verification and a mandatory acceptance check. A08 passed 473 isolated tests, 691 full regressions, 12 installed checks and 20 write denials. Preserved intermediate failures, the ACL-timeout rerun, earlier runners and T7. Phase 3 acceptance/Phase 4 remain pending. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
+| 2026-10-07 | Recorded the user's explicit Phase 3 acceptance (“그럼 일단 인수하겠다”) after reviewing the T8, temporary-directory and self-test evidence; all 51 referenced raw artifacts matched their hashes. Marked Phase 3 completed with A08 as the verified runner. No new AI calls or test runs; Phase 4 not started. Synchronized both languages, Phase 3, Phase 4 prerequisite and README. |
 
 ---
 
 # 개발 Phase — 축소 MVP
 
-**문서 버전**: 0.4 · **작성일**: 2026-09-30 · **상태**: Phase 1–2 인수·완료. Phase 3 진행 중: 최소 결과·피드백·인수 조건을 포함한 P3-T1–T6 구현. T4·T5 실제 호출 근거는 과거 이력으로 보존하고 T6의 새 AI 호출은 없다. P3-T7은 실제 역할 호출 2회의 기술 검증과 R1·M1 사용자 확인을 거쳐 인수·완료했다. P3-T8과 인수 검토 후 두 수정을 A08에서 검증했으며 격리 자체 검사 473개·전체 회귀 691개·설치본 검사 12개가 통과했다. Phase 4는 미시작이며 Phase 3 인수는 대기 중이다. 현재 검증 결과는 [Phase 3](Phase3_Workflow.md)에 기록한다.
+**문서 버전**: 0.4 · **작성일**: 2026-10-07 · **상태**: Phase 1–3 인수·완료. Phase 3: 최소 결과·피드백·인수 조건을 포함한 P3-T1–T6 구현. T4·T5 실제 호출 근거는 과거 이력으로 보존하고 T6의 새 AI 호출은 없다. P3-T7은 실제 역할 호출 2회의 기술 검증과 R1·M1 사용자 확인을 거쳐 인수·완료했다. P3-T8과 인수 검토 후 두 수정을 A08에서 검증했으며 격리 자체 검사 473개·전체 회귀 691개·설치본 검사 12개가 통과했다. 2026-10-07 사용자가 Phase 3를 인수했으며 A08을 Phase 4의 검증된 실행본으로 한다. Phase 4는 미시작이다. 현재 검증 결과는 [Phase 3](Phase3_Workflow.md)에 기록한다.
 
 ## 목표와 결정 사항
 
@@ -108,6 +110,7 @@ Preserve pre-existing changes, stop on unexpected file differences, and keep run
 - **고정 실행본(2026-09-30)**: P3-T8에서 오프라인 wheel·Python·의존성·Adapter의 독립 설치, 매니페스트 검사와 역할·정책 지침 고정을 구현했다. 새 실행 승인에는 산출물 ID를 연결한다. 실제 B 테스트와 자식 프로세스의 보호 대상 쓰기 시도 20회를 모두 차단하고 임시 DB 기록은 허용했다. 설치본 CLI·Workflow·중단 복구 검사 9개를 통과했으며 전체 회귀 검사 658개도 통과했다. T7 인수 근거를 보존했다. 새 AI 서비스 호출·Phase 3 인수·Phase 4 자체 개발은 없다. [T8 근거](Evidence/Phase3_FixedRunner.json).
 - **임시 폴더 수정(2026-09-30)**: T8 이후 발견한 AppContainer의 `mkdir(0o700)` 문제를 격리 검사용 Python에서 수정했다. 비공개 상위 폴더와 일반 자식 실행을 포함해 원래 재현 검사 4개·전체 회귀 670개·설치본 검사 12개·보호 대상 쓰기 차단 20회를 통과했다. 별도 A06을 만들고 A04와 진행 중인 Run의 연결을 보존했다. 이는 1번 수정의 근거이며 다음 수정에서 B 자체 검사를 다룬다. Phase 3 인수와 Phase 4는 대기 중이다. [수정 근거](Evidence/Phase3_TemporaryDirectories.json).
 - **하네스 자체 검사(2026-09-30)**: B 검사 자료·임시 기록·경로 호환과 격리 검사 수집·실행 대조, 별도 검토 후 호스트 검사를 구현했다. A08에서 격리 473개·전체 회귀 691개·설치본 12개·쓰기 차단 20회를 통과했다. 필수 호스트 확인으로 격리 검사만 통과한 상태의 인수를 막는다. [자체 검사 근거](Evidence/Phase3_SelfTests.json).
+- **Phase 3 인수(2026-10-07)**: T8·임시 폴더·자체 검사 근거와 수동 조치·남은 한계를 확인한 사용자가 Phase 3를 명시적으로 인수했다. 참조된 원본 51개의 해시가 모두 일치했다. 인수를 위한 새 AI 호출·검사 실행은 없다.
 - **개발 방식**: 초기 기반은 기존 코딩 도구로 만들고 하네스 사용 범위를 점진적으로 넓힌다. 개발 중에는 Phase 문서를 보완하며, 필요한 수정 근거가 있는 경우 외에는 `phase-doc` 스킬과 템플릿을 유지한다.
 
 ## 전체 Phase 계획
@@ -116,10 +119,10 @@ Preserve pre-existing changes, stop on unexpected file differences, and keep run
 |---|---|---|---|
 | [1 — 실행 기반](Phase1_Foundation.md) ✅ | Python·테스트 환경, SQLite 상태, 버전에 연결된 승인, 가짜 Adapter, 검사 실행, 실행 소유권·재개 | 전체 계획과 Phase 1 범위 검토 | 충족: 검사 63개 통과, 2026-09-18 사용자 인수 |
 | [2 — 실제 연결과 계획](Phase2_Planning.md) ✅ | 실제 Planner·권한 및 입출력 확인·등록·기본 검사·계획·코드 및 요구사항 대응 | Phase 1 인수, AI 도구 선정 | 충족: 프로젝트 phase-doc 연결 포함 검사 172개와 실제 계획 검증, 2026-09-21 사용자 인수 |
-| [3 — 전체 실행 흐름](Phase3_Workflow.md) 🚧 | Task 8개: 구현 → 검증 → 별도 리뷰, 수정·기록·재개·결과·실행용 A. P3-T1–T6 구현, T7 인수·완료, T8과 두 수정의 A08 검증·전체 회귀 691개·격리 자체 검사 473개 통과 | Phase 2 인수, 작업 권한 검증과 버전별 실행 승인 연결 | 별도 예제의 작은 Phase를 중단·재개 포함 완료하고 실행용 A 검증·고정 |
+| [3 — 전체 실행 흐름](Phase3_Workflow.md) ✅ | Task 8개: 구현 → 검증 → 별도 리뷰, 수정·기록·재개·결과·실행용 A. P3-T1–T6 구현, T7 인수·완료, T8과 두 수정의 A08 검증·전체 회귀 691개·격리 자체 검사 473개 통과 | Phase 2 인수, 작업 권한 검증과 버전별 실행 승인 연결 | 충족: 중단·재개를 포함한 T7 예제 인수, 실행용 A08 검증·고정, 2026-10-07 사용자 인수 |
 | [4 — 자체 개발과 MVP 인수](Phase4_Dogfooding.md) | 작은 P0 자체 기능 개발, 최종 보고서 집계, 신규·기존 프로젝트 인수·회귀 검증 | Phase 3 인수, A/B 분리 검증 | 자체 개발 인수 및 기획서 11장 전체 완료 기준의 근거 확보 |
 
-Phase 1–2는 완료했으며 Phase 3는 Task 8개·요구사항 18개의 개발 계획을 승인받고 P3-T1–T6 준비·역할·기록·순차 실행·명시적 복구·최소 결과·인수 조건을 구현했다. T7은 한 차례 중단·응답 재사용과 실제 역할 호출 2회로 외부 CLI 예제를 검증했고 사용자 확인·명시적 결과 인수를 완료했다. Workflow 기록은 실행 기능 제공을 표시하지만 명시적 실행 승인은 계속 필요하다. 기술적 완료와 Phase 3 사용자 인수는 별개다. Phase 4는 Phase 3 실제 결과를 반영할 개요로 유지한다. 개발 일정·소요 시간은 확정하지 않았다.
+Phase 1–3을 완료했다. Phase 3는 Task 8개·요구사항 18개의 개발 계획을 승인받고 P3-T1–T6 준비·역할·기록·순차 실행·명시적 복구·최소 결과·인수 조건을 구현했다. T7은 한 차례 중단·응답 재사용과 실제 역할 호출 2회로 외부 CLI 예제를 검증했고 사용자 확인·명시적 결과 인수를 완료했다. Workflow 기록은 실행 기능 제공을 표시하지만 명시적 실행 승인은 계속 필요하다. Phase 3 사용자 인수는 2026-10-07 별도로 기록했다. Phase 4는 Phase 3 실제 결과를 반영할 개요로 유지한다. 개발 일정·소요 시간은 확정하지 않았다.
 
 ## 요구사항 대응표
 
@@ -171,3 +174,4 @@ P1 기획 검토·배포용 템플릿, MVP2 독립 수정 요청 및 나머지 P
 | 2026-09-30 | P3-T8 독립 고정 설치, 산출물 ID에 연결된 승인, 실제 보호 복제본·설치본 재개 검증을 추가했다. 설치본 검사 9개와 쓰기 차단 20회를 통과했으며 최종 회귀 검사 658개도 통과했다. T7 인수·이전 후보·수동 조치 근거를 보존했다. Phase 3 인수·Phase 4는 대기 중이며 영문·국문과 README를 동기화했다. dev-log 스킬이 없어 별도 로그는 생략했다. |
 | 2026-09-30 | T8 이후 임시 폴더 수정을 전체 회귀 670개·설치본 검사 12개·원래 재현 검사 4개·보호 대상 쓰기 차단 20회로 검증했다. A04·T7을 보존하고 A06을 준비했으며 중간 실패와 중단을 기록했다. B 자체 검사의 자료·경로 문제와 Phase 3 인수는 남아 있다. 영문·국문과 README를 동기화했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
 | 2026-09-30 | 2번 문제의 B 자료 복사·해시 일치, 임시 상태 저장, 격리 검사 수집·실행 대조, 검토 후 호스트 검사와 필수 인수 확인을 구현했다. A08에서 격리 473개·전체 회귀 691개·설치본 12개·쓰기 차단 20회를 통과했다. 중간 실패, 권한 설정 시간 초과 후 재검증, 이전 실행본과 T7을 보존했다. Phase 3 인수·Phase 4는 대기 중이다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-10-07 | T8·임시 폴더·자체 검사 근거 검토 후 사용자의 명시적 Phase 3 인수(“그럼 일단 인수하겠다”)를 기록했다. 참조된 원본 51개의 해시가 모두 일치했다. Phase 3를 완료로 표시하고 A08을 검증된 실행본으로 정했다. 새 AI 호출·검사 실행은 없으며 Phase 4는 미시작이다. 영문·국문, Phase 3, Phase 4 선행 조건과 README를 동기화했다. |
