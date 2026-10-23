@@ -240,7 +240,7 @@ def main():
                 raise HarnessError("Pinned role boundary verification is incomplete.")
         stage("roles", roles)
         stage("installed_workflow", verify_installed_workflow(repository, runner, directory / "installed-workflow"))
-        acceptance_path = repository / "Phase/Evidence/Phase3_Example_Acceptance.json"
+        acceptance_path = repository / "Phase/archive/lean-mvp-0.4/Evidence/Phase3_Example_Acceptance.json"
         acceptance = json.loads(acceptance_path.read_text(encoding="utf-8"))
         if acceptance["status"] != "Accepted and completed" or not acceptance["acceptance_status"]["accepted"]:
             raise HarnessError("T7 external example acceptance is required.")

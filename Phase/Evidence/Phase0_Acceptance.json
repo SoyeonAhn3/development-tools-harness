@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "phase": 0,
+  "specification_version": "1.10",
+  "status": "accepted",
+  "accepted": true,
+  "recorded_at": "2026-10-23T16:07:52.271411+09:00",
+  "accepted_on": "2026-10-23",
+  "source": "User message in this conversation",
+  "user_statement": "인수한다",
+  "scope": [
+    "Phase 0 environment and regression results",
+    "691-test baseline",
+    "41-module reuse and follow-up map"
+  ],
+  "baseline": {
+    "path": "Phase/Evidence/Phase0_Baseline.json",
+    "sha256": "2837fb2e511ad38e2271e9d72c9c02d400ae84c16f64259f712274e7efbb59cf"
+  },
+  "module_map": {
+    "path": "Phase/Evidence/Phase0_ModuleMap.json",
+    "sha256": "6d413b508a59dd8806a01fd05f7537ae545c4833dc26933b38bc6d5bc6a5c8aa"
+  },
+  "verification_at_recording": {
+    "baseline_artifacts_hash_verified": 9,
+    "unchanged_input_files": 108,
+    "tests_rerun": false
+  },
+  "snapshot_note": "Baseline and module-map snapshots retain their pre-acceptance status. This separate record establishes subsequent user acceptance without rewriting verification evidence.",
+  "limits_retained": [
+    "Codex 0.163.0 compatibility was not assessed; this baseline uses reviewed 0.155.1",
+    "Windows long-path support is not established; keep temporary/runtime roots short. The initial longer pytest root caused six WinError 206 failures.",
+    "No live AI service requests or new-language example runs were made",
+    "No formatter/linter/type-checker baseline exists; tool adoption remains a Phase 3 decision"
+  ],
+  "next_phase": {
+    "phase": 1,
+    "plan": "Phase/Phase1_ValidationContract.md",
+    "implementation_started": false
+  },
+  "dev_log": "Skill unavailable; changes recorded in Phase documents."
+}

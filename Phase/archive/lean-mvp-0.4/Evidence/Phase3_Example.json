@@ -1,0 +1,693 @@
+{
+  "date": "2026-09-23",
+  "phase": "Phase3",
+  "task": "P3-T7",
+  "status": "P3-T7 completed: live example, full 632-test regression and genuine user result acceptance passed",
+  "user_request": "T7 테스트 시작",
+  "user_phase_acceptance": null,
+  "external_example_acceptance": {
+    "at": "2026-09-23T11:51:57.078842+09:00",
+    "user_statement": "결과 인수한다",
+    "stage": "accepted",
+    "record": "Phase/Evidence/Phase3_Example_Acceptance.json",
+    "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb"
+  },
+  "approved_task_source": "Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/plan.json",
+  "script": {
+    "path": "%REPOSITORY_ROOT%\\scripts\\verify_t7.py",
+    "sha256": "07b38bb3c3811e3058c20395b08fccd02ef7a9df62b7739bd6a87391ea9f0f80"
+  },
+  "live_report": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\report.json",
+    "sha256": "abcbc442b0e1fe92b168454dcf87b339ceb7fe4d406926d13f0914153a332e12"
+  },
+  "workflow_result": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\workflow-result.json",
+    "sha256": "41fbb7e5c39b9f499ca852a6480c7cc60bfb54e68e3f66dd2517e30da06ce0a0"
+  },
+  "final_run": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\final-run.json",
+    "sha256": "56d76b1c701ea7b7f4cf688a0c9c4754224f44635b298486370739b5f051d12e"
+  },
+  "reviewed_plan": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\reviewed-plan.json",
+    "sha256": "3a1c65b8a5fb4c9f4577b5b4acf25a63487752336deef5c0e2c38bcd0336b57c"
+  },
+  "project": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\project",
+  "state": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state",
+  "planning_run_id": "5797e3ef9eff447fa874e2660304c768",
+  "workflow_run_id": "02ee4d614527425fa2235542d76637fb",
+  "plan_hash": "b8d7765abaaa8eb1bf1756b0cc74cc8a87f3b690691399045dedd6ab058762fb",
+  "policy_hash": "c26908d1b4158d64ee965d5266c2c08cc0158b50f56e7abcbd18092a161cb04b",
+  "initial_content_version": "3f34da3f890c4906ec11c6f2e202723a2d1a2b2dda3c627352e0662ad915aa07",
+  "final_content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+  "final_validation_ids": [
+    "20f5154c0ed4480a807a3bc3cec71f0f"
+  ],
+  "final_file_hashes": {
+    "cli.py": "5fd2d7d3fb3d902182f9b6201b653471f890c00aee711d6387eebae70db2b247",
+    "harness-project.json": "804058499b8b3434e0efb47b37bd9dd93416685c1d4da90a50a882075cfc411a",
+    "spec.md": "e34f9749bdd3cbad924be9ccc5d5bd4d5698ebc7a6573484c1be4361e7894833",
+    "test_cli.py": "fcd9068e8b9894e17b5cc5d50d7fce6a630cb3322f8ca79aea3ba28f74355a25",
+    "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Phase7_CompleteTheReviewedNegativeInputCLIChangeWithRealIndependentRole.md": "54b727068cd7614fbdf13b1621c178fc92d54a21220a4e5fa700d8c425e54a40",
+    "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Plan.md": "688551c2b817b744c349482ceaca5e73abcd3304520088f992e236334ec18044",
+    "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Plan_ko.md": "d0dac316627c7ed285a020e19b45d048f0c114adf08247405363ecda38b973b8",
+    "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/plan.json": "3a1c65b8a5fb4c9f4577b5b4acf25a63487752336deef5c0e2c38bcd0336b57c",
+    "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/writing-profile.json": "a7fa68b737abe7e417e802f12a18ca6b445697f79ad086e18db3ce67f69c8a38"
+  },
+  "planner_ai_calls": 0,
+  "plan_source": "controller_fixture",
+  "plan_review": "One-task plan derived from the reviewed CLI specification and the previously described user-authorized example; no new Planner-service execution is claimed.",
+  "model": "gpt-6-astra",
+  "actual_ai_call_attempts": 2,
+  "confirmed_ai_calls": 2,
+  "uncertain_ai_calls": 0,
+  "role_sessions": [
+    {
+      "id": "424273930481491f95935325161139ea",
+      "role": "developer",
+      "task_id": "T1",
+      "session_id": "01a0cc13-5d3e-7412-b465-e7aab59ed48e",
+      "content_version": "3f34da3f890c4906ec11c6f2e202723a2d1a2b2dda3c627352e0662ad915aa07",
+      "response_hash": "e05d9774a625832c3a759b1d0a06b4a9c64016dcc923b96ae7734500629b1503"
+    },
+    {
+      "id": "5cfe12b0446147748893067a269e446e",
+      "role": "reviewer",
+      "task_id": "T1",
+      "session_id": "01a0cc14-71d0-7e73-951b-c202e37ec566",
+      "content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+      "response_hash": "34da1e0fcfa76c270e14ce2877d2002ac56b63a8dbf137353716d5ac2a83bb3a"
+    }
+  ],
+  "corrections": {
+    "T1": 0
+  },
+  "baseline_tests": 2,
+  "task_validation": [
+    {
+      "id": "601d4ca39fd24162bb9b47b599d7010c",
+      "tests": 8,
+      "outcome": "passed"
+    },
+    {
+      "id": "20f5154c0ed4480a807a3bc3cec71f0f",
+      "tests": 8,
+      "outcome": "passed"
+    }
+  ],
+  "final_validation": [
+    {
+      "id": "20f5154c0ed4480a807a3bc3cec71f0f",
+      "task_id": "T1",
+      "role": "validation",
+      "content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+      "input_hash": null,
+      "plan_hash": "b8d7765abaaa8eb1bf1756b0cc74cc8a87f3b690691399045dedd6ab058762fb",
+      "policy_hash": "c26908d1b4158d64ee965d5266c2c08cc0158b50f56e7abcbd18092a161cb04b",
+      "outcome": "passed",
+      "dispatch_status": "not_sent",
+      "actual_ai_call_attempts": 0,
+      "confirmed_ai_calls": 0,
+      "started": 1790130295.0928397,
+      "ended": 1790130300.2323854,
+      "duration": 5.139545679092407,
+      "usage": null,
+      "cost": null,
+      "journal_phases": {
+        "prepared": null,
+        "process_registered": null,
+        "finished": null
+      },
+      "check_hash": "eeb208cbe3b397212cb4a848fbc29634781bb8e99d5f21b9bb9e2aae6eb84303",
+      "source_project": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\project",
+      "copied_project": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\project",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "backend": "appcontainer",
+      "permission_report": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\p-58622d9cb351\\report.json",
+      "dependencies": {
+        "pytest": "9.1.1",
+        "pluggy": "1.6.0",
+        "iniconfig": "2.3.0",
+        "packaging": "26.3",
+        "pygments": "2.21.0",
+        "colorama": "0.4.6",
+        "psutil": "7.2.2"
+      },
+      "excluded_paths": [
+        "harness-project.json",
+        "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Phase7_CompleteTheReviewedNegativeInputCLIChangeWithRealIndependentRole.md",
+        "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Plan.md",
+        "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Plan_ko.md",
+        "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/plan.json",
+        "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/writing-profile.json"
+      ],
+      "tests": 8,
+      "record": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\validation.json",
+      "effective_pytest_args": [
+        "-q",
+        "--capture=sys",
+        "-p",
+        "no:cacheprovider",
+        "--rootdir",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\project",
+        "--confcutdir",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\project",
+        "--basetemp",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\tmp\\pytest",
+        "--log-file",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\tmp\\pytest.log",
+        "--junitxml",
+        "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\tmp\\junit.xml",
+        "-o",
+        "junit_family=xunit2"
+      ],
+      "process": {
+        "pid": 23988,
+        "created": 1790130295.8325884
+      },
+      "containment": {
+        "kind": "windows_job_v1",
+        "name": "Local\\development-harness-22261a7fcd534d6dae0054fe595202f6",
+        "kill_on_close": true
+      },
+      "token": {
+        "appcontainer": true,
+        "capability_count": 0,
+        "elevated": false
+      },
+      "process_result": {
+        "outcome": "finished",
+        "exit_code": 0,
+        "pid": 23988,
+        "containment": {
+          "kind": "windows_job_v1",
+          "name": "Local\\development-harness-22261a7fcd534d6dae0054fe595202f6",
+          "kill_on_close": true
+        },
+        "token": {
+          "appcontainer": true,
+          "capability_count": 0,
+          "elevated": false
+        },
+        "duration": 3.480947732925415,
+        "stdout": "........                                                                 [100%]\r\n8 passed in 1.94s\r\n",
+        "stderr": ""
+      },
+      "exit_code": 0,
+      "log": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\process\\stdout.log",
+      "stderr": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\process\\stderr.log",
+      "junit": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\pytest.xml",
+      "container": {
+        "name": "harness.probe.a747d36f45914aebb3d4f1bd4e8f5737",
+        "capabilities": [],
+        "grants": [
+          {
+            "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\p-58622d9cb351",
+            "rights": "RX"
+          },
+          {
+            "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c",
+            "rights": "RX"
+          },
+          {
+            "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\p-58622d9cb351\\runtime",
+            "rights": "(OI)(CI)RX"
+          },
+          {
+            "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5",
+            "rights": "RX"
+          },
+          {
+            "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\project",
+            "rights": "(OI)(CI)RX"
+          },
+          {
+            "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\entry.py",
+            "rights": "RX"
+          },
+          {
+            "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\invocation.json",
+            "rights": "RX"
+          },
+          {
+            "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\state\\workflow-validation\\601d4ca39fd24162bb9b47b599d7010c\\c-8678c3785bf5\\tmp",
+            "rights": "(OI)(CI)M"
+          }
+        ],
+        "create_hresult": 0,
+        "sid": "S-1-15-2-1752966598-34816657-197836162-1434768597-4095783563-693289179-1408565897",
+        "delete_hresult": 0
+      },
+      "failure_kind": null,
+      "stop_kind": null,
+      "artifact_hashes": {
+        "record": "7aa22a2a65e19332a5a3b9f33d482eaeef16aad05e819213f4c1ab6c9c563e81",
+        "junit": "2564c71f48c218f880acb5f68c327a4d5c726b3f56530e75badcbbb4fb74a959",
+        "log": "953543728fe088c92a41d0a9ac80ef823244e06c9f1285ecec315c692a050b37",
+        "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "independent_validation": {
+    "id": "c-19ca0637e446",
+    "outcome": "passed",
+    "content_version": "d4edf846807dc958a091a376c2507363ac8eea43f0e06f1513bbbe122bbde697",
+    "source_project": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\assertions",
+    "copied_project": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\project",
+    "argv": [
+      "{python}",
+      "-m",
+      "pytest",
+      "-q",
+      "test_controller_requirements.py"
+    ],
+    "check_hash": "166122801f167cd6a8123518e270a9c941247e2c54bfa418678ae48f3a888c91",
+    "backend": "appcontainer",
+    "started": 1790130331.0983949,
+    "permission_report": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\p-8a11e2fb5694\\report.json",
+    "dependencies": {
+      "pytest": "9.1.1",
+      "pluggy": "1.6.0",
+      "iniconfig": "2.3.0",
+      "packaging": "26.3",
+      "pygments": "2.21.0",
+      "colorama": "0.4.6",
+      "psutil": "7.2.2"
+    },
+    "excluded_paths": [
+      "harness-project.json",
+      "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Phase7_CompleteTheReviewedNegativeInputCLIChangeWithRealIndependentRole.md",
+      "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Plan.md",
+      "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/Plan_ko.md",
+      "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/plan.json",
+      "Phase/Generated/5797e3ef9eff447fa874e2660304c768/v1/writing-profile.json"
+    ],
+    "tests": 6,
+    "record": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\validation.json",
+    "effective_pytest_args": [
+      "-q",
+      "test_controller_requirements.py",
+      "--capture=sys",
+      "-p",
+      "no:cacheprovider",
+      "--rootdir",
+      "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\project",
+      "--confcutdir",
+      "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\project",
+      "--basetemp",
+      "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\tmp\\pytest",
+      "--log-file",
+      "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\tmp\\pytest.log",
+      "--junitxml",
+      "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\tmp\\junit.xml",
+      "-o",
+      "junit_family=xunit2"
+    ],
+    "process": {
+      "pid": 31248,
+      "created": 1790130332.2792072
+    },
+    "containment": {
+      "kind": "windows_job_v1",
+      "name": "Local\\development-harness-51bd423757c34f8f857a9a21699ce276",
+      "kill_on_close": true
+    },
+    "token": {
+      "appcontainer": true,
+      "capability_count": 0,
+      "elevated": false
+    },
+    "process_result": {
+      "outcome": "finished",
+      "exit_code": 0,
+      "pid": 31248,
+      "containment": {
+        "kind": "windows_job_v1",
+        "name": "Local\\development-harness-51bd423757c34f8f857a9a21699ce276",
+        "kill_on_close": true
+      },
+      "token": {
+        "appcontainer": true,
+        "capability_count": 0,
+        "elevated": false
+      },
+      "duration": 3.0359466075897217,
+      "stdout": "......                                                                   [100%]\r\n============================== warnings summary ===============================\r\ntest_controller_requirements.py::test_controller_requirement[args0-6\\n-True]\r\ntest_controller_requirements.py::test_controller_requirement[args1-0\\n-True]\r\ntest_controller_requirements.py::test_controller_requirement[args2--False]\r\ntest_controller_requirements.py::test_controller_requirement[args3--False]\r\ntest_controller_requirements.py::test_controller_requirement[args4--False]\r\ntest_controller_requirements.py::test_controller_requirement[args5--False]\r\n  test_controller_requirements.py:4: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')\r\n    @pytest.mark.parametrize('args,stdout,success', [(['3'],'6\\n',True),(['0'],'0\\n',True),(['-1'],'',False),(['-42'],'',False),(['not-an-int'],'',False),([],'',False)])\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n6 passed, 6 warnings in 1.47s\r\n",
+      "stderr": ""
+    },
+    "exit_code": 0,
+    "log": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\process\\stdout.log",
+    "stderr": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\process\\stderr.log",
+    "junit": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\pytest.xml",
+    "container": {
+      "name": "harness.probe.c229c692c38246458f8ea63f4cdf5fa9",
+      "capabilities": [],
+      "grants": [
+        {
+          "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\p-8a11e2fb5694",
+          "rights": "RX"
+        },
+        {
+          "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation",
+          "rights": "RX"
+        },
+        {
+          "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\p-8a11e2fb5694\\runtime",
+          "rights": "(OI)(CI)RX"
+        },
+        {
+          "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446",
+          "rights": "RX"
+        },
+        {
+          "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\project",
+          "rights": "(OI)(CI)RX"
+        },
+        {
+          "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\entry.py",
+          "rights": "RX"
+        },
+        {
+          "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\invocation.json",
+          "rights": "RX"
+        },
+        {
+          "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\controller-validation\\c-19ca0637e446\\tmp",
+          "rights": "(OI)(CI)M"
+        }
+      ],
+      "create_hresult": 0,
+      "sid": "S-1-15-2-2192990056-3478347888-2216817446-2036485856-1671565985-4049356694-4130798968",
+      "delete_hresult": 0
+    },
+    "ended": 1790130336.474953,
+    "duration": 5.376558065414429,
+    "failure_kind": null,
+    "stop_kind": null,
+    "artifact_hashes": {
+      "record": "c1678f2746872f659e47a9363e6e3c71bed2258b5b3000661f4d2f2c32486240",
+      "junit": "88363012eb462597b0ed3a5f7949e4e804a45b79e75f9e38750c717e2cc78f09",
+      "log": "3bc637cd037e624835f7a29b7a03736b0618679f71e1ed91c287fb409cfde5fb",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "application_content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+    "controller_test_sha256": "d1d51902dc4654cd5591afbff0d695b1ac6ed92b5ab326308d93eb7dcb25d17b"
+  },
+  "actual_cli_observations": [
+    {
+      "argv": [
+        "python",
+        "cli.py",
+        "3"
+      ],
+      "exit_code": 0,
+      "stdout": "6\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python",
+        "cli.py",
+        "0"
+      ],
+      "exit_code": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python",
+        "cli.py",
+        "-1"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: cli.py [-h] value\ncli.py: error: value must be nonnegative\n"
+    },
+    {
+      "argv": [
+        "python",
+        "cli.py",
+        "-42"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: cli.py [-h] value\ncli.py: error: value must be nonnegative\n"
+    },
+    {
+      "argv": [
+        "python",
+        "cli.py",
+        "not-an-int"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: cli.py [-h] value\ncli.py: error: argument value: invalid int value: 'not-an-int'\n"
+    },
+    {
+      "argv": [
+        "python",
+        "cli.py"
+      ],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "usage: cli.py [-h] value\ncli.py: error: the following arguments are required: value\n"
+    }
+  ],
+  "interruption": {
+    "controller_exit_code": 99,
+    "boundary": "developer_response_saved_before_finished_journal",
+    "crash": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\crash.json",
+      "sha256": "6124bc79a91a53fff6a93899b937bbd42e081d072bb544d812c685475589dd72"
+    },
+    "assessment": {
+      "available": true,
+      "action": "reuse",
+      "stage": "developer",
+      "task_id": "T1",
+      "reason": "Reuse the verified saved response.",
+      "advisory": true
+    },
+    "processes_stopped": true,
+    "response_reuse": {
+      "developer_attempt_id": "424273930481491f95935325161139ea",
+      "additional_ai_calls": 0,
+      "recovery": {
+        "attempt_id": "424273930481491f95935325161139ea",
+        "disposition": "validated",
+        "evidence": {
+          "artifacts": {
+            "attempt.json": "d3f73d07c2d497fd136b8855e86333629f0083195f44fcc96ed6977e6bf70195",
+            "input.json": "310fe0893af7b40430751e22ab1033f895513e0cceda436ff21c87196fde57b6",
+            "response.json": "bbdf0a7a671f5630e0597f221e1e607dcf16d91c4460d2272916f6de2d771d5a",
+            "schema.json": "ae01a8d7420d4d5863dba43c0634136a95cbc00dd55faaf81e51d77a4e273019",
+            "events.jsonl": "4dea3e9fe8d7db1eb04da33ff1f972b7a7301c07f527954df6c3b8cc94ebab76"
+          }
+        },
+        "observations": {
+          "input_hash": "61a3b8de9f8143d3e7ddaf739442d7152bb6a04c3bf1de12db577064604d8f0b",
+          "process": {
+            "pid": 37472,
+            "created": 1790130215.911796
+          },
+          "containment": {
+            "kind": "windows_job_v1",
+            "name": "Local\\development-harness-5910911bf2d84e8f9f2fb94253958d37",
+            "kill_on_close": true
+          },
+          "started": 1790130215.9007764,
+          "ended": 1790130242.0184507,
+          "duration": 26.117674350738525,
+          "session_id": "01a0cc13-5d3e-7412-b465-e7aab59ed48e",
+          "response_hash": "e05d9774a625832c3a759b1d0a06b4a9c64016dcc923b96ae7734500629b1503",
+          "usage": {
+            "input_tokens": 8781,
+            "cached_input_tokens": 0,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 752,
+            "reasoning_output_tokens": 52
+          },
+          "prepared_at": 1790130209.0413888,
+          "process_registered_at": 1790130215.912161,
+          "dispatch_intent_at": 1790130215.9466355,
+          "responded_at": 1790130242.0184507
+        },
+        "at": 1790130242.7648828,
+        "original_hash": "21743628f09282e3ffe19281adf5c7c65438624da3d2742376af4470bd1f19aa"
+      }
+    }
+  },
+  "approval_preserved": true,
+  "completed_resume_idempotent": true,
+  "fixture_preserved": true,
+  "acceptance": {
+    "ready": true,
+    "accepted": true,
+    "technical_ready": true,
+    "blockers": [],
+    "reuse": [
+      {
+        "requirement_id": "R1",
+        "text": {
+          "en": "Preserve positive and zero doubling, missing-argument and non-integer rejection.",
+          "ko": "양수와 0의 두 배 출력 및 인수 누락·정수가 아닌 입력 거부를 유지한다."
+        },
+        "verification": {
+          "en": "Run the registered command-level pytest suite without skips or failures.",
+          "ko": "등록된 명령 수준 pytest 검사를 실패와 생략 없이 실행한다."
+        },
+        "status": "passed",
+        "evidence": {
+          "id": "t7-user-r1-c2cc52b6323c",
+          "requirement_id": "R1",
+          "outcome": "passed",
+          "evidence": "사용자가 기존 동작 유지·음수 오류 설명과 실제 실행 결과를 전달받은 뒤 \"결과 인수한다\"고 명시적으로 인수했다. 최종 등록 검사 20f5154c0ed4480a807a3bc3cec71f0f의 통과한 8개 테스트는 양수 3→6, 0→0 및 argparse의 인수 누락·비정수 거부를 확인한다. 별도 JUnit의 실제 명령 6개도 동일 동작을 확인한다. 이 설명은 사용자에게 제시한 결과와 그에 대한 인수 응답을 기록한다.",
+          "plan_hash": "b8d7765abaaa8eb1bf1756b0cc74cc8a87f3b690691399045dedd6ab058762fb",
+          "policy_hash": "c26908d1b4158d64ee965d5266c2c08cc0158b50f56e7abcbd18092a161cb04b",
+          "content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+          "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb",
+          "source": "user",
+          "validation_ids": [
+            "20f5154c0ed4480a807a3bc3cec71f0f"
+          ],
+          "check_hashes": [
+            "eeb208cbe3b397212cb4a848fbc29634781bb8e99d5f21b9bb9e2aae6eb84303"
+          ],
+          "at": 1790131917.4155118
+        }
+      }
+    ],
+    "manual": [
+      {
+        "id": "M1",
+        "requirement_ids": [
+          "R2"
+        ],
+        "procedure": "Inspect the actual isolated CLI observations for -1 and -42 in report.json and their linked JUnit evidence; confirm the message clearly explains that negative input is forbidden.",
+        "expected": "Both inputs exit nonzero, produce no stdout, and explain the nonnegative input requirement on stderr.",
+        "status": "passed",
+        "evidence": {
+          "id": "t7-user-m1-c2cc52b6323c",
+          "check_id": "M1",
+          "outcome": "passed",
+          "evidence": "사용자에게 -1·-42 입력의 실제 결과(종료 코드 2, 빈 stdout, stderr의 value must be nonnegative)를 표시하고 오류 설명 확인을 요청했으며 사용자가 \"결과 인수한다\"고 응답했다. M1은 저장된 실행 결과의 오류 메시지 검토이며 사용자가 명령을 직접 실행했다는 주장은 하지 않는다.",
+          "plan_hash": "b8d7765abaaa8eb1bf1756b0cc74cc8a87f3b690691399045dedd6ab058762fb",
+          "policy_hash": "c26908d1b4158d64ee965d5266c2c08cc0158b50f56e7abcbd18092a161cb04b",
+          "content_version": "26cbd75c2f3509807fa2223329257122d0544981591378ee31f60ceba63047e1",
+          "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb",
+          "source": "user",
+          "at": 1790131917.8461473
+        }
+      }
+    ],
+    "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb"
+  },
+  "regression": {
+    "status": "passed",
+    "total": 632,
+    "passed": 632,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "duration_seconds": 1206.462,
+    "console_duration_seconds": 1206.69,
+    "exit_code": 0,
+    "command": [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "--junitxml=%LOCALAPPDATA%\\development-tools-harness\\t7-regression\\523159eeaa3d\\pytest.xml"
+    ],
+    "report": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-regression\\523159eeaa3d\\pytest.xml",
+      "sha256": "ead9d617329f773b893fb21944aca5dc6721b5e7101ce4c35addb7a185f567f8"
+    },
+    "log": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-regression\\523159eeaa3d\\pytest.log",
+      "sha256": "29538caf069b58b411fbb77a09121977bbad9944a8597dab6ead89a53565173b"
+    },
+    "source_manifest": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-regression\\523159eeaa3d\\source-at-start.json",
+      "sha256": "1e4c5c418f588ac97cd6a15cbe4756324dfaa982949a545fe59ff70afc42f513"
+    },
+    "source_files_verified_unchanged": 77,
+    "source_mismatches": [],
+    "pip_check": "passed",
+    "note": "One complete suite on unchanged source/test files. The eight final example tests and six independent CLI checks are separate evidence, not additions to this suite count."
+  },
+  "manual_intervention": [
+    "Controller authored/reviewed the bounded example plan, prepared the disposable environment and deliberately terminated the controller at the durable-response boundary.",
+    "No manual edits to generated application code or production harness policy changes. Result acceptance was recorded only after the user reviewed the displayed behavior and explicitly accepted."
+  ],
+  "remaining_work": [
+    "P3-T8 frozen runner A and isolation proof",
+    "Phase 3 user acceptance"
+  ],
+  "limits": [
+    "The user explicitly accepted after reviewing preserved behavior and negative-input output. Original pre-acceptance live artifacts remain historical snapshots.",
+    "Initial trusted unmodified fixture baseline uses the existing host validator. AI-modified checks and independent output probes use AppContainer.",
+    "Controller-reviewed plan used zero new Planner AI calls; this is not a live Planner demonstration.",
+    "Not self-development, fixed-runner promotion, or Phase 3 acceptance."
+  ],
+  "acceptance_before_user_confirmation": {
+    "ready": false,
+    "accepted": false,
+    "technical_ready": true,
+    "blockers": [
+      "Reuse requirement R1 is missing.",
+      "Manual check M1 is missing."
+    ],
+    "reuse": [
+      {
+        "requirement_id": "R1",
+        "text": {
+          "en": "Preserve positive and zero doubling, missing-argument and non-integer rejection.",
+          "ko": "양수와 0의 두 배 출력 및 인수 누락·정수가 아닌 입력 거부를 유지한다."
+        },
+        "verification": {
+          "en": "Run the registered command-level pytest suite without skips or failures.",
+          "ko": "등록된 명령 수준 pytest 검사를 실패와 생략 없이 실행한다."
+        },
+        "status": "missing",
+        "evidence": null
+      }
+    ],
+    "manual": [
+      {
+        "id": "M1",
+        "requirement_ids": [
+          "R2"
+        ],
+        "procedure": "Inspect the actual isolated CLI observations for -1 and -42 in report.json and their linked JUnit evidence; confirm the message clearly explains that negative input is forbidden.",
+        "expected": "Both inputs exit nonzero, produce no stdout, and explain the nonnegative input requirement on stderr.",
+        "status": "missing",
+        "evidence": null
+      }
+    ],
+    "completion_id": "fc36fe121fb339a30cebd15c6a92e5ad72b4a3653ba83b49bbdc6b13625a21bb"
+  },
+  "review_requirements_shown_to_user": {
+    "R1": "Confirm the final registered eight-test suite preserves positive/zero doubling and missing/non-integer rejection; the independent six CLI observations also match.",
+    "M1": "Inspect the actual -1/-42 outputs: exit 2, empty stdout, stderr says value must be nonnegative.",
+    "result_acceptance": "After reviewing these results, explicitly accept the external CLI example. Starting the test did not accept its future result."
+  },
+  "t7_complete": true,
+  "live_artifact_scope": "live_report, workflow_result and final_run preserve the original pre-acceptance execution snapshots; accepted_workflow_result and the separate acceptance record contain the current accepted state.",
+  "accepted_workflow_result": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\t7-live\\c2cc52b6323c\\acceptance-a6051a05fc0e\\accepted-report.json",
+    "sha256": "f7a74e2e37c79d49dc7d847598059dcce5abbfe5a6654ca19a5db905ed66b2ef"
+  },
+  "path_notation": {
+    "%LOCALAPPDATA%": "Local application-data directory of the machine that recorded the evidence.",
+    "%REPOSITORY_ROOT%": "Root of the development-tools-harness checkout.",
+    "note": "Only publication path prefixes are normalized; original runtime artifacts and their SHA-256 values are unchanged."
+  }
+}

@@ -1,0 +1,539 @@
+{
+  "modules": [
+    {
+      "module": "__init__",
+      "path": "src/development_harness/__init__.py",
+      "source_sha256": "d6a5344d7422f425da18fef61cebfa774e98f342f437d7d097cf69781192e62f",
+      "classification": "reuse",
+      "follow_up_phase": "all",
+      "inspected_symbol": "__version__",
+      "line": 1,
+      "reason": {
+        "en": "Package version; retain the entry contract.",
+        "ko": "패키지 버전과 진입 계약을 유지한다."
+      }
+    },
+    {
+      "module": "__main__",
+      "path": "src/development_harness/__main__.py",
+      "source_sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "classification": "reuse",
+      "follow_up_phase": "all",
+      "inspected_symbol": "main",
+      "line": 1,
+      "reason": {
+        "en": "Delegates to CLI; no project-language logic.",
+        "ko": "CLI로 위임하며 대상 언어 지식이 없다."
+      }
+    },
+    {
+      "module": "appcontainer_probe",
+      "path": "src/development_harness/appcontainer_probe.py",
+      "source_sha256": "b5e0a9889ad73b1f7c08883f321aea8ca15829fdada1bea857fd4a7cea26b9ab",
+      "classification": "diagnostic",
+      "follow_up_phase": "1",
+      "inspected_symbol": "diagnose_appcontainer",
+      "line": 176,
+      "reason": {
+        "en": "Active Python boundary verification and runtime copy helper, not merely an optional script.",
+        "ko": "실제 Python 경계 검증·런타임 복사에 사용되므로 선택적 스크립트로만 취급하지 않는다."
+      }
+    },
+    {
+      "module": "appcontainer_probe_payload",
+      "path": "src/development_harness/appcontainer_probe_payload.py",
+      "source_sha256": "a2aaffdecf6958078691263577301dbd8e78e11e31cc9ef28ebeb4f1072155c8",
+      "classification": "diagnostic",
+      "follow_up_phase": "1",
+      "inspected_symbol": "observe",
+      "line": 41,
+      "reason": {
+        "en": "Retain synthetic token/file/network observations for Python containment proofs.",
+        "ko": "Python 격리 입증을 위한 토큰·파일·네트워크 모의 관찰을 유지한다."
+      }
+    },
+    {
+      "module": "appcontainer_temp",
+      "path": "src/development_harness/appcontainer_temp.py",
+      "source_sha256": "f76e2b0cd89fc600e2517fc8a9e4c8cc4984d0012595ae140d35718205a123e4",
+      "classification": "retain_python",
+      "follow_up_phase": "1",
+      "inspected_symbol": "install",
+      "line": 133,
+      "reason": {
+        "en": "Private temporary-path compatibility is specific to copied Python; retain that backend behavior.",
+        "ko": "복사된 Python의 임시 경로 호환 계층이므로 해당 백엔드 동작을 보존한다."
+      }
+    },
+    {
+      "module": "cli",
+      "path": "src/development_harness/cli.py",
+      "source_sha256": "46743e01c102c1ff087a0bba90dac807bed9b21bdaed02b61f615b721bd8e2ae",
+      "classification": "redesign",
+      "follow_up_phase": "2,3",
+      "inspected_symbol": "parser",
+      "line": 13,
+      "reason": {
+        "en": "Separate legacy, planning and workflow commands; replace the user flow with the specified seven commands.",
+        "ko": "기존·계획·실행 명령으로 나뉜 사용자 흐름을 기획서의 일곱 명령으로 바꾼다."
+      }
+    },
+    {
+      "module": "codex_adapter",
+      "path": "src/development_harness/codex_adapter.py",
+      "source_sha256": "68dc3685bf48be782b5cf0674960172ca162c9eefa16488b55953270567b5353",
+      "classification": "extend",
+      "follow_up_phase": "3",
+      "inspected_symbol": "CodexPlanner",
+      "line": 96,
+      "reason": {
+        "en": "Keep verified Codex transport; extract the tool-independent boundary and assess Claude Code fit (I1).",
+        "ko": "검증된 Codex 연결은 유지하고 도구 공통 경계를 분리하며 Claude Code 적합성을 확인한다(I1)."
+      }
+    },
+    {
+      "module": "codex_probe",
+      "path": "src/development_harness/codex_probe.py",
+      "source_sha256": "956a2e7b0140a943675c7bf9c2eda332c43105070d1ddb1c2be229ae656ac29b",
+      "classification": "diagnostic",
+      "follow_up_phase": "3",
+      "inspected_symbol": "verify_capabilities",
+      "line": 26,
+      "reason": {
+        "en": "An active adapter admission gate; preserve forced-tool rejection and extend for the new permissions (I1).",
+        "ko": "실제 연결 허용 조건이므로 강제 도구 거부 검사를 보존하고 새 권한에 맞춰 확장한다(I1)."
+      }
+    },
+    {
+      "module": "files",
+      "path": "src/development_harness/files.py",
+      "source_sha256": "e52b6a3020347093fe4de93a7a04aefd9f2bccbf512f7b26cb26ba489c58725b",
+      "classification": "extend",
+      "follow_up_phase": "3",
+      "inspected_symbol": "apply_write",
+      "line": 90,
+      "reason": {
+        "en": "Retain hashes and checked writes; add equivalent guards for deletion and renaming.",
+        "ko": "해시와 쓰기 검사를 유지하고 삭제·이름 변경에도 같은 보호를 추가한다."
+      }
+    },
+    {
+      "module": "fixed_runner",
+      "path": "src/development_harness/fixed_runner.py",
+      "source_sha256": "baad90f3d5901a716b35a6d383576052b3c642398760a091f676b4a59cc0882d",
+      "classification": "preserve",
+      "follow_up_phase": "1",
+      "inspected_symbol": "build_runner",
+      "line": 39,
+      "reason": {
+        "en": "Keep frozen installation/history and regressions outside product dogfooding; reassess manifest reuse in Phase 1.",
+        "ko": "고정 실행본·이력·회귀 검사를 보존하되 자기 개발은 범위 밖이다. Phase 1에서 매니페스트 재사용을 검토한다."
+      }
+    },
+    {
+      "module": "fixed_runner_verify",
+      "path": "src/development_harness/fixed_runner_verify.py",
+      "source_sha256": "f954adb588f8734dc7dc4a0c271f60e26aae935a6d8059e47d36364a3516d775",
+      "classification": "preserve",
+      "follow_up_phase": "all",
+      "inspected_symbol": "main",
+      "line": 212,
+      "reason": {
+        "en": "Retain historical installation/permission proofs, including the existing archive-path adjustment.",
+        "ko": "기존 보관 경로 수정을 포함해 설치·권한 검증 도구를 보존한다."
+      }
+    },
+    {
+      "module": "frozen_entry",
+      "path": "src/development_harness/frozen_entry.py",
+      "source_sha256": "a4d1a91cf7ddadd01b0f3c17e6eff189cefecfdc023940985f6667281d2b376b",
+      "classification": "preserve",
+      "follow_up_phase": "1",
+      "inspected_symbol": "inspect_runner",
+      "line": 62,
+      "reason": {
+        "en": "Keep frozen runner verification; its manifest hashing can inform new installation tamper checks.",
+        "ko": "고정 실행본 검증을 보존한다. 매니페스트 해시는 새 설치본 변조 검사에 재사용 검토한다."
+      }
+    },
+    {
+      "module": "gate",
+      "path": "src/development_harness/gate.py",
+      "source_sha256": "a5f848ec3bbfb242e98ed5b02a755981dce196736051729c6d5fff6ad1ff0089",
+      "classification": "reuse",
+      "follow_up_phase": "1",
+      "inspected_symbol": "main",
+      "line": 9,
+      "reason": {
+        "en": "Already launches arbitrary argv only after containment and journaling; reuse with new monitoring.",
+        "ko": "격리·기록 후에만 임의 argv를 실행하는 게이트를 새 감시와 함께 재사용한다."
+      }
+    },
+    {
+      "module": "isolated_validation",
+      "path": "src/development_harness/isolated_validation.py",
+      "source_sha256": "3b3275b0828f8e1768b8506d855af6d52926eb392c77816659c74dfeeed79c86",
+      "classification": "redesign",
+      "follow_up_phase": "1",
+      "inspected_symbol": "IsolatedValidator",
+      "line": 126,
+      "reason": {
+        "en": "Keep the copied Python backend; generalize command/evidence selection and add normal-permission tamper detection.",
+        "ko": "복사된 Python 백엔드를 유지하고 명령·근거 선택을 일반화하며 일반 권한 변조 탐지를 추가한다."
+      }
+    },
+    {
+      "module": "model",
+      "path": "src/development_harness/model.py",
+      "source_sha256": "dc70da50c091433a30c80f554c13d76f653ede16aa2411402b26eade24aa9221",
+      "classification": "redesign",
+      "follow_up_phase": "1,3",
+      "inspected_symbol": "validate_checks",
+      "line": 82,
+      "reason": {
+        "en": "Shared validation requires a pytest check; generalize in Phase 1. Retain shared errors/hashes/paths; decide only legacy fake-plan handling in Phase 3.",
+        "ko": "공용 검사 검증이 pytest를 필수로 요구해 Phase 1에서 일반화해야 한다. 오류·해시·경로는 유지하고 가짜 계획 처리만 Phase 3에서 결정한다."
+      }
+    },
+    {
+      "module": "phase_docs",
+      "path": "src/development_harness/phase_docs.py",
+      "source_sha256": "98054970ea8bfe647bf0941fb625cc5c1a9f1e186cd2d717797e9d01f7884e8f",
+      "classification": "extend",
+      "follow_up_phase": "2,3",
+      "inspected_symbol": "render_documents",
+      "line": 146,
+      "reason": {
+        "en": "Keep pinned bilingual templates; generate into Phase/ and update only allowed completion fields.",
+        "ko": "고정된 영문·국문 템플릿을 유지하고 Phase/ 생성 및 허용된 완료 필드 갱신을 추가한다."
+      }
+    },
+    {
+      "module": "plan_schema",
+      "path": "src/development_harness/plan_schema.py",
+      "source_sha256": "7e1d5a2d0c8abdac6b2af16ae4b7ca5229e282e39db019e224efd22d5706e765",
+      "classification": "extend",
+      "follow_up_phase": "2",
+      "inspected_symbol": "validate_plan",
+      "line": 65,
+      "reason": {
+        "en": "Current schema has Phases and current Tasks but lacks structured setup/check/version decisions.",
+        "ko": "Phase·현재 Task는 있으나 구조화한 세팅·검사·버전 결정 항목이 없다."
+      }
+    },
+    {
+      "module": "planning",
+      "path": "src/development_harness/planning.py",
+      "source_sha256": "edc6c6d152ab7555f53434c7069ff02daf4bfb5ded59c9ac0dd7ec5f5f4ad74d",
+      "classification": "extend",
+      "follow_up_phase": "2,3",
+      "inspected_symbol": "Planning",
+      "line": 23,
+      "reason": {
+        "en": "Add Phase 0, technology/version choices, setup contracts and later the common Planner adapter.",
+        "ko": "Phase 0·기술/버전 선택·세팅 계약과 공통 Planner 연결을 추가한다."
+      }
+    },
+    {
+      "module": "processes",
+      "path": "src/development_harness/processes.py",
+      "source_sha256": "320feb4250b10ff827d44349ea02f7034375dc27bd44ecce2003ac178c793e77",
+      "classification": "reuse",
+      "follow_up_phase": "1",
+      "inspected_symbol": "ProjectLock",
+      "line": 101,
+      "reason": {
+        "en": "Reuse Windows project locks, PID identity and Job containment for arbitrary commands.",
+        "ko": "임의 명령에도 적용할 Windows 잠금·PID 식별·Job 관리를 재사용한다."
+      }
+    },
+    {
+      "module": "project",
+      "path": "src/development_harness/project.py",
+      "source_sha256": "23e5fac98762b34e893089c08731bf9b7e0c52d662a15ade51e99ece101add46",
+      "classification": "extend",
+      "follow_up_phase": "1,2,3",
+      "inspected_symbol": "validate_config",
+      "line": 70,
+      "reason": {
+        "en": "Explicit context and Phase/Generated policy depend on the pytest contract; adapt registration then safe whole-project reads.",
+        "ko": "명시적 입력·Phase/Generated 정책과 pytest 계약 의존을 새 등록 규약·안전한 전체 읽기로 확장한다."
+      }
+    },
+    {
+      "module": "results",
+      "path": "src/development_harness/results.py",
+      "source_sha256": "6f1ad75e923c9d002d89ca2f49e0cf72cb30cdb82ca1a937f860285de38d03be",
+      "classification": "extend",
+      "follow_up_phase": "3",
+      "inspected_symbol": "report",
+      "line": 116,
+      "reason": {
+        "en": "Keep evidence-linked JSON; add bilingual Markdown including failure, quality, configuration and version changes.",
+        "ko": "근거 연결 JSON을 유지하고 실패·품질·설정·버전 변경을 포함한 영문·국문 Markdown을 추가한다."
+      }
+    },
+    {
+      "module": "reviewed_test_entry",
+      "path": "src/development_harness/reviewed_test_entry.py",
+      "source_sha256": "382395cda0709836c4d1330b926ebb6a1a8152b67507b711b1b7c27372579037",
+      "classification": "preserve",
+      "follow_up_phase": "all",
+      "inspected_symbol": "main",
+      "line": 10,
+      "reason": {
+        "en": "Preserve the reviewed host-regression bootstrap and evidence observer.",
+        "ko": "검토된 호스트 회귀 검사 부트스트랩·근거 관찰자를 보존한다."
+      }
+    },
+    {
+      "module": "runner",
+      "path": "src/development_harness/runner.py",
+      "source_sha256": "28233156db1d4e0b2fd0d59f36f17d7e367bd19bf1dfd1f5822f8d35aef7148e",
+      "classification": "pending",
+      "follow_up_phase": "3",
+      "inspected_symbol": "Harness",
+      "line": 16,
+      "reason": {
+        "en": "Legacy fake-Adapter command engine only; retain regressions and decide retirement during CLI simplification.",
+        "ko": "기존 가짜 Adapter 명령 실행기다. 회귀 검사를 유지하고 CLI 단순화 때 존치 여부를 결정한다."
+      }
+    },
+    {
+      "module": "self_test_verify",
+      "path": "src/development_harness/self_test_verify.py",
+      "source_sha256": "15b737adc47058ab578b27ac846f6e46004a205fdf6a0980a5b09ad0fc0842f1",
+      "classification": "preserve",
+      "follow_up_phase": "all",
+      "inspected_symbol": "reviewed_host",
+      "line": 51,
+      "reason": {
+        "en": "Keep isolated/host evidence tooling and tests; no harness-driven self-development is planned.",
+        "ko": "격리·호스트 근거 도구와 테스트는 보존하고 하네스 자기 개발은 진행하지 않는다."
+      }
+    },
+    {
+      "module": "store",
+      "path": "src/development_harness/store.py",
+      "source_sha256": "d4c9ee557aa9380f179b6864ff735a6dd17df94b339c7663620dff9fa34d6834",
+      "classification": "reuse",
+      "follow_up_phase": "1",
+      "inspected_symbol": "Store",
+      "line": 29,
+      "reason": {
+        "en": "Reuse transactional SQLite journal; integrate the new tamper monitor around it.",
+        "ko": "SQLite 트랜잭션 기록을 재사용하고 외부에 새 변조 감시를 연결한다."
+      }
+    },
+    {
+      "module": "test_collection",
+      "path": "src/development_harness/test_collection.py",
+      "source_sha256": "7041d1091f5b0600fe8586495f09f90b5f66f4cb3c744c5267a2a1bc9342613e",
+      "classification": "extend",
+      "follow_up_phase": "1",
+      "inspected_symbol": "CollectionEvidence",
+      "line": 7,
+      "reason": {
+        "en": "Keep pytest hooks as Python evidence; introduce language-independent inventory/skip comparisons above this layer.",
+        "ko": "pytest 훅은 Python 근거로 유지하고 상위에 언어 공통 목록·skip 비교를 추가한다."
+      }
+    },
+    {
+      "module": "validation",
+      "path": "src/development_harness/validation.py",
+      "source_sha256": "7ca9c7c72cb3844a2855026671407b6bdbece7d67f2ea36b2f38ff822eb3ddfa",
+      "classification": "redesign",
+      "follow_up_phase": "1",
+      "inspected_symbol": "pytest_result",
+      "line": 14,
+      "reason": {
+        "en": "Launch is argv-based, but JUnit path, pytest exit rules and skip rejection are hard-coded.",
+        "ko": "실행은 argv 기반이지만 JUnit 경로·pytest 종료 판정·skip 거부가 고정돼 있다."
+      }
+    },
+    {
+      "module": "validation_entry",
+      "path": "src/development_harness/validation_entry.py",
+      "source_sha256": "81d61e06d7fd481badb9f14b3ce005585d5865b95fb89fd31029b83c2545b252",
+      "classification": "retain_python",
+      "follow_up_phase": "1",
+      "inspected_symbol": "main",
+      "line": 9,
+      "reason": {
+        "en": "Bootstrap imports pinned pytest and collection observer; keep it confined to the Python backend.",
+        "ko": "고정 pytest·수집 관찰자를 불러오는 부트스트랩은 Python 백엔드에 한정해 유지한다."
+      }
+    },
+    {
+      "module": "validation_profiles",
+      "path": "src/development_harness/validation_profiles.py",
+      "source_sha256": "0fdcd8ef5b82c3153cec1566e8505440171ce5085468ce4121cc5c8c35eeb1f7",
+      "classification": "preserve",
+      "follow_up_phase": "1",
+      "inspected_symbol": "prepare_profile",
+      "line": 55,
+      "reason": {
+        "en": "Self-test profile is outside product scope, but active modules import its filtering/helpers; do not remove it wholesale.",
+        "ko": "자체 검사 프로필은 제품 범위 밖이나 실행 모듈이 필터·도우미를 사용하므로 통째로 제거하지 않는다."
+      }
+    },
+    {
+      "module": "windows_appcontainer",
+      "path": "src/development_harness/windows_appcontainer.py",
+      "source_sha256": "02118977bdc690ff3beabc4a1942c36fc1ad31e5e80491b84df5db661d384398",
+      "classification": "retain_python",
+      "follow_up_phase": "1",
+      "inspected_symbol": "AppContainer",
+      "line": 99,
+      "reason": {
+        "en": "Zero-capability Windows primitive is reusable; retain it for Python rather than implement other runtimes here.",
+        "ko": "권한 없는 Windows 실행 기반을 Python 경로에 유지한다. 다른 런타임 구현을 이곳에 추가하지 않는다."
+      }
+    },
+    {
+      "module": "worker_contract",
+      "path": "src/development_harness/worker_contract.py",
+      "source_sha256": "b1329a5483a2b45845b624fb984ff3a0fb5cc3a088a7bc8dcdd456b0ff3ef665",
+      "classification": "redesign",
+      "follow_up_phase": "3",
+      "inspected_symbol": "TaskScope",
+      "line": 74,
+      "reason": {
+        "en": "Explicit file lists and content replacements only; support safe search, folder scope, delete/rename and bounded check requests.",
+        "ko": "명시적 파일 목록·내용 교체만 허용한다. 안전한 탐색·폴더 범위·삭제/이름 변경·제한된 검사 요청을 설계한다."
+      }
+    },
+    {
+      "module": "worker_probe",
+      "path": "src/development_harness/worker_probe.py",
+      "source_sha256": "da4888bb1673e16a66767d9355be18df895658be7bc665f39491be49dc42ea9c",
+      "classification": "diagnostic",
+      "follow_up_phase": "3",
+      "inspected_symbol": "diagnose_workers",
+      "line": 118,
+      "reason": {
+        "en": "Retain reviewed Windows command-boundary diagnostics; reassess for the new read/search model.",
+        "ko": "Windows 명령 경계 진단을 유지하고 새 읽기·검색 권한 모델에 맞춰 재검토한다."
+      }
+    },
+    {
+      "module": "worker_probe_payload",
+      "path": "src/development_harness/worker_probe_payload.py",
+      "source_sha256": "4aecd81671251c8f9b8a49b299a7c87ae7c138ef4b674574260e9f63e9fe624c",
+      "classification": "diagnostic",
+      "follow_up_phase": "3",
+      "inspected_symbol": "observe",
+      "line": 11,
+      "reason": {
+        "en": "Retain synthetic parent/child permission checks used by the worker probe.",
+        "ko": "작업자 진단에 쓰이는 부모·자식 권한 모의 검사를 유지한다."
+      }
+    },
+    {
+      "module": "workers",
+      "path": "src/development_harness/workers.py",
+      "source_sha256": "62a45e6d987202dce954199cd25e765be1fd74de5359d00181cb76e06653f451",
+      "classification": "extend",
+      "follow_up_phase": "3",
+      "inspected_symbol": "CodexWorker",
+      "line": 44,
+      "reason": {
+        "en": "Codex-only text workers prohibit tools and deletion; extend the role protocol and Reviewer checklist via the common adapter.",
+        "ko": "Codex 전용 텍스트 작업자의 도구·삭제 금지를 새 역할 규약·리뷰 기준·공통 연결로 확장한다."
+      }
+    },
+    {
+      "module": "workflow",
+      "path": "src/development_harness/workflow.py",
+      "source_sha256": "5c00aac6d83be0f351e7b7f3668081d0cdd23e9b4c10360db88706ec26aa2de7",
+      "classification": "extend",
+      "follow_up_phase": "1,2,3",
+      "inspected_symbol": "Workflow",
+      "line": 26,
+      "reason": {
+        "en": "Preparation pins pytest/AppContainer/Codex; integrate general contracts and later combine plan approval with start.",
+        "ko": "준비 단계가 pytest·AppContainer·Codex에 고정돼 있다. 공통 계약을 연결하고 계획 승인·시작을 통합한다."
+      }
+    },
+    {
+      "module": "workflow_acceptance",
+      "path": "src/development_harness/workflow_acceptance.py",
+      "source_sha256": "896990133f724fb2d54449e09f932a546fa623ccc7c5479b8e099774574c3103",
+      "classification": "extend",
+      "follow_up_phase": "1,3",
+      "inspected_symbol": "final_validation",
+      "line": 84,
+      "reason": {
+        "en": "Requires AppContainer tokens and positive test counts for every check; generalize for mixed isolation and quality commands, then add document completion.",
+        "ko": "모든 검사에 AppContainer 토큰·양수 테스트 수를 요구한다. 혼합 격리·품질 명령에 맞추고 문서 완료를 연결한다."
+      }
+    },
+    {
+      "module": "workflow_attempt_recovery",
+      "path": "src/development_harness/workflow_attempt_recovery.py",
+      "source_sha256": "c721c6c56a4d2df66f3e90487924c6a8b2a81fb625bf870977c82ba414790d53",
+      "classification": "extend",
+      "follow_up_phase": "1,3",
+      "inspected_symbol": "reconcile_attempt",
+      "line": 129,
+      "reason": {
+        "en": "Directly parses Codex events and isolated-validation evidence; move those dependencies behind common contracts (I1).",
+        "ko": "Codex 이벤트·격리 검사 근거에 직접 의존하므로 공통 계약으로 분리한다(I1)."
+      }
+    },
+    {
+      "module": "workflow_execution",
+      "path": "src/development_harness/workflow_execution.py",
+      "source_sha256": "03ecbd328a08f88926fc5aeff31c2c88f4aabea94a2ffb9b4c01a80355f6e272",
+      "classification": "extend",
+      "follow_up_phase": "1,3",
+      "inspected_symbol": "Execution",
+      "line": 18,
+      "reason": {
+        "en": "Retain sequential correction/final-check flow; adapt evidence and add quality devices, check requests and new file operations.",
+        "ko": "순차 수정·최종 검사 흐름을 유지하고 근거 형식·품질 장치·검사 요청·새 파일 작업을 연결한다."
+      }
+    },
+    {
+      "module": "workflow_feedback",
+      "path": "src/development_harness/workflow_feedback.py",
+      "source_sha256": "ed42b6f943490495d515d36c336e15280e97917e91fa05ccf60785d1ee30d6ed",
+      "classification": "reuse",
+      "follow_up_phase": "3",
+      "inspected_symbol": "submit_feedback",
+      "line": 67,
+      "reason": {
+        "en": "Keep same-scope defect versus requirements-change routing; connect the new planning entry point.",
+        "ko": "동일 범위 결함과 요구사항 변경의 분기를 유지하고 새 계획 진입점에 연결한다."
+      }
+    },
+    {
+      "module": "workflow_records",
+      "path": "src/development_harness/workflow_records.py",
+      "source_sha256": "6bef36cf5f83cae9a47c31cb103fe2df64a5c75d99d488be0391d0c26980e939",
+      "classification": "extend",
+      "follow_up_phase": "3",
+      "inspected_symbol": "WorkflowRecords",
+      "line": 95,
+      "reason": {
+        "en": "Keep replay-safe journaling; findings currently constrain explicit paths and mandatory severity, so adapt to new scope/checklist.",
+        "ko": "재실행에 안전한 기록은 유지하되 명시적 경로·필수 중요도 조건을 새 범위·리뷰 기준에 맞춘다."
+      }
+    },
+    {
+      "module": "workflow_recovery",
+      "path": "src/development_harness/workflow_recovery.py",
+      "source_sha256": "ab04fb04bfd226a07a7d83775900690179ba45f10815d766d1d0579befe8c205",
+      "classification": "extend",
+      "follow_up_phase": "1,3",
+      "inspected_symbol": "_patch",
+      "line": 50,
+      "reason": {
+        "en": "Recovery currently reconstructs content writes; generalize validation evidence and recover deletion/rename operations.",
+        "ko": "현재 내용 쓰기 중심 복구를 일반 검사 근거와 삭제·이름 변경까지 확장한다."
+      }
+    }
+  ],
+  "count": 41,
+  "status": "code reviewed; user review pending"
+}

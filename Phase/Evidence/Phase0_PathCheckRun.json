@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "C:\\Users\\sy.ahn\\AppData\\Local\\development-tools-harness\\venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/integration/test_workflow_journal_bridge.py",
+    "--junitxml=C:\\Users\\sy.ahn\\AppData\\Local\\h0-1023\\focused.xml",
+    "--basetemp=C:\\Users\\sy.ahn\\AppData\\Local\\h0-1023\\focused-tmp",
+    "-o",
+    "cache_dir=C:\\Users\\sy.ahn\\AppData\\Local\\h0-1023\\focused-cache"
+  ],
+  "exit_code": 0,
+  "duration_seconds": 15.327999999979511,
+  "change": "Only temporary/evidence directory shortened; source, tests, package versions and selected Codex unchanged"
+}

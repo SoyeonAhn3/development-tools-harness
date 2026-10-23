@@ -1,0 +1,123 @@
+{
+  "recorded_at": "2026-10-23T06:29:34.399424+00:00",
+  "python_version": "3.12.10",
+  "python_executable": "C:\\Users\\sy.ahn\\AppData\\Local\\development-tools-harness\\venv\\Scripts\\python.exe",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "sqlite_version": "3.49.1",
+  "is_administrator": false,
+  "checkout": "C:\\Users\\sy.ahn\\OneDrive - Bosch Group\\AI Development\\development-tools-harness",
+  "imported_harness": "C:\\Users\\sy.ahn\\OneDrive - Bosch Group\\AI Development\\development-tools-harness\\src\\development_harness\\__init__.py",
+  "lock_file_sha256": "e4e44d7929da2d7569ad6ed861546a118f3694359f77427b4de7cf62ad24fd2a",
+  "locked_packages": {
+    "colorama": {
+      "expected": "0.4.6",
+      "actual": "0.4.6",
+      "matches": true
+    },
+    "iniconfig": {
+      "expected": "2.3.0",
+      "actual": "2.3.0",
+      "matches": true
+    },
+    "packaging": {
+      "expected": "26.3",
+      "actual": "26.3",
+      "matches": true
+    },
+    "pluggy": {
+      "expected": "1.6.0",
+      "actual": "1.6.0",
+      "matches": true
+    },
+    "psutil": {
+      "expected": "7.2.2",
+      "actual": "7.2.2",
+      "matches": true
+    },
+    "pygments": {
+      "expected": "2.21.0",
+      "actual": "2.21.0",
+      "matches": true
+    },
+    "pytest": {
+      "expected": "9.1.1",
+      "actual": "9.1.1",
+      "matches": true
+    },
+    "setuptools": {
+      "expected": "84.0.0",
+      "actual": "84.0.0",
+      "matches": true
+    }
+  },
+  "additional_distributions": {
+    "development-tools-harness": "0.1.0",
+    "pip": "25.0.1"
+  },
+  "pip_check": {
+    "argv": [
+      "C:\\Users\\sy.ahn\\AppData\\Local\\development-tools-harness\\venv\\Scripts\\python.exe",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "exit_code": 0,
+    "stdout": "No broken requirements found.\n",
+    "stderr": ""
+  },
+  "pip_freeze_all": {
+    "argv": [
+      "C:\\Users\\sy.ahn\\AppData\\Local\\development-tools-harness\\venv\\Scripts\\python.exe",
+      "-m",
+      "pip",
+      "freeze",
+      "--all"
+    ],
+    "exit_code": 0,
+    "stdout": "colorama==0.4.6\n-e git+https://github.com/SoyeonAhn3/development-tools-harness.git@55af7791a2e5d81fc216154fa285a12a01a221cb#egg=development_tools_harness\niniconfig==2.3.0\npackaging==26.3\npip==25.0.1\npluggy==1.6.0\npsutil==7.2.2\nPygments==2.21.0\npytest==9.1.1\nsetuptools==84.0.0\n",
+    "stderr": ""
+  },
+  "harness_cli": {
+    "argv": [
+      "C:\\Users\\sy.ahn\\AppData\\Local\\development-tools-harness\\venv\\Scripts\\python.exe",
+      "-m",
+      "development_harness",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "0.1.0\n",
+    "stderr": ""
+  },
+  "default_codex": {
+    "argv": [
+      "C:\\Users\\sy.ahn\\AppData\\Roaming\\npm\\node_modules\\@openai\\codex\\node_modules\\@openai\\codex-win32-x64\\vendor\\x86_64-pc-windows-msvc\\bin\\codex.exe",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "codex-cli 0.163.0\n",
+    "stderr": ""
+  },
+  "selected_codex": {
+    "argv": [
+      "C:\\Users\\sy.ahn\\AppData\\Local\\development-tools-harness\\runners\\A-20260930-08\\tools\\codex.exe",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "codex-cli 0.155.1\n",
+    "stderr": ""
+  },
+  "reviewed_codex_versions": [
+    "codex-cli 0.154.0",
+    "codex-cli 0.155.1"
+  ],
+  "preserved_runner": {
+    "path": "C:\\Users\\sy.ahn\\AppData\\Local\\development-tools-harness\\runners\\A-20260930-08",
+    "integrity_verified": true,
+    "artifact_id": "48c0b11e27b79757f82f015946e94668da61f91b92e3d81b72aee7ee1b9487dc",
+    "manifest_sha256": "09697e5da96adca77791dcacbb617d4c17893d81021082b4d8c0c509799df0b5",
+    "codex_sha256": "eba0f32c976667cb9298efafd98513e823eeda7b576a03ec658bb8be8d336316"
+  },
+  "selection_reason": "Default Codex 0.163.0 is outside the existing reviewed contract. Use preserved reviewed 0.155.1 only for this regression process; no global configuration or installed version changed.",
+  "git_head": "55af7791a2e5d81fc216154fa285a12a01a221cb",
+  "git_status_before": " D Draft/ai-development-harness-lean-mvp-plan.md\n D Phase/Evidence/Phase3_AppContainer.json\n D Phase/Evidence/Phase3_Example.json\n D Phase/Evidence/Phase3_Example_Acceptance.json\n D Phase/Evidence/Phase3_Example_Review.md\n D Phase/Evidence/Phase3_Execution.json\n D Phase/Evidence/Phase3_FixedRunner.json\n D Phase/Evidence/Phase3_Preparation.json\n D Phase/Evidence/Phase3_Records.json\n D Phase/Evidence/Phase3_Recovery.json\n D Phase/Evidence/Phase3_Results.json\n D Phase/Evidence/Phase3_SelfTests.json\n D Phase/Evidence/Phase3_TemporaryDirectories.json\n D Phase/Evidence/Phase3_Workers.json\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/Evidence.json\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/Review.md\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v1/Phase2_Planning.md\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v1/Plan.md\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v1/Plan_ko.md\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v1/plan.json\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Phase2_Planning.md\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md\n D Phase/Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/plan.json\n D Phase/Generated/78fb56ab088648e49111258ff74112ad/Evidence.json\n D Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/Phase1_InputValidation.md\n D Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/Plan.md\n D Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/Plan_ko.md\n D Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/plan.json\n D Phase/Generated/78fb56ab088648e49111258ff74112ad/v1/writing-profile.json\n M Phase/Overview.md\n D Phase/Phase1_Foundation.md\n D Phase/Phase2_Planning.md\n D Phase/Phase3_Workflow.md\n D Phase/Phase4_Dogfooding.md\n M README.md\n M README_ko.md\n M src/development_harness/fixed_runner_verify.py\n?? Draft/ai-development-harness-plan-v1.md\n?? Draft/archive/ai-development-harness-lean-mvp-plan-v0.4.md\n?? Phase/Phase0_Baseline.md\n?? Phase/Phase1_ValidationContract.md\n?? Phase/Phase2_PlanningAndSetup.md\n?? Phase/Phase3_WorkflowAndQuality.md\n?? Phase/Phase4_RealWorldValidation.md\n?? Phase/archive/\n"
+}

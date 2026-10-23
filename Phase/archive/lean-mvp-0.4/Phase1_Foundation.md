@@ -53,7 +53,7 @@ The review reran the original suite: 43 tests passed in 12.33 seconds and `pip c
 
 **Implementation**: `files.require_single_link` checks the baseline's file metadata and `os.fstat` on the opened write handle. `processes.ProjectLock` retains the original `.lock` file and reads valid legacy inline records; new ownership metadata uses a separate `.json` file written to a flushed/fsynced temporary file and replaced under the same lock. Invalid metadata stops execution without overwriting the evidence. `validation.validate` requires both pytest exit code 1 and JUnit failure evidence before consuming a correction; missing pytest leaves the attempt `unverified`, with an environment/log diagnostic and unchanged correction count.
 
-**Verification (2026-09-18)**: The six initial regression cases failed before the fixes and passed afterward. Added 20 cases in total, including forced subprocess exits before/after metadata replacement in both current and legacy formats, malformed metadata preservation and environment repair followed by CLI resume without another Developer attempt. The full suite passed **63 tests in 16.71 seconds**; `pip check` passed. Evidence: `%LOCALAPPDATA%/development-tools-harness/phase1-remediation-tests.xml`. Tests are in [file protection regressions](../tests/unit/test_inputs.py), [ownership regressions](../tests/unit/test_ownership.py), and [CLI/process integration tests](../tests/integration/test_cli.py).
+**Verification (2026-09-18)**: The six initial regression cases failed before the fixes and passed afterward. Added 20 cases in total, including forced subprocess exits before/after metadata replacement in both current and legacy formats, malformed metadata preservation and environment repair followed by CLI resume without another Developer attempt. The full suite passed **63 tests in 16.71 seconds**; `pip check` passed. Evidence: `%LOCALAPPDATA%/development-tools-harness/phase1-remediation-tests.xml`. Tests are in [file protection regressions](../../../tests/unit/test_inputs.py), [ownership regressions](../../../tests/unit/test_ownership.py), and [CLI/process integration tests](../../../tests/integration/test_cli.py).
 
 This follow-up stays within the Phase 1 fake-Adapter foundation; it does not introduce the Phase 2 baseline admission gate or permission sandbox. The user accepted the foundation and review fixes on 2026-09-18. No separate dev-log skill is installed; this document's change log records the work.
 
@@ -65,11 +65,11 @@ Provide predictable state transitions and evidence before adding live AI executi
 
 ### Implementation Files
 
-- [Package and test configuration](../pyproject.toml), [locked development dependencies](../requirements-dev.lock), and `.python-version`.
-- [CLI](../src/development_harness/cli.py): `prepare`, `approve`, `run`, `resume`, `status`, `accept`, `cancel`.
-- [Harness](../src/development_harness/runner.py) and [Store](../src/development_harness/store.py): transitions and transactional state/evidence.
-- [Input contract](../src/development_harness/model.py), [file handling](../src/development_harness/files.py), [process ownership/containment](../src/development_harness/processes.py), [validation](../src/development_harness/validation.py) and its [internal launch gate](../src/development_harness/gate.py).
-- [Unit tests](../tests/unit/), [CLI/process integration tests](../tests/integration/test_cli.py), and [example plan](../tests/fixtures/fake-plan.json).
+- [Package and test configuration](../../../pyproject.toml), [locked development dependencies](../../../requirements-dev.lock), and `.python-version`.
+- [CLI](../../../src/development_harness/cli.py): `prepare`, `approve`, `run`, `resume`, `status`, `accept`, `cancel`.
+- [Harness](../../../src/development_harness/runner.py) and [Store](../../../src/development_harness/store.py): transitions and transactional state/evidence.
+- [Input contract](../../../src/development_harness/model.py), [file handling](../../../src/development_harness/files.py), [process ownership/containment](../../../src/development_harness/processes.py), [validation](../../../src/development_harness/validation.py) and its [internal launch gate](../../../src/development_harness/gate.py).
+- [Unit tests](../../../tests/unit/), [CLI/process integration tests](../../../tests/integration/test_cli.py), and [example plan](../../../tests/fixtures/fake-plan.json).
 
 ### Core Structure & Design Decisions
 
@@ -87,7 +87,7 @@ The baseline excludes `.git` (directory or worktree pointer), `.venv`, `__pycach
 
 ### Usage Examples
 
-Follow the [README setup and example](../README.md#phase-1-setup-and-example). Verification is `python -m pytest`; the CLI is `python -m development_harness` or `dev-harness`. `run --steps 1` pauses at a stage boundary and `resume` continues. `status` prints JSON evidence and log locations. `accept` is a separate user action after final validation. Copy the fixture to a fresh local project before running it.
+Follow the [README setup and example](../../../README.md#phase-1-setup-and-example). Verification is `python -m pytest`; the CLI is `python -m development_harness` or `dev-harness`. `run --steps 1` pauses at a stage boundary and `resume` continues. `status` prints JSON evidence and log locations. `accept` is a separate user action after final validation. Copy the fixture to a fresh local project before running it.
 
 ## Prerequisites & Dependencies
 
@@ -168,7 +168,7 @@ Exit requires all above Tasks and final Phase checks to pass with evidence, foll
 
 **구현 내용**: `files.require_single_link`로 기준선의 파일 메타데이터와 열린 쓰기 핸들의 `os.fstat`을 검사한다. `processes.ProjectLock`은 기존 `.lock` 파일을 유지하고 정상적인 기존 내부 기록을 읽는다. 새 소유권 정보는 별도 `.json` 파일을 사용하며 동일한 잠금 안에서 임시 파일 쓰기·flush·fsync 후 교체한다. 손상된 기록은 덮어쓰지 않고 중단한다. `validation.validate`는 pytest 종료 코드 1과 JUnit 실패 근거가 모두 있을 때만 수정 횟수를 소모한다. pytest 미설치는 `unverified`로 남기고 환경·로그 확인 사유를 표시하며 수정 횟수를 유지한다.
 
-**검증 결과(2026-09-18)**: 최초 회귀 사례 6개는 수정 전 실패하고 수정 후 통과했다. 총 20개를 추가했으며 기존·새 형식에서 소유권 정보 교체 직전·직후 프로세스 강제 종료, 손상된 기록 보존, 환경 보완 후 Developer 추가 실행 없이 CLI 재개를 포함한다. 전체 **63개 검사가 16.71초에 통과**했고 `pip check`도 통과했다. 근거: `%LOCALAPPDATA%/development-tools-harness/phase1-remediation-tests.xml`. 검사는 [파일 보호 회귀 검사](../tests/unit/test_inputs.py), [소유권 회귀 검사](../tests/unit/test_ownership.py), [CLI·프로세스 통합 검사](../tests/integration/test_cli.py)에 있다.
+**검증 결과(2026-09-18)**: 최초 회귀 사례 6개는 수정 전 실패하고 수정 후 통과했다. 총 20개를 추가했으며 기존·새 형식에서 소유권 정보 교체 직전·직후 프로세스 강제 종료, 손상된 기록 보존, 환경 보완 후 Developer 추가 실행 없이 CLI 재개를 포함한다. 전체 **63개 검사가 16.71초에 통과**했고 `pip check`도 통과했다. 근거: `%LOCALAPPDATA%/development-tools-harness/phase1-remediation-tests.xml`. 검사는 [파일 보호 회귀 검사](../../../tests/unit/test_inputs.py), [소유권 회귀 검사](../../../tests/unit/test_ownership.py), [CLI·프로세스 통합 검사](../../../tests/integration/test_cli.py)에 있다.
 
 범위는 Phase 1 가짜 Adapter 기반을 유지하며 Phase 2의 기본 검사 진입 조건이나 권한 샌드박스를 추가하지 않는다. 사용자는 2026-09-18 실행 기반과 리뷰 보완을 인수했다. 별도 dev-log 스킬은 설치되지 않아 이 문서의 변경 이력에 기록했다.
 
@@ -180,11 +180,11 @@ Exit requires all above Tasks and final Phase checks to pass with evidence, foll
 
 ### 구현 파일
 
-- [패키지·테스트 설정](../pyproject.toml), [고정 개발 의존성](../requirements-dev.lock), `.python-version`.
-- [CLI](../src/development_harness/cli.py): `prepare`, `approve`, `run`, `resume`, `status`, `accept`, `cancel`.
-- [Harness](../src/development_harness/runner.py)와 [Store](../src/development_harness/store.py): 상태 전이와 트랜잭션 기반 상태·근거 저장.
-- [입력 규약](../src/development_harness/model.py), [파일 처리](../src/development_harness/files.py), [프로세스 소유권·수명 관리](../src/development_harness/processes.py), [검증 실행](../src/development_harness/validation.py)과 [내부 실행 게이트](../src/development_harness/gate.py).
-- [단위 검사](../tests/unit/), [CLI·프로세스 통합 검사](../tests/integration/test_cli.py), [예제 계획](../tests/fixtures/fake-plan.json).
+- [패키지·테스트 설정](../../../pyproject.toml), [고정 개발 의존성](../../../requirements-dev.lock), `.python-version`.
+- [CLI](../../../src/development_harness/cli.py): `prepare`, `approve`, `run`, `resume`, `status`, `accept`, `cancel`.
+- [Harness](../../../src/development_harness/runner.py)와 [Store](../../../src/development_harness/store.py): 상태 전이와 트랜잭션 기반 상태·근거 저장.
+- [입력 규약](../../../src/development_harness/model.py), [파일 처리](../../../src/development_harness/files.py), [프로세스 소유권·수명 관리](../../../src/development_harness/processes.py), [검증 실행](../../../src/development_harness/validation.py)과 [내부 실행 게이트](../../../src/development_harness/gate.py).
+- [단위 검사](../../../tests/unit/), [CLI·프로세스 통합 검사](../../../tests/integration/test_cli.py), [예제 계획](../../../tests/fixtures/fake-plan.json).
 
 ### 핵심 구조와 설계 결정 사항
 
@@ -202,7 +202,7 @@ Exit requires all above Tasks and final Phase checks to pass with evidence, foll
 
 ### 사용 예시
 
-[README 설치·예제 안내](../README_ko.md#phase-1-설치와-예제)를 따른다. 검증은 `python -m pytest`, CLI는 `python -m development_harness` 또는 `dev-harness`다. `run --steps 1`은 단계 경계에서 멈추고 `resume`은 이어서 실행한다. `status`는 JSON 근거와 로그 위치를 출력한다. `accept`는 최종 검증 후 사용자가 별도로 실행한다. 예제는 새 로컬 프로젝트에 복사한 뒤 실행한다.
+[README 설치·예제 안내](../../../README_ko.md#phase-1-설치와-예제)를 따른다. 검증은 `python -m pytest`, CLI는 `python -m development_harness` 또는 `dev-harness`다. `run --steps 1`은 단계 경계에서 멈추고 `resume`은 이어서 실행한다. `status`는 JSON 근거와 로그 위치를 출력한다. `accept`는 최종 검증 후 사용자가 별도로 실행한다. 예제는 새 로컬 프로젝트에 복사한 뒤 실행한다.
 
 ## 선행 조건 및 의존성
 

@@ -1,177 +1,133 @@
-# Development Phases — Lean MVP
+# Development Phases — Language-Independent Harness
 
-**Revision**: 0.4 · **Date**: 2026-10-07 · **Status**: Phases 1–3 accepted and completed. Phase 3: P3-T1–T6 implemented, including minimum results, feedback and acceptance gates. Historical T4/T5 live evidence is preserved; T6 makes no new AI calls. P3-T7 is accepted and completed after technical verification with two real role calls and recorded R1/M1 user confirmations. P3-T8 and both post-review corrections are verified on A08: 473 isolated self-tests, 691 full regressions and 12 installed checks passed. The user accepted Phase 3 on 2026-10-07; A08 is the verified runner for Phase 4. Phase 4 has not started. Current verification is recorded in [Phase 3](Phase3_Workflow.md).
+**Revision**: 1.2 · **Date**: 2026-10-23 · **Status**: Specification 1.10 finalized. Phase 0 completed and accepted on 2026-10-23: environment verified, 691 regressions passed with identical test IDs and no skips, baseline and 41-module map accepted. Phase 1 is detailed into Tasks and has not started.
 
 ## Goal & Decisions
 
-Build the P0 local CLI described in the [lean MVP plan 0.4](../Draft/ai-development-harness-lean-mvp-plan.md). Follow its section 10 implementation order. P0 is a priority label; Phase numbers below are development stages.
+Build the first version described in the [specification 1.10](../Draft/ai-development-harness-plan-v1.md): a harness that reads a completed development specification, splits it into Phases starting with Phase 0 (environment), sets up the stated language and tools when the user says start, develops and tests, presents the deliverables, and marks the Phase complete when the user accepts. Its purpose is to reduce duplicate, wrong and low-quality code. The harness holds no language knowledge and judges only through common protocols: exit codes, JUnit XML reports and file hashes.
 
-- **Decided**: Windows/Python 3.12.10 + pytest 9.1.1 for harness development; SQLite for execution state, psutil 7.2.2 for process identity. Versions are recorded in `.python-version` and `requirements-dev.lock`. Phase documents contain complete English and Korean sections.
-- **Proposed**: use Python + pytest for the separate real validation examples as well. The Phase 1 fake-Adapter fixture already uses this configuration.
-- **Selected Adapter**: Codex CLI with ChatGPT authentication, reviewed versions 0.154.0 and 0.155.1. Planner, Developer and separate Reviewer reuse the verified text-only boundary. P3-T2 tests run in standard-user AppContainer on read-only copies. P3-T3 binds execution authorization and evidence to the approved plan, code and policy.
-- **Accepted foundation/planning**: Phase 1 foundation and Phase 2 registration, actual baseline checks, real Planner, bilingual versioned plans, diagnostics and planning approval are implemented. Phase 2 acceptance covered 172 passing tests, including project phase-doc loading, template rendering, pinned rules and package resources. Planning-only use on a harness snapshot produced the [reviewed Phase 3 draft](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan.md) with one actual AI call and recorded manual corrections. The user accepted Phase 2 on 2026-09-21.
-- **Phase 3 preparation**: P3-T1 added an execution contract, a two-test CLI fixture and synthetic `workflow-doctor`; 187 tests passed at that stage. Unelevated Codex allowed six raw loopback TCP connections, motivating the AppContainer alternative. [Historical evidence](Evidence/Phase3_Preparation.json).
-- **Administrator-free workers**: Company policy excludes administrator setup. AppContainer synthetic probes passed with 206 tests at the candidate stage. P3-T2 added real Developer/Reviewer sessions, controller-checked patches and isolated pytest: **265 tests passed**, plus a two-call live example with eight generated-project tests and five independent checks. [Candidate evidence](Evidence/Phase3_AppContainer.json), [T2 evidence](Evidence/Phase3_Workers.json).
-- **Execution admission and records (2026-09-22)**: P3-T3 implements separate `workflow-prepare`/`workflow-approve`/`workflow-status`/`workflow-cancel` commands and durable attempts, waits and evidence-linked findings. Stable SQLite transitions prevent duplicate replay; unknown measurements remain `null`. Admission does not dispatch work. All 378 tests and `pip check` passed, including 113 added cases. Local subprocess and AppContainer checks used zero live AI calls. [T3 evidence](Evidence/Phase3_Records.json).
-- **Sequential execution (2026-09-22)**: P3-T4 adds `workflow-run`, a shared per-Task correction limit, explicit independent follow-up assessments and all registered checks on final content. The initial authorization remains pinned while checked patches establish the current code. A disposable two-Task example reached `technically_complete` with four distinct actual role sessions, eight passing tests in each Task/final run and six independent checks. No Planner service call or user result acceptance is claimed. T4 can continue from clean recorded boundaries; explicit interruption recovery is supplied by T5 below. Results/acceptance and runner A remain T6–T8. [T4 evidence](Evidence/Phase3_Execution.json).
-- **Explicit recovery (2026-09-22)**: P3-T5 adds advisory recovery status and `workflow-resume`. It reuses artifact-verified responses, retries proven unsent requests, blocks uncertain calls without complete evidence, repairs only files matching approved before/after content and reruns interrupted validation after process-tree checks. Original attempts stay immutable; separate recovery facts drive effective call/usage totals. Same approval and correction counts survive. Named Job inspection and shared project ownership protect against surviving descendants or alternate-state-directory bypass. Final regression/live results are recorded in [Phase 3](Phase3_Workflow.md) and [T5 evidence](Evidence/Phase3_Recovery.json); Phase acceptance remains pending.
-- **Results, feedback and acceptance (2026-09-22)**: P3-T6 adds read-only `workflow-report` JSON with delivered files, current validation/reuse evidence, unresolved items, manual procedures and actual record paths. Original feedback and routing history distinguish same-scope corrections from fresh planning for changed requirements. Defects retain approval and the existing correction budget; completed later Tasks are revalidated/reviewed. Every current reused requirement, including those without a Task, needs actual final-check IDs plus a user explanation; required manual checks are fixed before execution approval. Missing, stale or failed mandatory evidence blocks explicit `workflow-accept`. The gate requires the new approved policy and sealed final artifacts; legacy T4/T5 results remain historical, with a new approved workflow required for acceptance. Technical completion and user acceptance remain separate. [T6 evidence](Evidence/Phase3_Results.json); final verification is recorded in Phase 3. T7–T8 remain pending, and the T5 example's two calls are historical rather than new T6 calls.
-- **External example (2026-09-23)**: P3-T7's controller-reviewed one-Task CLI plan made zero Planner calls and two actual Developer/Reviewer calls. One intentional durable-response interruption was recovered through public `workflow-resume` without a duplicate call. Default AppContainer execution passed eight sealed final tests; six independent isolated checks recorded actual CLI output. R1 reuse confirmation, M1 manual confirmation and explicit user acceptance were recorded on 2026-09-23; T7 is complete and T8 has not started. All 632 full-regression tests passed with zero failures, errors or skips. [T7 evidence](Evidence/Phase3_Example.json), [user review packet](Evidence/Phase3_Example_Review.md) and [acceptance evidence](Evidence/Phase3_Example_Acceptance.json).
-- **Fixed runner (2026-09-30)**: P3-T8 creates an independent offline wheel/Python/dependency/adapter installation with a checked manifest and fixed role/policy resources. New execution approvals bind its artifact ID. Actual B tests and their child were denied all 20 protected writes and could use a scratch DB. Nine installed CLI/workflow/crash-recovery checks passed; all 658 regressions passed. T7 acceptance evidence is preserved. Zero new AI-service calls, no Phase 3 acceptance and no Phase 4 self-development. [T8 evidence](Evidence/Phase3_FixedRunner.json).
-- **Private temporary directories (2026-09-30)**: Corrected the post-T8 AppContainer `mkdir(0o700)` defect in copied validation Python, including private parents and normal child startup. The unchanged four-case reproduction, 670 regressions, 12 installed checks and 20 protected write denials passed. Separate A06 preserves A04 and active-run bindings. This is issue-1 evidence; the next correction covers B self-tests. Phase 3 acceptance and Phase 4 remain pending. [Correction evidence](Evidence/Phase3_TemporaryDirectories.json).
-- **Harness self-tests (2026-09-30)**: Explicit B test resources/state, scratch path compatibility, complete isolated collection evidence and separately reviewed host regression. A08 passed 473 isolated tests, 691 full regressions, 12 installed checks and 20 write denials. Mandatory host confirmation prevents partial isolated success from satisfying acceptance. [Self-test evidence](Evidence/Phase3_SelfTests.json).
-- **Phase 3 acceptance (2026-10-07)**: After reviewing the T8, temporary-directory and self-test evidence, manual interventions and remaining limits, the user explicitly accepted Phase 3. All 51 referenced raw artifacts matched their recorded hashes. No new AI calls or test runs were made for acceptance.
-- **Development method**: use existing coding tools for the initial foundation, then progressively use the harness. Refine these Phase documents during development; keep the `phase-doc` skill and template stable unless a necessary correction is demonstrated.
+- **Decided**: continue in this repository and reuse the existing code (spec 11, F1). The harness itself is developed with existing AI coding tools (Claude Code, Codex), not with the harness (spec 11, Q4).
+- **Decided**: the Phases follow the seven development steps of spec 12 and are numbered from 0 (spec 14.1, G1).
+- **Decided**: harness environment is Windows without administrator rights, Python 3.12.10, pytest 9.1.1, psutil 7.2.2 and SQLite. Versions are recorded in `.python-version` and `requirements-dev.lock`. Codex CLI is the only AI tool in the first version.
+- **Decided**: verification languages are Python, TypeScript and Java. Only SQLite is verified; server DBs remain an "unverified" limitation (spec 10.3).
+- **Decided**: every Phase document has complete English and Korean sections. Only the current Phase is detailed into Tasks; the next Phase is detailed after the previous one is accepted.
 
 ## Phase Plan
 
 | Phase | Goal & Main Deliverables | Prerequisite | Exit Condition |
 |---|---|---|---|
-| [1 — Foundation](Phase1_Foundation.md) ✅ | Python/test setup, SQLite state, versioned approvals, fake Adapter, validation runner, ownership and resume | Review the overall plan and Phase 1 scope | Met: 63 tests passed and the user accepted the foundation on 2026-09-18 |
-| [2 — Planning](Phase2_Planning.md) ✅ | Real Planner, permission/I/O checks, project registration, baseline, plans and code/requirements mapping | Phase 1 accepted; AI tool selected | Met: 172 tests and live planning verified, including project phase-doc integration; user accepted on 2026-09-21 |
-| [3 — Workflow](Phase3_Workflow.md) ✅ | Eight Tasks: Developer → validation → separate Reviewer, corrections, records, resume, results and runner A. P3-T1–T6 implemented; T7 accepted; T8 and both corrections verified on A08; 691 regressions and 473 isolated self-tests passed | Phase 2 accepted; verified worker boundaries and version-bound execution admission | Met: T7 example accepted with interruption/resume; runner A08 verified and frozen; user accepted on 2026-10-07 |
-| [4 — Dogfooding](Phase4_Dogfooding.md) | One small P0 self-development Phase, final report summaries, new/existing project acceptance and regressions | Phase 3 accepted; A/B isolation verified | Self-development is accepted and all MVP section 11 criteria have evidence |
+| [0 — Baseline](Phase0_Baseline.md) ✅ | Check the current repository's environment and full regression, record a passing-test baseline and confirm the module reuse map. Check-only form: no installation, code change or AI call | Specification 1.10 finalized | Baseline recorded with zero failing tests, module map confirmed, user acceptance |
+| [1 — Validation Contract & Isolation](Phase1_ValidationContract.md) 🔲 | Spec 12 steps 1–2: language-independent check contract (argv, JUnit judgement, test-list comparison, skip rules) and isolation option C (AppContainer for Python, normal permissions plus tamper detection otherwise, isolation level in results). Includes the Java package download check | Phase 0 accepted | Python and Java examples judged by the same contract without language-specific harness code; Java download result recorded; tamper detection stops on mismatch; user acceptance |
+| [2 — Planning & Environment Setup](Phase2_PlanningAndSetup.md) 🔲 | Spec 12 steps 3–4: plans that include Phase 0, technology and version proposals, version pinning, bilingual `Phase/` documents, and Phase 0 execution with approved commands, manual administrator steps and the three Phase 0 forms | Phase 1 accepted | From a specification alone, Phase documents including Phase 0 are generated; a new project is set up and passes the contract; a ready project finishes check-only with a baseline; user acceptance |
+| [3 — Workflow & Quality](Phase3_WorkflowAndQuality.md) 🔲 | Spec 12 steps 5–6: AI permissions (spec 7.1), quality devices (spec 6), results report (spec 8.1), acceptance that marks Phase documents complete, and the simplified CLI | Phase 2 accepted | Every spec 6 device leaves evidence in review and report; weakening is blocked; a report is produced even on failure; acceptance marks the Phase document complete; user acceptance |
+| [4 — Real-World Validation](Phase4_RealWorldValidation.md) 🔲 | Spec 12 step 7: Decision Desk Phase 1 (new project, TypeScript and SQLite), one existing Python project and one mock Java project (spec 13.1) | Phase 3 accepted | Every spec 13 criterion has evidence; the three examples are accepted without changing harness code; user acceptance of the first version |
 
-Phases 1–3 are completed. Phase 3's authorized eight-Task plan with 18 requirements implemented P3-T1–T6 preparation, roles, records, sequential execution, explicit recovery, minimum results and acceptance gates. T7 has verified the external CLI example with one interruption/reuse and two real role calls; user confirmations and explicit result acceptance are complete. Workflow records advertise execution capability, while explicit execution approval remains required. Phase 3 user acceptance was recorded separately on 2026-10-07. Phase 4 remains an outline to refine using actual Phase 3 results. No development dates or effort estimates are committed.
+No development dates or effort estimates are committed.
 
 ## Requirements Mapping
 
-| Source Requirement | Planned Coverage | Verification Evidence |
+| Specification | Planned Coverage | Verification Evidence |
 |---|---|---|
-| §2, §4: prepared project, initialization and baseline | Phases 1–2 | Path/tool/command checks; actual passing, failing and zero-test examples |
-| §5: plans, requirement coverage, code/reuse investigation | Phase 2; acceptance checks in Phases 3–4 | Plan inspection against specification/code; actual final checks for reused requirements |
-| §6: sequential implementation, validation, separate review and bounded correction | Phases 1 and 3 | Fake failure scenarios followed by real small-Phase execution |
-| §7: versioned approval, feedback, permissions and manual Git | Phases 1–3; final regression in Phase 4 | Approval invalidation, same-scope correction versus scope change, denied-operation checks |
-| §8: SQLite, ownership, baseline preservation and resume | Phase 1; real-process integration in Phases 2–3 | Competing processes, interruption, file mismatch and metadata-only Git change scenarios |
-| §8.1: AI calls, timing, review findings and resolution evidence | Minimal actual-call records in Phase 2; complete records in Phase 3; summaries in Phase 4 | Records checked for retries, interruptions and duplicate findings/calls |
-| §9: reports, reused-function checks and user acceptance | Minimum in Phase 3; complete in Phase 4 | Final code/plan-linked evidence; failed and unverified mandatory conditions block completion |
-| §10–11: isolated dogfooding, new/existing examples and MVP acceptance | Phases 3–4 | Frozen runner version, self-development report, two accepted external example Phases and core regressions |
+| 2, 2.1, 2.2: basic flow, user decision points, commands | Phase 2 (plan, start of Phase 0), Phase 3 (start of development Phases, accept, simplified CLI) | Separate start and acceptance of Phase 0 and development Phases; no execution before start |
+| 3: specification input, Phase rules, Phase documents | Phase 2; completion marking in Phase 3 | Generated bilingual documents; technology proposal with alternatives; "complete" only after acceptance |
+| 4: Phase 0, version selection, pinning, three forms | Phase 2; lock-file review in Phase 3 | Approved-command execution, manual-step resume, check-only run, lock files registered |
+| 5: check contract | Phase 1 | Pass, failure, zero-test, missing-report and removed-test cases in Python and Java |
+| 5.1: isolation option C | Phase 1 | AppContainer path kept for Python; tamper detection stops on a changed record; isolation level shown |
+| 6.1–6.5: quality devices, baseline comparison | Phase 3; test and quality-violation baselines in Phase 2, duplicate and suppression-comment baselines with their detectors in Phase 3 | Exact-copy duplicate report, quality checks, Reviewer table, config-change classification, suppression-comment report, new-problems-only blocking |
+| 7, 7.1–7.3: execution and AI permissions | Phase 3 (reusing sequential execution, bounded correction and final validation) | Whole-project read with secret exclusion, file scope stops, check-request limit, final checks on final code |
+| 8: results report and acceptance | Phase 3 | Bilingual report including failures; blocked acceptance when mandatory evidence is missing |
+| 9: state, records, resume | Reused; regression in every Phase | Existing regression tests from the Phase 0 baseline |
+| 10.3: Windows without administrator rights, Codex CLI, SQLite | All Phases | No administrator operation; runtime records outside OneDrive |
+| 10.3, I1: tool-independent AI boundary, Codex module and Claude Code fit assessment | Phase 3 | Request/response, enforceable permissions and structured output assessed; company-login or documentation-only limits recorded; full Claude Code module deferred until first-version acceptance |
+| 11: relation to current implementation | Phase 0 (module map), applied in Phases 1–3 | Confirmed map; changes recorded per Phase |
+| 13, 13.1: completion criteria and examples | Phase 4 | Criterion-to-evidence table and three accepted examples |
 
-P1 specification review and distributed templates, MVP2 standalone requests, and other P2 features are excluded. Developer fixtures are test assets, not the P1 template product.
+## Shared Completion Rules
 
-## Dogfooding & Shared Completion Rules
+1. The harness is developed with existing AI coding tools in this repository. Phase documents record what was actually done and verified.
+2. In every Phase, run the full regression on the final code and record actual counts with a JUnit XML report. Failed, interrupted, missing or zero-test outcomes never count as passed.
+3. Compare with the Phase 0 baseline. A previously passing test that disappears, fails or becomes skipped must be explained. Tests that change because behavior intentionally changes (for example CLI simplification) are listed with the reason and approved by the user.
+4. Technical completion and user acceptance are separate. A Phase is marked ✅ only after the user's explicit acceptance is recorded.
+5. Keep runtime databases and logs outside OneDrive. Do not perform administrator operations. Git writes and deployment are manual; nothing is committed unless the user asks.
+6. Run large Windows verifications sequentially; concurrent runs caused an ACL-grant timeout in the previous Phase 3.
+7. Update the English and Korean sections together.
 
-1. These first documents are created using the skill with existing coding tools. This is preparation, not completed harness dogfooding.
-2. Once Phase 2 produces plans, use its output when reviewing the next harness Phase. Record manual corrections; this only exercises planning.
-3. Phase 3 must first prove the full flow in a separate example, including stop/resume. Freeze runner A outside the editable development target B, with separate protected runtime records.
-4. In Phase 4, A develops a small remaining P0 feature in B. The initial candidate is the per-role AI-call summary in the results report. Record events and show minimum results before then; reserve only the report enhancement for this self-development exercise.
-5. Validate B separately with preserved core regressions; the user accepts it and manually chooses it for a subsequent run. Never replace A during an active run.
+## Previous Phase Set
 
-For every implementation Phase, required checks must run on the final code and match the approved plan. Record failed, interrupted, missing and zero-test outcomes accurately. User acceptance is separate from technical completion; neither a document update nor an approval can turn missing evidence into a pass. Reused mandatory functionality also needs final verification.
-
-Preserve pre-existing changes, stop on unexpected file differences, and keep runtime DB/logs outside OneDrive. Actual permissions must prevent workers and tests from modifying the running policies or approval DB; a different folder alone is insufficient. Git writes, deployment and UI checks remain manual. Significant scope/risk changes follow the specification's approval rules; unchanged approved work does not require repeated approval.
+The earlier Phase set built on lean MVP 0.4 is archived in [archive/lean-mvp-0.4](archive/lean-mvp-0.4/Overview.md). Its Phases 1–3 were accepted on 2026-09-18, 2026-09-21 and 2026-10-07, and that code is the starting point here. Its Phase 4 (self-development) was cancelled on 2026-10-23 because the product direction changed. Evidence and generated files in the archive are unchanged so that their recorded hashes still match. The 0.4 specification is in [Draft/archive](../Draft/archive/ai-development-harness-lean-mvp-plan-v0.4.md).
 
 ## Change Log
 
 | Date | Description |
 |---|---|
-| 2026-09-15 | Created four development Phases from lean MVP 0.4 and the agreed Python + pytest choice. No implementation or product verification performed. |
-| 2026-09-15 | Phase 1 authorized and implemented; 43 tests passed. Recorded concrete environment and remaining acceptance/real-integration boundaries. |
-| 2026-09-18 | Fixed Phase 1 review findings R1–R3 and verified 63 tests. User acceptance remains pending. |
-| 2026-09-18 | User explicitly accepted Phase 1, including review fixes. Marked Phase 1 completed; Phases 2–4 remain not started. |
-| 2026-09-21 | Synchronized Phase 2 implementation/compatibility and successful planning-only dogfooding: 156 tests, one Planner call, reviewed Phase 3 draft and manual corrections. Phase 2 user acceptance and Phase 3 worker isolation remain pending. |
-| 2026-09-21 | Added authorized project phase-doc integration: pinned skill/template rules, bilingual Phase documents and wheel resources. All 172 tests and one small live example passed; earlier planning evidence remains unchanged. |
-| 2026-09-21 | User explicitly accepted Phase 2 with “phase2 인수”, including Tasks 2.1–2.7, P2-01 and compatibility improvements. Marked Phase 2 completed; Phases 3–4 implementation remains not started. Generated-plan approvals are separate from this development acceptance. |
-| 2026-09-21 | User authorized Phase 3. Completed P3-T1 contract/example preparation and synthetic worker investigation; 187 tests passed. Recorded the unelevated network-denial failure and preserved the P3-T2 live-execution gate. Phase 4 remains unstarted. |
-| 2026-09-21 | Excluded administrator setup under company policy. Added and verified the standard-user AppContainer diagnostic; 206 tests passed. Preserved existing project/Run/events and the live-admission gate; documented the remaining adapter/isolated-validation integration. |
-| 2026-09-21 | Verified P3-T2 real Developer/Reviewer, controlled patches and isolated pytest: 265 tests and a two-call live example passed. P3-T3–T8 and Phase acceptance remain pending. |
-| 2026-09-22 | Implemented and verified P3-T3 version-bound execution admission and durable records with zero live AI calls. All 378 tests and pip check passed. Planning approval remains planning-only, automatic execution/recovery remain disabled, and P3-T4–T8 are next. Separate dev-log omitted because the skill is unavailable. |
-| 2026-09-22 | Implemented P3-T4 sequential execution, bounded corrections, explicit review assessments and final checks; verified a four-call live example with two Tasks. Current regression evidence is linked from Phase 3. T5–T8 and Phase acceptance remain pending. Separate dev-log omitted because the skill is unavailable. |
-| 2026-09-22 | Added P3-T5 explicit interruption recovery, artifact-proven reuse, checked partial repair, process/ownership guards and immutable attempt history with separate recovery facts. Current verification is linked from Phase 3; T6–T8 and Phase acceptance remain pending. Updated both languages and README. Separate dev-log omitted because the skill is unavailable. |
-| 2026-09-22 | Added P3-T6 minimum JSON reports, preserved feedback routes, final reuse/manual evidence and explicit acceptance gates. Kept historical T1–T5 evidence and zero new T6 AI calls distinct. Updated both languages and README; T7–T8 and Phase acceptance remain pending. Separate dev-log omitted because the skill is unavailable. |
-| 2026-09-23 | Recorded P3-T7 external-example technical verification: a controller-reviewed plan, zero Planner calls, two actual role calls, one interruption/reuse, eight final tests and six independent checks. Kept R1/M1 user confirmations and result acceptance pending, T8 unstarted, and recorded all 632 full-regression tests passing. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
-| 2026-09-23 | Recorded the user's explicit T7 acceptance (“결과 인수한다”), R1/M1 confirmations and successful public workflow-accept. T7 is completed; T8 remains unstarted and overall Phase 3 acceptance pending. No new AI calls or test runs; existing implementation and evidence preserved. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
-| 2026-09-30 | Added P3-T8 independent fixed installation, artifact-bound approvals and actual protected-replica/installed-recovery proofs. Nine installed tests and 20 write denials passed; all 658 final regression checks passed. Preserved T7 acceptance, prior candidates and manual-intervention evidence. Phase 3 acceptance/Phase 4 pending; bilingual documents and README synchronized. Separate dev-log omitted because the skill is unavailable. |
-| 2026-09-30 | Verified the post-T8 private-temporary-directory correction with 670 regressions, 12 installed checks, the unchanged four-case reproduction and 20 protected write denials. Prepared A06 while preserving A04/T7; recorded intermediate failures and interrupted attempts. B's own-test resource/path issue and Phase 3 acceptance remain pending. Bilingual documents/README synchronized; separate dev-log omitted because the skill is unavailable. |
-| 2026-09-30 | Corrected issue 2 with explicit copied/hash-bound B resources, temporary state, isolated collection coverage, reviewed-host verification and a mandatory acceptance check. A08 passed 473 isolated tests, 691 full regressions, 12 installed checks and 20 write denials. Preserved intermediate failures, the ACL-timeout rerun, earlier runners and T7. Phase 3 acceptance/Phase 4 remain pending. Updated both languages and README; separate dev-log omitted because the skill is unavailable. |
-| 2026-10-07 | Recorded the user's explicit Phase 3 acceptance (“그럼 일단 인수하겠다”) after reviewing the T8, temporary-directory and self-test evidence; all 51 referenced raw artifacts matched their hashes. Marked Phase 3 completed with A08 as the verified runner. No new AI calls or test runs; Phase 4 not started. Synchronized both languages, Phase 3, Phase 4 prerequisite and README. |
+| 2026-10-23 | Created the new Phase set (Phase 0–4) from specification 1.9 after archiving the lean MVP 0.4 Phases. Phase 0 detailed; Phases 1–4 at goal and exit-criteria level. No implementation, test run or acceptance. Separate dev-log omitted because the skill is unavailable. |
+| 2026-10-23 | Phase 0 technical verification: 691 passed, no failures/errors/skips; exact historical test-ID set retained. Baseline and 41-module review recorded with Codex 0.155.1 selected only for regression (default 0.163.0 unverified). Synchronized I1 and Phase 1/3 integration notes. User review/acceptance pending; no source/test changes or Phase 1 start. |
+| 2026-10-23 | User accepted Phase 0 results and the module map; see the [acceptance record](Evidence/Phase0_Acceptance.json). Phase 0 marked complete; Phase 1 detailed into P1-T1–T9 and remains not started. Evidence unchanged; no new test run. Separate dev-log omitted: skill unavailable. |
 
 ---
 
-# 개발 Phase — 축소 MVP
+# 개발 Phase — 언어에 묶이지 않는 하네스
 
-**문서 버전**: 0.4 · **작성일**: 2026-10-07 · **상태**: Phase 1–3 인수·완료. Phase 3: 최소 결과·피드백·인수 조건을 포함한 P3-T1–T6 구현. T4·T5 실제 호출 근거는 과거 이력으로 보존하고 T6의 새 AI 호출은 없다. P3-T7은 실제 역할 호출 2회의 기술 검증과 R1·M1 사용자 확인을 거쳐 인수·완료했다. P3-T8과 인수 검토 후 두 수정을 A08에서 검증했으며 격리 자체 검사 473개·전체 회귀 691개·설치본 검사 12개가 통과했다. 2026-10-07 사용자가 Phase 3를 인수했으며 A08을 Phase 4의 검증된 실행본으로 한다. Phase 4는 미시작이다. 현재 검증 결과는 [Phase 3](Phase3_Workflow.md)에 기록한다.
+**문서 버전**: 1.2 · **작성일**: 2026-10-23 · **상태**: 기획서 1.10 확정. 2026-10-23 Phase 0 완료·인수: 환경 확인, 동일 테스트 ID의 전체 회귀 691개 통과·skip 0, 기준선·41개 모듈 대응표 인수. Phase 1은 Task를 상세화했으며 미시작이다.
 
 ## 목표와 결정 사항
 
-[축소 MVP 계획서 0.4](../Draft/ai-development-harness-lean-mvp-plan.md)의 P0 로컬 CLI를 개발한다. 기획서 10장의 구현 순서를 따른다. P0는 우선순위이며 아래 Phase 번호는 개발 단계다.
+[기획서 1.10](../Draft/ai-development-harness-plan-v1.md)의 첫 버전을 만든다. 완성된 개발 기획서를 읽어 Phase 0(환경 준비)부터 Phase를 나누고, 사용자가 시작을 지시하면 기획서에 적힌 언어·도구로 환경을 세팅하고 개발·테스트를 진행한다. 끝나면 산출물을 안내하고, 사용자가 인수하면 Phase를 완료 처리한다. 목적은 중복 코드, 잘못된 코드, 낮은 품질의 코드를 줄이는 것이다. 하네스는 언어 지식을 갖지 않고 공통 규약(종료 코드, JUnit XML 보고서, 파일 해시)으로만 판단한다.
 
-- **확정**: 하네스 개발은 Windows/Python 3.12.10 + pytest 9.1.1, 실행 상태는 SQLite, 프로세스 식별은 psutil 7.2.2를 사용한다. 버전은 `.python-version`과 `requirements-dev.lock`에 기록했다. Phase 문서는 영문·국문 전체 내용을 함께 작성한다.
-- **제안**: 별도 실제 검증 예제도 Python + pytest로 통일한다. Phase 1 가짜 Adapter 예제는 이미 이 구성을 사용한다.
-- **선정 Adapter**: ChatGPT 인증의 Codex CLI이며 검토된 버전은 0.154.0·0.155.1이다. Planner·Developer·별도 Reviewer가 검증된 텍스트 전용 경계를 재사용한다. P3-T2 테스트는 일반 사용자 AppContainer의 읽기 전용 복사본에서 실행한다. P3-T3는 실행 승인·근거를 승인한 계획·코드·정책에 연결한다.
-- **인수한 기반·계획 기능**: Phase 1 기반과 Phase 2 등록·실제 기본 검사·실제 Planner·영문 및 국문 버전별 계획·진단·계획 승인을 구현했다. Phase 2 인수에는 프로젝트 phase-doc 읽기·템플릿 출력·규칙 고정·설치 리소스를 포함한 검사 172개 통과가 반영됐다. 하네스 복사본에서 실제 AI 호출 1회로 [검토용 Phase 3 초안](Generated/45e4c4397c42468e87d9dad81d7b9ce9/v2/Plan_ko.md)을 만들고 수동 보완을 기록했다. 2026-09-21 Phase 2 사용자 인수를 완료했다.
-- **Phase 3 준비**: P3-T1 실행 계약·기본 검사 2개인 CLI 예제·합성 `workflow-doctor`를 추가했고 당시 검사 187개를 통과했다. unelevated Codex가 직접 루프백 TCP 연결 6개를 허용해 AppContainer 대안을 준비했다. [이전 근거](Evidence/Phase3_Preparation.json).
-- **관리자 설정 없는 작업 실행**: 회사 정책상 관리자 설정은 제외한다. AppContainer 후보 합성 시험 단계에서 검사 206개를 통과했다. P3-T2는 실제 Developer·Reviewer 세션, 하네스의 변경 검사와 격리된 pytest를 추가했다. **검사 265개**, 실제 호출 2회의 예제에서 변경 후 검사 8개·독립 검사 5개를 통과했다. [후보 근거](Evidence/Phase3_AppContainer.json), [T2 근거](Evidence/Phase3_Workers.json).
-- **실행 승인·기록(2026-09-22)**: P3-T3에서 별도 `workflow-prepare`·`workflow-approve`·`workflow-status`·`workflow-cancel` 명령과 호출 시도·대기·근거 기반 지적 기록을 구현했다. 안정된 SQLite 전이로 재처리 중복을 막고 미확정 측정은 `null`로 유지한다. 준비·승인만으로 작업을 호출하지 않는다. 추가 113개를 포함한 전체 검사 378개와 `pip check`를 통과했다. 로컬 자식 프로세스·AppContainer 검사에서 실제 AI 호출은 0회였다. [T3 근거](Evidence/Phase3_Records.json).
-- **순차 실행(2026-09-22)**: P3-T4는 `workflow-run`, Task별 공통 수정 한도, 후속 독립 리뷰의 명시적 지적 평가와 최종 코드의 전체 등록 검사를 추가한다. 최초 승인은 고정하고 검증된 변경 이력으로 현재 코드를 연결한다. 임시 Task 2개 예제가 서로 다른 실제 역할 세션 4회, Task별·최종 검사 각 8개, 독립 검사 6개 통과로 `technically_complete`에 도달했다. Planner 서비스 호출이나 사용자 결과 인수로 기록하지 않는다. T4는 정상 저장된 단계부터 계속할 수 있으며 명시적 중단 복구는 아래 T5에서 제공한다. 결과·인수·실행용 A는 T6–T8에 남아 있다. [T4 근거](Evidence/Phase3_Execution.json).
-- **명시적 복구(2026-09-22)**: P3-T5는 참고용 복구 상태와 `workflow-resume`을 추가한다. 저장 근거를 검증한 응답은 재사용하고 미전송이 증명된 요청은 실행하며 완전한 근거 없는 미확정 호출은 막는다. 승인한 변경 전·후 내용과 일치하는 파일만 부분 복구하고 프로세스와 자식 확인 후 중단 검사를 다시 실행한다. 원래 호출 이력은 유지하고 별도 복구 사실로 호출·사용량을 집계한다. 같은 승인·수정 횟수를 유지한다. 이름 있는 Job 조회와 프로젝트 공통 소유권으로 남은 자식이나 다른 상태 폴더를 통한 우회를 막는다. 최종 회귀·실제 예제 결과는 [Phase 3](Phase3_Workflow.md)와 [T5 근거](Evidence/Phase3_Recovery.json)에 기록하며 Phase 인수는 대기 중이다.
-- **결과·피드백·인수(2026-09-22)**: P3-T6는 변경 파일, 현재 검사·재사용 근거, 미해결 항목, 수동 절차와 실제 기록 경로를 보여주는 읽기 전용 `workflow-report` JSON을 추가한다. 피드백 원문·처리 이력을 보존하며 같은 범위 결함 수정과 요구사항 변경에 따른 새 계획을 구분한다. 결함 수정은 승인·기존 수정 한도를 유지하고 이미 완료한 후속 Task도 다시 검사·리뷰한다. Task가 없는 항목을 포함한 현재 재사용 요구사항마다 실제 최종 검사 ID와 사용자 설명이 필요하며 필수 수동 확인은 실행 승인 전에 고정한다. 필수 근거가 누락·이전 버전·실패 상태면 명시적 `workflow-accept`를 막는다. 새 승인 정책과 봉인된 최종 근거를 요구하므로 이전 T4·T5 결과는 과거 이력으로 보존하고 인수하려면 새 승인 Workflow가 필요하다. 기술적 완료와 사용자 인수는 구분한다. [T6 근거](Evidence/Phase3_Results.json), 최종 검증 결과는 Phase 3에 기록한다. T7–T8은 대기 중이며 T5 예제의 호출 2회는 새로운 T6 호출이 아니다.
-- **외부 예제(2026-09-23)**: P3-T7은 제어 프로그램이 작성하고 검토한 Task 1개 CLI 계획으로 Planner 호출 0회·실제 Developer 및 Reviewer 호출 2회를 수행했다. 응답 저장 후 한 차례 의도적으로 중단하고 공개 `workflow-resume`으로 중복 호출 없이 복구했다. 기본 AppContainer에서 봉인된 최종 검사 8개를 통과했고 독립 격리 검사 6개로 실제 CLI 출력을 기록했다. 2026-09-23 R1 재사용 확인·M1 수동 확인·명시적 사용자 인수를 기록해 T7을 완료했으며 T8은 미시작이다. 전체 회귀 검사 632개가 실패·오류·생략 없이 통과했다. [T7 근거](Evidence/Phase3_Example.json), [사용자 검토 자료](Evidence/Phase3_Example_Review.md), [인수 근거](Evidence/Phase3_Example_Acceptance.json).
-- **고정 실행본(2026-09-30)**: P3-T8에서 오프라인 wheel·Python·의존성·Adapter의 독립 설치, 매니페스트 검사와 역할·정책 지침 고정을 구현했다. 새 실행 승인에는 산출물 ID를 연결한다. 실제 B 테스트와 자식 프로세스의 보호 대상 쓰기 시도 20회를 모두 차단하고 임시 DB 기록은 허용했다. 설치본 CLI·Workflow·중단 복구 검사 9개를 통과했으며 전체 회귀 검사 658개도 통과했다. T7 인수 근거를 보존했다. 새 AI 서비스 호출·Phase 3 인수·Phase 4 자체 개발은 없다. [T8 근거](Evidence/Phase3_FixedRunner.json).
-- **임시 폴더 수정(2026-09-30)**: T8 이후 발견한 AppContainer의 `mkdir(0o700)` 문제를 격리 검사용 Python에서 수정했다. 비공개 상위 폴더와 일반 자식 실행을 포함해 원래 재현 검사 4개·전체 회귀 670개·설치본 검사 12개·보호 대상 쓰기 차단 20회를 통과했다. 별도 A06을 만들고 A04와 진행 중인 Run의 연결을 보존했다. 이는 1번 수정의 근거이며 다음 수정에서 B 자체 검사를 다룬다. Phase 3 인수와 Phase 4는 대기 중이다. [수정 근거](Evidence/Phase3_TemporaryDirectories.json).
-- **하네스 자체 검사(2026-09-30)**: B 검사 자료·임시 기록·경로 호환과 격리 검사 수집·실행 대조, 별도 검토 후 호스트 검사를 구현했다. A08에서 격리 473개·전체 회귀 691개·설치본 12개·쓰기 차단 20회를 통과했다. 필수 호스트 확인으로 격리 검사만 통과한 상태의 인수를 막는다. [자체 검사 근거](Evidence/Phase3_SelfTests.json).
-- **Phase 3 인수(2026-10-07)**: T8·임시 폴더·자체 검사 근거와 수동 조치·남은 한계를 확인한 사용자가 Phase 3를 명시적으로 인수했다. 참조된 원본 51개의 해시가 모두 일치했다. 인수를 위한 새 AI 호출·검사 실행은 없다.
-- **개발 방식**: 초기 기반은 기존 코딩 도구로 만들고 하네스 사용 범위를 점진적으로 넓힌다. 개발 중에는 Phase 문서를 보완하며, 필요한 수정 근거가 있는 경우 외에는 `phase-doc` 스킬과 템플릿을 유지한다.
+- **확정**: 지금 저장소에서 기존 코드를 재사용해 이어서 수정한다(기획서 11장, F1). 하네스 자체는 하네스가 아니라 기존 AI 코딩 도구(Claude Code, Codex)로 개발한다(기획서 11장, Q4).
+- **확정**: Phase는 기획서 12장의 개발 7단계를 따르고 0번부터 번호를 매긴다(기획서 14.1, G1).
+- **확정**: 하네스 실행 환경은 관리자 권한 없는 Windows, Python 3.12.10, pytest 9.1.1, psutil 7.2.2, SQLite다. 버전은 `.python-version`과 `requirements-dev.lock`에 기록돼 있다. 첫 버전의 AI 도구는 Codex CLI 하나다.
+- **확정**: 검증 언어는 Python, TypeScript, Java다. DB는 SQLite만 검증하고 서버 DB는 "미검증" 한계로 남긴다(기획서 10.3).
+- **확정**: 모든 Phase 문서는 영문과 국문을 모두 쓴다. 현재 Phase만 Task로 상세화하고, 다음 Phase는 이전 Phase를 인수한 뒤 상세화한다.
 
 ## 전체 Phase 계획
 
 | Phase | 목표와 주요 산출물 | 선행 조건 | 종료 조건 |
 |---|---|---|---|
-| [1 — 실행 기반](Phase1_Foundation.md) ✅ | Python·테스트 환경, SQLite 상태, 버전에 연결된 승인, 가짜 Adapter, 검사 실행, 실행 소유권·재개 | 전체 계획과 Phase 1 범위 검토 | 충족: 검사 63개 통과, 2026-09-18 사용자 인수 |
-| [2 — 실제 연결과 계획](Phase2_Planning.md) ✅ | 실제 Planner·권한 및 입출력 확인·등록·기본 검사·계획·코드 및 요구사항 대응 | Phase 1 인수, AI 도구 선정 | 충족: 프로젝트 phase-doc 연결 포함 검사 172개와 실제 계획 검증, 2026-09-21 사용자 인수 |
-| [3 — 전체 실행 흐름](Phase3_Workflow.md) ✅ | Task 8개: 구현 → 검증 → 별도 리뷰, 수정·기록·재개·결과·실행용 A. P3-T1–T6 구현, T7 인수·완료, T8과 두 수정의 A08 검증·전체 회귀 691개·격리 자체 검사 473개 통과 | Phase 2 인수, 작업 권한 검증과 버전별 실행 승인 연결 | 충족: 중단·재개를 포함한 T7 예제 인수, 실행용 A08 검증·고정, 2026-10-07 사용자 인수 |
-| [4 — 자체 개발과 MVP 인수](Phase4_Dogfooding.md) | 작은 P0 자체 기능 개발, 최종 보고서 집계, 신규·기존 프로젝트 인수·회귀 검증 | Phase 3 인수, A/B 분리 검증 | 자체 개발 인수 및 기획서 11장 전체 완료 기준의 근거 확보 |
+| [0 — 기준선 확인](Phase0_Baseline.md) ✅ | 현재 저장소의 환경과 전체 회귀 검사를 확인하고, 통과 테스트 기준선을 기록하고, 모듈 재사용 대응표를 확정한다. "확인만" 형태로 설치·코드 변경·AI 호출이 없다 | 기획서 1.10 확정 | 실패 테스트 0개로 기준선 기록, 모듈 대응표 확정, 사용자 인수 |
+| [1 — 검사 계약과 격리](Phase1_ValidationContract.md) 🔲 | 기획서 12장 1–2단계: 언어와 무관한 검사 계약(argv, JUnit 판정, 테스트 목록 비교, skip 규칙)과 격리 방식 C(Python은 AppContainer, 그 밖은 일반 권한과 변조 탐지, 결과에 격리 수준 표시). Java 패키지 다운로드 확인 포함 | Phase 0 인수 | Python과 Java 예제를 언어별 하네스 코드 없이 같은 계약으로 판정, Java 다운로드 결과 기록, 변조 탐지 시 중단, 사용자 인수 |
+| [2 — 계획 확장과 환경 세팅](Phase2_PlanningAndSetup.md) 🔲 | 기획서 12장 3–4단계: Phase 0을 포함한 계획, 기술 구성·버전 제안, 버전 고정, 영문·국문 `Phase/` 문서 생성, 승인된 명령과 관리자 작업 수동 안내·재개, Phase 0 세 형태 실행 | Phase 1 인수 | 기획서만으로 Phase 0을 포함한 Phase 문서 생성, 신규 프로젝트 세팅 후 검사 계약 충족, 준비된 프로젝트는 확인만으로 기준선 기록, 사용자 인수 |
+| [3 — 개발 흐름과 품질 장치](Phase3_WorkflowAndQuality.md) 🔲 | 기획서 12장 5–6단계: AI 권한(7.1), 품질 장치(6장), 결과 보고서(8.1), 인수 시 Phase 문서 완료 처리, CLI 단순화 | Phase 2 인수 | 6장 장치마다 리뷰와 보고서에 근거가 남음, 기준 완화 차단, 실패해도 보고서 생성, 인수 시 Phase 문서 완료 처리, 사용자 인수 |
+| [4 — 실사용 검증](Phase4_RealWorldValidation.md) 🔲 | 기획서 12장 7단계: Decision Desk Phase 1(신규, TypeScript와 SQLite), 기존 Python 프로젝트 1개, 모의 Java 프로젝트 1개(기획서 13.1) | Phase 3 인수 | 13장 완료 기준마다 근거 확보, 세 예제를 하네스 코드 수정 없이 인수, 첫 버전 사용자 인수 |
 
-Phase 1–3을 완료했다. Phase 3는 Task 8개·요구사항 18개의 개발 계획을 승인받고 P3-T1–T6 준비·역할·기록·순차 실행·명시적 복구·최소 결과·인수 조건을 구현했다. T7은 한 차례 중단·응답 재사용과 실제 역할 호출 2회로 외부 CLI 예제를 검증했고 사용자 확인·명시적 결과 인수를 완료했다. Workflow 기록은 실행 기능 제공을 표시하지만 명시적 실행 승인은 계속 필요하다. Phase 3 사용자 인수는 2026-10-07 별도로 기록했다. Phase 4는 Phase 3 실제 결과를 반영할 개요로 유지한다. 개발 일정·소요 시간은 확정하지 않았다.
+개발 일정과 소요 시간은 정하지 않았다.
 
 ## 요구사항 대응표
 
-| 기획서 요구사항 | 처리 계획 | 확인할 근거 |
+| 기획서 | 처리 계획 | 확인할 근거 |
 |---|---|---|
-| 2·4장: 준비된 프로젝트, 초기화·기본 검사 | Phase 1–2 | 경로·도구·명령 확인, 실제 통과·실패·테스트 0개 예제 |
-| 5장: 계획·요구사항 대응·코드와 재사용 조사 | Phase 2, Phase 3–4 인수 시 검증 | 기획·코드와 계획 대조, 재사용 요구사항의 실제 최종 검사 |
-| 6장: 순차 구현·검증·별도 리뷰·제한된 수정 | Phase 1·3 | 가짜 실패 시나리오와 실제 작은 Phase 실행 |
-| 7장: 버전별 승인·피드백·권한·Git 수동 처리 | Phase 1–3, Phase 4 최종 회귀 검증 | 승인 무효화, 같은 범위 수정과 범위 변경 구분, 금지 동작 차단 검사 |
-| 8장: SQLite·소유권·기준선 보존·재개 | Phase 1, Phase 2–3 실제 프로세스 연결 | 두 프로세스 경쟁·중단·파일 불일치·Git 메타데이터만 변경된 상황 |
-| 8.1장: AI 호출·시간·리뷰 지적과 처리 근거 | Phase 2 실제 호출 최소 기록, Phase 3 전체 기록, Phase 4 집계 | 재시도·중단·동일 지적과 호출의 중복 여부 대조 |
-| 9장: 보고서·재사용 검증·사용자 인수 | Phase 3 최소 구현, Phase 4 완성 | 최종 코드·계획에 연결된 근거, 필수 조건 실패·미검증 시 완료 차단 |
-| 10–11장: 분리된 자체 개발·신규와 기존 예제·MVP 인수 | Phase 3–4 | 고정 실행 버전, 자체 개발 보고서, 외부 예제 두 Phase 인수와 핵심 회귀 검사 |
+| 2, 2.1, 2.2: 기본 흐름, 사용자 결정 지점, 명령 | Phase 2(계획, Phase 0 시작), Phase 3(개발 Phase 시작, 인수, CLI 단순화) | Phase 0과 개발 Phase의 별도 시작·인수, 시작 전에는 실행하지 않음 |
+| 3: 기획서 입력, Phase 구성 규칙, Phase 문서 | Phase 2, 완료 처리는 Phase 3 | 생성된 영문·국문 문서, 대안을 포함한 기술 구성 제안, 인수 후에만 완료 표시 |
+| 4: Phase 0, 버전 선택, 버전 고정, 세 형태 | Phase 2, 잠금 파일 리뷰는 Phase 3 | 승인된 명령 실행, 수동 단계 후 재개, 확인만 형태 실행, 잠금 파일 등록 |
+| 5: 검사 계약 | Phase 1 | Python과 Java에서 통과·실패·테스트 0개·보고서 없음·테스트 삭제 경우 |
+| 5.1: 격리 방식 C | Phase 1 | Python AppContainer 경로 유지, 기록 변조 시 중단, 격리 수준 표시 |
+| 6.1–6.5: 품질 장치, 기준선 비교 | Phase 3. 테스트와 품질 위반 기준선은 Phase 2, 중복과 검사 회피 주석 기준선은 탐지기와 함께 Phase 3 | 그대로 복사한 중복 보고, 품질 검사, Reviewer 기준표, 설정 변경 분류, 검사 회피 주석 보고, 새로 생긴 문제만 차단 |
+| 7, 7.1–7.3: 개발 실행과 AI 권한 | Phase 3(기존 순차 실행·제한된 수정·통합 검증 재사용) | 비밀값 제외를 포함한 전체 읽기, 파일 범위 밖 변경 시 중단, 검사 요청 한도, 최종 코드에서 전체 검사 |
+| 8: 결과 보고서와 인수 | Phase 3 | 실패를 포함한 영문·국문 보고서, 필수 근거가 없으면 인수 차단 |
+| 9: 상태·기록·재개 | 재사용, 모든 Phase에서 회귀 검사 | Phase 0 기준선의 기존 회귀 검사 |
+| 10.3: 관리자 권한 없는 Windows, Codex CLI, SQLite | 모든 Phase | 관리자 작업 없음, 실행 기록은 OneDrive 밖 |
+| 10.3, I1: 도구 공통 AI 경계, Codex 모듈, Claude Code 적합성 확인 | Phase 3 | 요청·응답·실제 권한 제한·구조화 출력 확인, 회사 로그인 또는 문서 확인만 한 한계 기록. Claude Code 정식 모듈은 첫 버전 인수 후 |
+| 11: 현재 구현과의 관계 | Phase 0(모듈 대응표), Phase 1–3에서 적용 | 확정한 대응표, Phase별 변경 기록 |
+| 13, 13.1: 완료 기준과 예제 | Phase 4 | 기준별 근거 대조표, 인수한 예제 3건 |
 
-P1 기획 검토·배포용 템플릿, MVP2 독립 수정 요청 및 나머지 P2는 제외한다. 개발 검증용 예제는 테스트 자산이며 P1 템플릿 제품이 아니다.
+## 공통 완료 규칙
 
-## Dogfooding과 공통 완료 규칙
+1. 하네스는 이 저장소에서 기존 AI 코딩 도구로 개발한다. Phase 문서에는 실제로 수행하고 검증한 내용만 적는다.
+2. 모든 Phase에서 최종 코드로 전체 회귀 검사를 실행하고, JUnit XML 보고서로 실제 개수를 기록한다. 실패·중단·미실행·테스트 0개는 통과로 치지 않는다.
+3. Phase 0 기준선과 비교한다. 통과하던 테스트가 사라지거나 실패하거나 skip으로 바뀌면 이유를 밝힌다. 동작을 의도적으로 바꿔서(예: CLI 단순화) 바뀌는 테스트는 이유와 함께 목록으로 적고 사용자 승인을 받는다.
+4. 기술적 완료와 사용자 인수는 구분한다. 사용자의 명시적 인수를 기록한 뒤에만 ✅로 표시한다.
+5. 실행 DB와 로그는 OneDrive 밖에 둔다. 관리자 권한 작업은 하지 않는다. Git 쓰기와 배포는 수동이며, 사용자가 요청하기 전에는 커밋하지 않는다.
+6. 큰 Windows 검증은 순서대로 실행한다. 이전 Phase 3에서 동시 실행으로 권한 설정 시간 초과가 발생했다.
+7. 영문과 국문을 함께 갱신한다.
 
-1. 최초 문서는 기존 코딩 도구와 스킬로 작성한다. 준비 작업이며 하네스 dogfooding 완료 실적이 아니다.
-2. Phase 2에서 계획 생성이 가능해지면 다음 하네스 Phase 검토에 생성 결과를 사용한다. 수동 보완을 기록하며, 이 단계는 계획 기능만 사용하는 것이다.
-3. Phase 3에서 별도 예제로 전체 흐름과 중단·재개를 먼저 확인한다. 수정 대상 B 밖에 실행용 A를 고정하고 실행 기록을 별도로 보호한다.
-4. Phase 4에서는 A로 B의 작은 미완료 P0 기능을 개발한다. 첫 후보는 결과 보고서의 역할별 AI 호출 수 요약이다. 그 전에 이벤트 기록과 최소 결과 확인을 준비하며, 보고서 개선 부분만 자체 개발 대상으로 남긴다.
-5. 보존한 핵심 회귀 검사와 별도 실행으로 B를 검증한다. 사용자가 인수하고 다음 Run에 사용할 버전을 수동 선택한다. 실행 중인 A는 교체하지 않는다.
+## 이전 Phase 묶음
 
-각 구현 Phase의 필수 검사는 최종 코드에서 실행하고 승인된 계획에 연결한다. 실패·중단·미실행·테스트 미발견을 정확히 기록한다. 사용자 인수와 기술적 완료를 구분하며, 문서 갱신이나 승인만으로 검증 근거가 없는 항목을 통과 처리하지 않는다. 필수 재사용 기능도 최종 검증이 필요하다.
-
-기존 변경을 보존하고 예상 밖 파일 차이에서는 중단하며 실행 DB·로그는 OneDrive 밖에 둔다. 작업 에이전트와 테스트가 실행 중인 정책·승인 DB를 변경하지 못하도록 실제 권한으로 제한해야 하며, 폴더만 나누는 것으로 충분하지 않다. Git 쓰기·배포·UI 확인은 수동이다. 중요한 범위·위험 변경은 기획서의 승인 규칙을 따르고, 동일한 승인 범위의 작업에 반복 승인을 요구하지 않는다.
+축소 MVP 0.4 기준의 이전 Phase 묶음은 [archive/lean-mvp-0.4](archive/lean-mvp-0.4/Overview.md)에 보관했다. 그중 Phase 1–3은 2026-09-18, 2026-09-21, 2026-10-07에 인수했으며, 그 코드가 이번 개발의 출발점이다. Phase 4(자체 개발)는 제품 방향이 바뀌어 2026-10-23에 취소했다. 보관 폴더의 Evidence와 Generated 파일은 기록된 해시가 계속 맞도록 수정하지 않았다. 0.4 기획서는 [Draft/archive](../Draft/archive/ai-development-harness-lean-mvp-plan-v0.4.md)에 있다.
 
 ## 변경 이력
 
 | 날짜 | 내용 |
 |---|---|
-| 2026-09-15 | 축소 MVP 0.4와 합의한 Python + pytest를 바탕으로 4개 개발 Phase 작성. 구현·제품 검증은 수행하지 않음. |
-| 2026-09-15 | Phase 1 승인·구현, 검사 43개 통과. 실제 개발 환경과 남은 사용자 인수·실제 연결 경계를 기록. |
-| 2026-09-18 | Phase 1 리뷰 결함 R1–R3 수정과 검사 63개를 검증했다. 사용자 인수 대기는 유지한다. |
-| 2026-09-18 | 사용자가 리뷰 보완을 포함한 Phase 1을 명시적으로 인수했다. Phase 1 완료 처리, Phase 2–4 미시작 상태 유지. |
-| 2026-09-21 | Phase 2 구현·호환성 개선과 계획 dogfooding 성공을 반영했다. 검사 156개·Planner 호출 1회·Phase 3 검토 초안과 수동 보완을 기록했으며 Phase 2 사용자 인수·Phase 3 작업 권한 분리는 대기 중이다. |
-| 2026-09-21 | 승인된 프로젝트 phase-doc 연결로 스킬·템플릿 규칙 고정, 영문·국문 통합 Phase 문서와 wheel 리소스를 추가했다. 검사 172개와 작은 실제 예제가 통과했으며 이전 계획 근거는 유지했다. |
-| 2026-09-21 | 사용자가 “phase2 인수”로 Task 2.1–2.7, P2-01·호환성 개선을 포함한 Phase 2를 명시적으로 인수했다. Phase 2 완료 처리, Phase 3–4 구현 미시작 상태 유지. 생성한 계획의 승인은 이번 개발 결과 인수와 별도다. |
-| 2026-09-21 | 사용자 승인으로 Phase 3를 시작했다. P3-T1 실행 계약·예제 준비·합성 작업 권한 조사를 마치고 검사 187개를 통과했다. unelevated 네트워크 차단 실패를 기록했으며 P3-T2 실제 실행 조건은 유지한다. Phase 4는 미시작이다. |
-| 2026-09-21 | 회사 정책상 관리자 설정을 제외하고 일반 사용자 AppContainer 진단을 추가·검증했다. 검사 206개를 통과하고 기존 프로젝트·Run·이벤트와 실제 실행 조건을 유지했다. 남은 Adapter·격리된 검증 실행 연결을 기록했다. |
-| 2026-09-21 | P3-T2 실제 Developer·Reviewer, 파일 변경 검사와 격리된 pytest를 검증했다. 검사 265개·실제 호출 2회의 예제를 통과했다. P3-T3–T8과 Phase 인수는 대기 중이다. |
-| 2026-09-22 | 실제 AI 호출 없이 P3-T3 버전별 실행 승인·영속 기록을 구현·검증했다. 전체 검사 378개와 pip check를 통과했다. 계획 승인은 계획 전용으로 유지하고 자동 실행·복구는 비활성화했다. 다음 범위는 P3-T4–T8이다. dev-log 스킬이 없어 별도 기록은 생략했다. |
-| 2026-09-22 | P3-T4 순차 실행·제한된 수정·명시적 리뷰 평가·최종 검사를 구현하고 Task 2개·실제 호출 4회의 예제로 검증했다. 현재 회귀 검사 근거는 Phase 3에서 연결한다. T5–T8·Phase 인수는 대기 중이다. dev-log 스킬이 없어 별도 기록은 생략했다. |
-| 2026-09-22 | P3-T5 명시적 중단 복구, 근거 기반 응답 재사용, 부분 파일 검사·복구, 프로세스·소유권 검사와 원본 호출 이력을 유지하는 별도 복구 사실을 추가했다. 현재 검증 결과는 Phase 3에서 연결하며 T6–T8·Phase 인수는 대기 중이다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 기록은 생략했다. |
-| 2026-09-22 | P3-T6 최소 JSON 보고서, 피드백 원문·처리 경로, 최종 재사용·수동 근거와 명시적 인수 조건을 추가했다. T1–T5 과거 근거와 T6 새 AI 호출 0회를 구분했다. 영문·국문과 README를 갱신했으며 T7–T8·Phase 인수는 대기 중이다. dev-log 스킬이 없어 별도 기록은 생략했다. |
-| 2026-09-23 | P3-T7 외부 예제 기술 검증을 기록했다. 제어 프로그램이 작성하고 검토한 계획, Planner 호출 0회, 실제 역할 호출 2회, 중단·응답 재사용 1회, 최종 검사 8개·독립 검사 6개를 확인했다. R1·M1 사용자 확인과 결과 인수는 대기, T8은 미시작으로 유지하고 전체 회귀 검사 632개 통과를 기록했다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
-| 2026-09-23 | 사용자의 명시적 T7 인수(“결과 인수한다”), R1·M1 확인과 공개 workflow-accept 성공을 기록했다. T7은 완료, T8은 미시작이며 Phase 3 전체 인수는 대기 중이다. 새 AI 호출·테스트 실행 없이 기존 구현·근거를 보존했다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
-| 2026-09-30 | P3-T8 독립 고정 설치, 산출물 ID에 연결된 승인, 실제 보호 복제본·설치본 재개 검증을 추가했다. 설치본 검사 9개와 쓰기 차단 20회를 통과했으며 최종 회귀 검사 658개도 통과했다. T7 인수·이전 후보·수동 조치 근거를 보존했다. Phase 3 인수·Phase 4는 대기 중이며 영문·국문과 README를 동기화했다. dev-log 스킬이 없어 별도 로그는 생략했다. |
-| 2026-09-30 | T8 이후 임시 폴더 수정을 전체 회귀 670개·설치본 검사 12개·원래 재현 검사 4개·보호 대상 쓰기 차단 20회로 검증했다. A04·T7을 보존하고 A06을 준비했으며 중간 실패와 중단을 기록했다. B 자체 검사의 자료·경로 문제와 Phase 3 인수는 남아 있다. 영문·국문과 README를 동기화했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
-| 2026-09-30 | 2번 문제의 B 자료 복사·해시 일치, 임시 상태 저장, 격리 검사 수집·실행 대조, 검토 후 호스트 검사와 필수 인수 확인을 구현했다. A08에서 격리 473개·전체 회귀 691개·설치본 12개·쓰기 차단 20회를 통과했다. 중간 실패, 권한 설정 시간 초과 후 재검증, 이전 실행본과 T7을 보존했다. Phase 3 인수·Phase 4는 대기 중이다. 영문·국문과 README를 갱신했으며 dev-log 스킬이 없어 별도 로그는 생략했다. |
-| 2026-10-07 | T8·임시 폴더·자체 검사 근거 검토 후 사용자의 명시적 Phase 3 인수(“그럼 일단 인수하겠다”)를 기록했다. 참조된 원본 51개의 해시가 모두 일치했다. Phase 3를 완료로 표시하고 A08을 검증된 실행본으로 정했다. 새 AI 호출·검사 실행은 없으며 Phase 4는 미시작이다. 영문·국문, Phase 3, Phase 4 선행 조건과 README를 동기화했다. |
+| 2026-10-23 | 축소 MVP 0.4 Phase를 보관한 뒤 기획서 1.9를 기준으로 새 Phase 묶음(Phase 0–4)을 작성했다. Phase 0은 상세화하고 Phase 1–4는 목표와 종료 조건 수준으로 적었다. 구현·검사 실행·인수는 없다. dev-log 스킬이 없어 별도 기록은 생략했다. |
+| 2026-10-23 | Phase 0 기술 검증: 691개 통과, 실패·오류·skip 0, 이전 테스트 ID 집합 유지. 회귀 검사에만 Codex 0.155.1을 지정해 기준선·41개 모듈 검토 기록(기본 0.163.0은 미검증). I1·Phase 1/3 연결 주의사항 반영. 사용자 검토·인수 대기이며 소스·테스트 변경이나 Phase 1 시작은 없다. |
+| 2026-10-23 | 사용자가 Phase 0 결과와 모듈 대응표를 인수했다([인수 기록](Evidence/Phase0_Acceptance.json)). Phase 0 완료, Phase 1은 P1-T1–T9로 상세화했으며 미시작이다. 검증 근거 변경·검사 재실행은 없다. dev-log 스킬이 없어 별도 로그는 생략했다. |

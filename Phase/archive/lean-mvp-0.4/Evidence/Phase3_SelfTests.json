@@ -1,0 +1,276 @@
+{
+  "date": "2026-09-30",
+  "scope": "Post-T8 issue 2: explicit B test resources, temporary state, isolated profile and reviewed host regression",
+  "status": "Implemented and technically verified; overall Phase 3 acceptance pending",
+  "actual_ai_service_calls": 0,
+  "phase3_accepted": false,
+  "phase4_self_development": false,
+  "runner": {
+    "path": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-08\\runner-manifest.json",
+    "sha256": "09697e5da96adca77791dcacbb617d4c17893d81021082b4d8c0c509799df0b5",
+    "artifact_id": "48c0b11e27b79757f82f015946e94668da61f91b92e3d81b72aee7ee1b9487dc",
+    "installed_source_matches_checkout": true
+  },
+  "inputs": {
+    "version": "cd4c8cf499d43ab1fba3ef78470e2118db8edcf935af9f4955e7235324b9b035",
+    "files": 108,
+    "unchanged": true,
+    "manifest": {
+      "path": "%LOCALAPPDATA%\\h8\\inputs.json",
+      "sha256": "368624ff0a43658d11e76c80d1f6a2ed65d66d3c6866d77153405ca086d955b4"
+    },
+    "scope": "Exact copied source/test/build/resource tree; undeclared prose/reports are not exposed to tests"
+  },
+  "combined": {
+    "path": "%LOCALAPPDATA%\\h8\\combined\\report.json",
+    "sha256": "cf02134a25276ce9911646823e6e4bbbfbb5d22cfe3d7802ade8113c0a92cfa1"
+  },
+  "isolated": {
+    "report": {
+      "path": "%LOCALAPPDATA%\\h8\\i\\report.json",
+      "sha256": "aad6979070387f9b5fb5e97684eccf823ac43fe10678e388cb305dc426805765"
+    },
+    "junit": {
+      "path": "%LOCALAPPDATA%\\h8\\i\\validation\\c-22ba611c56dc\\pytest.xml",
+      "sha256": "67ed59b517fb87cc6fe289e95602979d4e7f5dd3cbdc58e33c45be3b498a364b",
+      "tests": 473,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 153.518
+    },
+    "collection": {
+      "path": "%LOCALAPPDATA%\\h8\\i\\validation\\c-22ba611c56dc\\collection.json",
+      "sha256": "b0e3224e80bda2bce953bfed4b0d373ba90938ef18572257b1d7dda27e24d655"
+    },
+    "modules": [
+      "tests/unit/test_appcontainer_probe.py",
+      "tests/unit/test_attempt_recovery.py",
+      "tests/unit/test_codex_compatibility.py",
+      "tests/unit/test_inputs.py",
+      "tests/unit/test_isolated_validation.py",
+      "tests/unit/test_ownership.py",
+      "tests/unit/test_phase_docs.py",
+      "tests/unit/test_planning.py",
+      "tests/unit/test_review_followup.py",
+      "tests/unit/test_state.py",
+      "tests/unit/test_validation_classification.py",
+      "tests/unit/test_validation_profiles.py",
+      "tests/unit/test_worker_calls.py",
+      "tests/unit/test_worker_contract.py",
+      "tests/unit/test_worker_lifecycle.py",
+      "tests/unit/test_worker_probe.py",
+      "tests/unit/test_workflow_admission.py",
+      "tests/unit/test_workflow_feedback.py",
+      "tests/unit/test_workflow_records.py",
+      "tests/unit/test_workflow_replanning.py",
+      "tests/unit/test_workflow_review_regressions.py"
+    ],
+    "all_tests_complete_alone": false
+  },
+  "reviewed_host": {
+    "report": {
+      "path": "%LOCALAPPDATA%\\h8\\h2\\report.json",
+      "sha256": "3f16bc512f2d909b062fbbd0262979695da4a9b52ee46f2d75dfd40fb60ddd0c"
+    },
+    "junit": {
+      "path": "%LOCALAPPDATA%\\h8\\h2\\pytest.xml",
+      "sha256": "56890ac5d528f85b1d5c0cc7a75f24a30d9cb0c5caa269b910b241a0afffdf26",
+      "tests": 691,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 1051.158
+    },
+    "collection": {
+      "path": "%LOCALAPPDATA%\\h8\\h2\\collection.json",
+      "sha256": "fba869620e563a002b3fa1fa81d8439e805aa8ab021aceb42e2b9e55d8b3bc5c"
+    },
+    "reviewed_input_version": "cd4c8cf499d43ab1fba3ef78470e2118db8edcf935af9f4955e7235324b9b035",
+    "host_only_modules": [
+      {
+        "path": "tests/integration/test_appcontainer_execution.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_cli.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_fixed_runner.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_isolated_temporary_directories.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_phase_doc_package.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_planning_cli.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_recovery_processes.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_self_test_profile.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_acceptance.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_admission_cli.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_default_validation.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_feedback_flow.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_integrity.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_journal_bridge.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_permissions.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_preparation.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_recovery_edges.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_results.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/integration/test_workflow_resume.py",
+        "reason": "CLI, installation, recovery or OS integration; reviewed full host regression required"
+      },
+      {
+        "path": "tests/unit/test_appcontainer_temp.py",
+        "reason": "Native junction creation and host startup assumptions"
+      },
+      {
+        "path": "tests/unit/test_frozen_integrity.py",
+        "reason": "Checks installation ancestors outside the AppContainer grant"
+      },
+      {
+        "path": "tests/unit/test_self_test_verify.py",
+        "reason": "Verifies host evidence paths and runner installation ancestors"
+      }
+    ],
+    "scope": "Full reviewed regression, including the isolated unit modules; do not add these counts together"
+  },
+  "installed_checks": {
+    "report": {
+      "path": "%LOCALAPPDATA%\\h8\\t8\\report.json",
+      "sha256": "a3f77457034a109ec323cf26b54c6b43c71a59cc68c73994c23d2a6f9b1d0d9a"
+    },
+    "junit": {
+      "path": "%LOCALAPPDATA%\\h8\\t8\\installed-workflow\\pytest.xml",
+      "sha256": "70600885c753312a7d68331ffaa11568514d8f2776d31eaf25e88555478643cc",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 266.261
+    },
+    "protected_write_denials": 20,
+    "runner_unchanged": true,
+    "t7_acceptance": {
+      "path": "%LOCALAPPDATA%\\h8\\b\\Phase\\Evidence\\Phase3_Example_Acceptance.json",
+      "sha256": "460900bad4adbd339d78917efb9cdb9349343a08838aeffeac64a683f9b0f930",
+      "accepted_report_sha256": "f7a74e2e37c79d49dc7d847598059dcce5abbfe5a6654ca19a5db905ed66b2ef",
+      "new_acceptance": false
+    }
+  },
+  "dependency_check": {
+    "path": "%LOCALAPPDATA%\\h8\\pip-check.txt",
+    "sha256": "672aec65a45bed50e70229c70934a7eebf0462595c459b83023027645d57cccf",
+    "exit_code": 0,
+    "stdout": "No broken requirements found."
+  },
+  "preserved_runners": {
+    "A-20260930-04": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-04\\runner-manifest.json",
+      "sha256": "71326565b6ab71114ceb362e79d8a45663471b07475ec3de385b9ac737e4d536",
+      "artifact_id": "5cfcf2e92afa6fd9d3bc0e0220a49eff5dad807611b812aeee08f5fd21048ecc"
+    },
+    "A-20260930-06": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-06\\runner-manifest.json",
+      "sha256": "76cbbd6b6851cc5c659f8d73f86acf340f0415d6bbd357899c61fd0b85c8d97f",
+      "artifact_id": "6f068344f7b30cbcc0bde90ccf1d9653745a51569ed9e54b4361052e1aa58b0f"
+    },
+    "A-20260930-07": {
+      "path": "%LOCALAPPDATA%\\development-tools-harness\\runners\\A-20260930-07\\runner-manifest.json",
+      "sha256": "6d38ffd9d142b91f0fb4dad8058b6899bb7de2123279c399fe2161415c083c89",
+      "artifact_id": "569d8973df9f6868751bca7347ac155a2822dc425c325e927df0aa4fa5acf86f"
+    }
+  },
+  "resolved_development_findings": [
+    {
+      "issue": "Strict scratch resolution failed at DOS volume-name lookup despite granted file access",
+      "resolution": "Handle-based normalized NT path translation only within the verified scratch root; host runtime unchanged",
+      "initial_failed_probe": {
+        "path": "%LOCALAPPDATA%\\harness-self-tests\\probe-rcqfl9z5\\result.json",
+        "sha256": "07571479811b6cf7179bdadbbcf5631383022cf08d5e6d5dfed8c2f1ad38a23a"
+      }
+    },
+    {
+      "issue": "Copied files must be exactly the declared hashed inputs, including platform path-separator normalization",
+      "resolution": "Single manifest controls isolated and reviewed-host copies; actual tests assert copy equality and excluded prose",
+      "initial_failed_probe": {
+        "path": "%LOCALAPPDATA%\\development-tools-harness\\t2-tests\\b48e3cff79f4\\validator\\c-e828989a88a6\\validation.json",
+        "sha256": "a337be339b72cc6815ba1e110993f490cfea11dbc953bfd92b2cc570c9ddd30c"
+      }
+    },
+    {
+      "issue": "A07 host regression stopped for the copy/input alignment review",
+      "resolution": "Preserved incomplete evidence and reran the entire final A08 verification; the interrupted run is not counted as passing",
+      "interruption": {
+        "path": "%LOCALAPPDATA%\\h7\\h\\interruption.json",
+        "sha256": "afc5679e4627e01b1f1162a2611a98897935b3b1afbbaaeb47ecf64a28f92d4a"
+      }
+    }
+  ],
+  "environment_retry": {
+    "interruption": {
+      "path": "%LOCALAPPDATA%\\h8\\h\\interruption.json",
+      "sha256": "6208d85e1741ac3b141e3c3c043074cdaf9de692802c1ff37240f47d18457114"
+    },
+    "failed_validation": {
+      "path": "%LOCALAPPDATA%\\h8\\h\\u\\development-tools-harness\\t4-tests\\176118d21121\\validator\\c-992b41a58ac0\\validation.json",
+      "sha256": "9df5e34bb01051f380341d76e4424e29066d1b28119271deeb3b9d4dca7912e8"
+    },
+    "observation": "icacls grant exceeded 15 seconds while independent large verification runs overlapped; validation correctly remained unverified",
+    "verification": "Complete host regression rerun alone with the same final input hash; no timeout threshold, dependency or test expectation was changed"
+  },
+  "remaining_execution_requirements": [
+    "Generated B source/tests must be reviewed before explicit reviewed-host execution; no automatic host fallback",
+    "HARNESS_HOST_REGRESSION is mandatory for profile workflows and must be confirmed on final matching evidence before acceptance",
+    "Other resource locations or new dependencies require explicit profile/runtime support",
+    "Hashes identify reviewed inputs and detect stale evidence, not malicious privileged host execution"
+  ]
+}
