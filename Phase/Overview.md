@@ -1,6 +1,6 @@
 # Development Phases — Language-Independent Harness
 
-**Revision**: 1.2 · **Date**: 2026-10-23 · **Status**: Specification 1.10 finalized. Phase 0 completed and accepted on 2026-10-23: environment verified, 691 regressions passed with identical test IDs and no skips, baseline and 41-module map accepted. Phase 1 is detailed into Tasks and has not started.
+**Revision**: 1.3 · **Date**: 2026-10-23 · **Status**: Specification 1.10 finalized. Phase 0 completed and accepted on 2026-10-23: environment verified, 691 regressions passed with identical test IDs and no skips, baseline and 41-module map accepted. Phase 1 is detailed into Tasks and has not started; its examples are limited to two minimal fixtures.
 
 ## Goal & Decisions
 
@@ -23,6 +23,8 @@ Build the first version described in the [specification 1.10](../Draft/ai-develo
 | [4 — Real-World Validation](Phase4_RealWorldValidation.md) 🔲 | Spec 12 step 7: Decision Desk Phase 1 (new project, TypeScript and SQLite), one existing Python project and one mock Java project (spec 13.1) | Phase 3 accepted | Every spec 13 criterion has evidence; the three examples are accepted without changing harness code; user acceptance of the first version |
 
 No development dates or effort estimates are committed.
+
+Phase 1 retains the full common implementation and verification scope, using only one minimal Python fixture and one minimal Java fixture. Reuse them for environment and contract checks; application features and real project development belong to Phase 4. See [Example Scope](Phase1_ValidationContract.md#example-scope-user-decision-2026-10-23).
 
 ## Requirements Mapping
 
@@ -63,12 +65,13 @@ The earlier Phase set built on lean MVP 0.4 is archived in [archive/lean-mvp-0.4
 | 2026-10-23 | Created the new Phase set (Phase 0–4) from specification 1.9 after archiving the lean MVP 0.4 Phases. Phase 0 detailed; Phases 1–4 at goal and exit-criteria level. No implementation, test run or acceptance. Separate dev-log omitted because the skill is unavailable. |
 | 2026-10-23 | Phase 0 technical verification: 691 passed, no failures/errors/skips; exact historical test-ID set retained. Baseline and 41-module review recorded with Codex 0.155.1 selected only for regression (default 0.163.0 unverified). Synchronized I1 and Phase 1/3 integration notes. User review/acceptance pending; no source/test changes or Phase 1 start. |
 | 2026-10-23 | User accepted Phase 0 results and the module map; see the [acceptance record](Evidence/Phase0_Acceptance.json). Phase 0 marked complete; Phase 1 detailed into P1-T1–T9 and remains not started. Evidence unchanged; no new test run. Separate dev-log omitted: skill unavailable. |
+| 2026-10-23 | User retained Phase 1 common implementation and limited examples to two minimal reusable fixtures. Synchronized the specification, bilingual Phase 1 plan and READMEs. Documentation only; Phase 1 remains not started. Separate dev-log omitted: skill unavailable. |
 
 ---
 
 # 개발 Phase — 언어에 묶이지 않는 하네스
 
-**문서 버전**: 1.2 · **작성일**: 2026-10-23 · **상태**: 기획서 1.10 확정. 2026-10-23 Phase 0 완료·인수: 환경 확인, 동일 테스트 ID의 전체 회귀 691개 통과·skip 0, 기준선·41개 모듈 대응표 인수. Phase 1은 Task를 상세화했으며 미시작이다.
+**문서 버전**: 1.3 · **작성일**: 2026-10-23 · **상태**: 기획서 1.10 확정. 2026-10-23 Phase 0 완료·인수: 환경 확인, 동일 테스트 ID의 전체 회귀 691개 통과·skip 0, 기준선·41개 모듈 대응표 인수. Phase 1은 Task를 상세화했으며 미시작이다. 예제는 최소 검증용 프로젝트 2개로 제한한다.
 
 ## 목표와 결정 사항
 
@@ -91,6 +94,8 @@ The earlier Phase set built on lean MVP 0.4 is archived in [archive/lean-mvp-0.4
 | [4 — 실사용 검증](Phase4_RealWorldValidation.md) 🔲 | 기획서 12장 7단계: Decision Desk Phase 1(신규, TypeScript와 SQLite), 기존 Python 프로젝트 1개, 모의 Java 프로젝트 1개(기획서 13.1) | Phase 3 인수 | 13장 완료 기준마다 근거 확보, 세 예제를 하네스 코드 수정 없이 인수, 첫 버전 사용자 인수 |
 
 개발 일정과 소요 시간은 정하지 않았다.
+
+Phase 1의 공통화 구현·검증 범위는 모두 유지하고 최소 Python 예제 1개와 Java 예제 1개만 사용한다. 환경 확인과 검사 계약 검증에서 재사용하며 애플리케이션 기능과 실제 프로젝트 개발은 Phase 4에서 다룬다. [예제 범위](Phase1_ValidationContract.md#예제-범위-2026-10-23-사용자-결정)를 참고한다.
 
 ## 요구사항 대응표
 
@@ -131,3 +136,4 @@ The earlier Phase set built on lean MVP 0.4 is archived in [archive/lean-mvp-0.4
 | 2026-10-23 | 축소 MVP 0.4 Phase를 보관한 뒤 기획서 1.9를 기준으로 새 Phase 묶음(Phase 0–4)을 작성했다. Phase 0은 상세화하고 Phase 1–4는 목표와 종료 조건 수준으로 적었다. 구현·검사 실행·인수는 없다. dev-log 스킬이 없어 별도 기록은 생략했다. |
 | 2026-10-23 | Phase 0 기술 검증: 691개 통과, 실패·오류·skip 0, 이전 테스트 ID 집합 유지. 회귀 검사에만 Codex 0.155.1을 지정해 기준선·41개 모듈 검토 기록(기본 0.163.0은 미검증). I1·Phase 1/3 연결 주의사항 반영. 사용자 검토·인수 대기이며 소스·테스트 변경이나 Phase 1 시작은 없다. |
 | 2026-10-23 | 사용자가 Phase 0 결과와 모듈 대응표를 인수했다([인수 기록](Evidence/Phase0_Acceptance.json)). Phase 0 완료, Phase 1은 P1-T1–T9로 상세화했으며 미시작이다. 검증 근거 변경·검사 재실행은 없다. dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-10-23 | 사용자 결정에 따라 Phase 1 공통화 개발을 유지하고 예제를 재사용 가능한 최소 프로젝트 2개로 제한했다. 기획서·영문/국문 Phase 1 계획·README를 동기화했다. 문서만 변경했으며 Phase 1은 미시작이다. dev-log 스킬이 없어 별도 로그는 생략했다. |

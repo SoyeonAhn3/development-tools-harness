@@ -34,7 +34,7 @@ A local development tool for any language. Give it a completed development speci
 | Phase | Focus | Status |
 |---|---|---|
 | [0 — Baseline](Phase/Phase0_Baseline.md) | Check the current environment and full regression, record the baseline, confirm the module map | ✅ |
-| [1 — Validation Contract & Isolation](Phase/Phase1_ValidationContract.md) | Language-independent check contract, isolation option C, Java download check | 🔲 |
+| [1 — Validation Contract & Isolation](Phase/Phase1_ValidationContract.md) | Language-independent check contract, isolation option C, Java download check; verify with one minimal Python fixture and one minimal Java fixture | 🔲 |
 | [2 — Planning & Environment Setup](Phase/Phase2_PlanningAndSetup.md) | Plans with Phase 0, technology and version proposals, Phase documents, Phase 0 execution | 🔲 |
 | [3 — Workflow & Quality](Phase/Phase3_WorkflowAndQuality.md) | AI permissions, quality devices, report, acceptance, simplified CLI | 🔲 |
 | [4 — Real-World Validation](Phase/Phase4_RealWorldValidation.md) | Decision Desk Phase 1, an existing Python project, a mock Java project | 🔲 |

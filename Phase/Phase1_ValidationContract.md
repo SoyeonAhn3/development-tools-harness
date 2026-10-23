@@ -12,6 +12,16 @@
 
 Spec 12 steps 1–2. Replace the pytest-only validation with the language-independent check contract (spec 5), and implement isolation option C (spec 5.1). These are the riskiest items, so they come first: the Java package download on the company network and the isolation method are checked here.
 
+## Example Scope (User Decision, 2026-10-23)
+
+Keep the common check contract, isolation, tamper detection and workflow/acceptance integration in full. Limit example development to one minimal Python fixture and one minimal Java fixture. Python verifies existing behavior remains intact; Java verifies execution outside the Python runtime. These are verification examples, not a supported-language list.
+
+- Each fixture contains a small deterministic function (for example, addition or input validation), a few tests and only the configuration/dependencies needed to build, execute and emit JUnit. Python also demonstrates a project virtualenv dependency.
+- Reuse these fixtures across P1-T1, T4 and T7. Java uses one selected build tool; verifying both Maven and Gradle is unnecessary.
+- Exercise pass, failure, zero tests, missing report, timeout, removed test and new skip through controlled variants of the same fixtures, rather than separate applications. Keep the required quality-check, isolation, tamper and manual-acceptance checks.
+- Do not add screens, a web service, a DB, authentication or application business features. Use disposable local helpers only where needed for process/network/tamper verification.
+- Real project development remains in Phase 4. Smaller examples do not reduce the common-contract acceptance criteria or the full regression requirement.
+
 ## Deliverables
 
 | # | Module / Artifact | Status |
@@ -20,7 +30,7 @@ Spec 12 steps 1–2. Replace the pytest-only validation with the language-indepe
 | 2 | JUnit XML judgement: exit code 0, report exists, at least one test, zero failures and errors; comparison with the previous passing-test list; skip rules (baseline skips allowed, new skips flagged for the Reviewer) | 🔲 |
 | 3 | Quality checks judged by exit code; the missing-report exception becomes a manual check only with user approval | 🔲 |
 | 4 | Isolation option C: AppContainer kept for Python; other checks run with normal user permissions plus tamper detection; isolation level shown in results | 🔲 |
-| 5 | Python and Java example projects, and the recorded result of the Java package download check | 🔲 |
+| 5 | One minimal Python fixture and one minimal Java fixture within the scope above, and the recorded result of the Java package download check | 🔲 |
 
 ## Tasks & Verification
 
@@ -34,7 +44,7 @@ Execute P1-T1–T8 in order; T9 is the separate user acceptance step. All entrie
 | P1-T4 | Execute the contract through both isolation modes | Keep Python AppContainer including project virtualenv dependencies; add normal-user execution for other runtimes and checks requiring local network. Record mode, argv, cwd, output, exit and timeout; never silently downgrade after AppContainer failure | Actual Python virtualenv and Java child processes; timeout/descendant cleanup and failed-isolation cases; inspect mode recorded for every check | 🔲 |
 | P1-T5 | Detect record and installation tampering | Hold the latest legitimate record hashes in controller memory, compare after every command, check installation manifest, and read reports only from newly created controller result folders. Mismatch stops further execution | Disposable fixtures modify records, policy/approval data or installation files; reject stale/outside-folder results; legitimate controller writes do not trigger false positives | 🔲 |
 | P1-T6 | Connect registration, workflow and acceptance to the contract | Update `workflow.prepare` and `workflow_acceptance.final_validation` so quality checks use exit codes and test checks use JUnit. Missing reports stay unverified; conversion to manual checking requires user approval plus recorded manual result. Preserve content/version and approval binding | Integration tests reach final validation through both backends; reject missing evidence, stale results and unapproved manual conversion; previously passing tests removed/new skips require Reviewer evidence | 🔲 |
-| P1-T7 | Verify Python and Java examples using the same implementation | Both examples exercise pass, failure, zero tests, missing report, timeout, removed test and new skip. Record the actual Java download and Python virtualenv results; do not change harness code between languages | Save commands, JUnit, normalized outcomes, isolation level and code hashes for both example runs; trace each outcome to the contract | 🔲 |
+| P1-T7 | Verify the two minimal fixtures using the same implementation | Reuse the Python/Java fixtures from T1/T4 with controlled variants for pass, failure, zero tests, missing report, timeout, removed test and new skip. Stay within Example Scope; record the actual Java download and Python virtualenv results without changing harness code between languages | Save commands, JUnit, normalized outcomes, isolation level and code hashes for both fixtures; trace each outcome to the contract and confirm no application features were added | 🔲 |
 | P1-T8 | Run final regression and prepare bilingual evidence | Full suite passes with JUnit; compare exact IDs with the accepted 691-test Phase 0 baseline. Explain every removed/changed/newly skipped test and record unresolved limits; no zero-test or interrupted run is a pass | Run Windows checks sequentially with short local runtime roots; verify report hashes and test-ID differences; document changes and results in this file | 🔲 |
 | P1-T9 | User acceptance | User reviews T1–T8 evidence, intentional baseline changes and limitations, and explicitly accepts Phase 1 | Record acceptance separately and then mark Phase 1 complete in both languages and the Overview | 🔲 |
 
@@ -42,7 +52,7 @@ The normal-user backend provides detection after execution, not AppContainer-equ
 
 ## Verification & Exit Criteria
 
-- The same contract judges the Python and Java examples. The judgement code has no language-specific branch.
+- The same contract judges the two minimal Python and Java fixtures within Example Scope. The judgement code has no language-specific branch.
 - In both languages, pass, failure, zero tests, missing report, timeout, removed test and new skip each produce the correct outcome.
 - The Java dependency download result on the company network is recorded. If it is blocked, the proxy or internal repository steps are written down; if that also fails, the cause and the needed action are reported.
 - The AppContainer path works for a Python project that uses its own virtual environment (spec 5.1).
@@ -66,6 +76,7 @@ The normal-user backend provides detection after execution, not AppContainer-equ
 | 2026-10-23 | Created the outline from spec 12 steps 1–2. Not started. |
 | 2026-10-23 | Recorded Phase 0 findings about shared registration, workflow and acceptance dependencies. Outline only; Phase 1 has not started. |
 | 2026-10-23 | After Phase 0 acceptance, detailed P1-T1–T9 with work, acceptance criteria and verification. Java versions/sources remain pending the first environment task. No installation, implementation or test execution; Phase 1 not started. Separate dev-log omitted: skill unavailable. |
+| 2026-10-23 | User retained the common implementation scope and limited examples to two minimal reusable fixtures. Added explicit size boundaries and aligned T7/deliverable/exit criteria; all required verification remains. Documentation only; Phase 1 not started. Separate dev-log omitted: skill unavailable. |
 
 ---
 
@@ -83,6 +94,16 @@ The normal-user backend provides detection after execution, not AppContainer-equ
 
 기획서 12장 1–2단계다. pytest 전용 검사를 언어와 무관한 검사 계약(기획서 5장)으로 바꾸고, 격리 방식 C(기획서 5.1)를 구현한다. 위험이 가장 큰 항목이라 먼저 한다. 회사 네트워크에서 Java 패키지 다운로드가 되는지와 격리 방식을 여기서 확인한다.
 
+## 예제 범위 (2026-10-23 사용자 결정)
+
+공통 검사 계약, 격리, 변조 탐지, 워크플로·인수 연결의 개발 범위는 모두 유지한다. 예제 개발은 최소 Python 검증용 프로젝트 1개와 Java 검증용 프로젝트 1개로 제한한다. Python은 기존 동작 유지, Java는 Python 런타임 밖에서의 실행을 확인한다. 두 언어는 검증 사례이며 지원 언어 목록이 아니다.
+
+- 각 예제는 결과가 일정한 작은 함수(예: 덧셈이나 입력 검증), 소수의 테스트, 빌드·실행·JUnit 출력에 필요한 설정과 의존성만 둔다. Python에서는 프로젝트 가상환경 의존성 사용도 확인한다.
+- P1-T1·T4·T7에서 같은 예제를 재사용한다. Java 빌드 도구는 하나를 선택하며 Maven과 Gradle 양쪽을 검증할 필요는 없다.
+- 통과·실패·테스트 0개·보고서 없음·시간 초과·테스트 삭제·새 skip은 같은 예제의 통제된 변형으로 확인하고 각각 별도 애플리케이션을 만들지 않는다. 필수 품질 검사·격리·변조·수동 인수 검증은 유지한다.
+- 화면, 웹 서비스, DB, 인증, 애플리케이션 업무 기능을 추가하지 않는다. 프로세스·네트워크·변조 확인에 필요한 경우에만 일회용 로컬 보조 프로그램을 사용한다.
+- 실제 프로젝트 개발 검증은 Phase 4에서 수행한다. 예제를 작게 제한해도 공통 계약의 완료 기준이나 전체 회귀 검사 요구를 줄이지 않는다.
+
 ## 완료 예정 / 완료 항목
 
 | # | 모듈 / 산출물 | 상태 |
@@ -91,7 +112,7 @@ The normal-user backend provides detection after execution, not AppContainer-equ
 | 2 | JUnit XML 판정: 종료 코드 0, 보고서 존재, 테스트 1개 이상, 실패·오류 0개. 이전 통과 테스트 목록과 비교. skip 규칙(기준선 skip 허용, 새 skip은 Reviewer 확인 대상으로 표시) | 🔲 |
 | 3 | 품질 검사는 종료 코드로 판정. 보고서를 낼 수 없는 예외는 사용자 승인이 있을 때만 수동 확인 항목으로 전환 | 🔲 |
 | 4 | 격리 방식 C: Python은 AppContainer 유지, 그 밖은 일반 사용자 권한 실행과 변조 탐지, 결과에 격리 수준 표시 | 🔲 |
-| 5 | Python과 Java 예제 프로젝트, Java 패키지 다운로드 확인 결과 기록 | 🔲 |
+| 5 | 위 범위에 따른 최소 Python 검증용 프로젝트 1개와 Java 검증용 프로젝트 1개, Java 패키지 다운로드 확인 결과 기록 | 🔲 |
 
 ## Task와 검증
 
@@ -105,7 +126,7 @@ P1-T1–T8 순서로 실행하며 T9는 별도 사용자 인수 단계다. 아�
 | P1-T4 | 두 격리 방식으로 계약 실행 | 프로젝트 가상환경 의존성을 포함한 Python AppContainer를 유지한다. 다른 런타임·로컬 네트워크 필요 검사는 일반 권한 실행을 추가한다. 방식·argv·cwd·출력·종료·시간 초과를 기록하고 AppContainer 실패 시 조용히 격리를 낮추지 않는다 | 실제 Python 가상환경·Java 자식 프로세스 실행, 시간 초과·자손 정리·격리 실패 검사, 검사별 격리 수준 기록 확인 | 🔲 |
 | P1-T5 | 기록·설치본 변조 탐지 | 정당한 최신 기록 해시를 컨트롤러 메모리에 보관해 명령마다 대조한다. 설치본 매니페스트를 확인하고 새로 만든 결과 폴더에서만 보고서를 읽는다. 불일치면 후속 실행을 중단한다 | 일회용 fixture로 기록·정책/승인 데이터·설치 파일 변조, 오래된/폴더 밖 결과 거부, 정당한 컨트롤러 기록의 오탐 없음 확인 | 🔲 |
 | P1-T6 | 등록·워크플로·인수를 공통 계약에 연결 | `workflow.prepare`·`workflow_acceptance.final_validation`을 수정해 품질 검사는 종료 코드, 테스트는 JUnit으로 판정한다. 보고서 누락은 미확인이고 수동 전환은 사용자 승인과 실제 확인 결과가 필요하다. 내용/버전·승인 연결을 보존한다 | 두 백엔드로 최종 검사까지 통합 검증, 근거 누락·오래된 결과·미승인 수동 전환 거부, 기존 통과 테스트 삭제·새 skip의 Reviewer 확인 근거 요구 | 🔲 |
-| P1-T7 | 같은 구현으로 Python·Java 예제 검증 | 두 예제에서 통과·실패·테스트 0개·보고서 없음·시간 초과·테스트 삭제·새 skip을 확인한다. Java 실제 다운로드와 Python 가상환경 결과를 기록하고 언어를 바꿀 때 하네스 코드를 수정하지 않는다 | 예제별 명령·JUnit·공통 판정 결과·격리 수준·코드 해시 저장, 결과와 계약 조건 대조 | 🔲 |
+| P1-T7 | 같은 구현으로 최소 예제 2개 검증 | T1/T4의 Python·Java 예제를 재사용해 통제된 변형으로 통과·실패·테스트 0개·보고서 없음·시간 초과·테스트 삭제·새 skip을 확인한다. 예제 범위를 지키고 Java 실제 다운로드·Python 가상환경 결과를 기록하며 언어를 바꿀 때 하네스 코드를 수정하지 않는다 | 예제별 명령·JUnit·공통 판정 결과·격리 수준·코드 해시 저장, 결과와 계약 조건 대조, 애플리케이션 기능 추가 없음 확인 | 🔲 |
 | P1-T8 | 최종 전체 회귀·영문/국문 근거 작성 | 전체 검사가 통과하고 JUnit을 남긴다. 인수한 Phase 0의 691개 테스트와 정확한 ID를 비교한다. 삭제/변경/새 skip 이유와 남은 한계를 기록한다. 테스트 0개·중단을 통과로 표시하지 않는다 | Windows 검사는 짧은 로컬 실행 경로에서 순차 수행, 보고서 해시·테스트 ID 차이 검증, 이 문서에 변경 내용·실제 결과 기록 | 🔲 |
 | P1-T9 | 사용자 인수 | 사용자가 T1–T8 근거·의도적인 기준선 변경·한계를 검토하고 Phase 1을 명시적으로 인수한다 | 별도 인수 기록 후 양쪽 언어와 Overview의 Phase 1을 완료 처리 | 🔲 |
 
@@ -113,7 +134,7 @@ P1-T1–T8 순서로 실행하며 T9는 별도 사용자 인수 단계다. 아�
 
 ## 검증 및 종료 조건
 
-- 같은 검사 계약으로 Python과 Java 예제를 판정한다. 판정 코드에 언어별 분기가 없다.
+- 예제 범위에 맞춘 최소 Python·Java 검증용 프로젝트 2개를 같은 검사 계약으로 판정한다. 판정 코드에 언어별 분기가 없다.
 - 두 언어 모두에서 통과, 실패, 테스트 0개, 보고서 없음, 시간 초과, 테스트 삭제, 새 skip이 각각 올바른 결과로 나온다.
 - 회사 네트워크에서 Java 의존성 다운로드 결과를 기록한다. 막혀 있으면 프록시나 사내 저장소 설정 절차를 적고, 그래도 안 되면 원인과 필요한 조치를 보고한다.
 - 프로젝트 자체 가상환경을 쓰는 Python 프로젝트에서도 AppContainer 경로가 동작한다(기획서 5.1).
@@ -137,3 +158,4 @@ P1-T1–T8 순서로 실행하며 T9는 별도 사용자 인수 단계다. 아�
 | 2026-10-23 | 기획서 12장 1–2단계로 개요를 작성했다. 미시작. |
 | 2026-10-23 | Phase 0에서 확인한 공용 등록·워크플로·인수 의존성을 기록했다. 개요만 보완했으며 Phase 1은 미시작이다. |
 | 2026-10-23 | Phase 0 인수 후 P1-T1–T9의 작업·완료 기준·검증 방법을 상세화했다. Java 버전·배포처는 첫 환경 확인 Task에서 선택할 미정 사항이다. 설치·구현·검사 실행 없이 Phase 1 미시작을 유지한다. dev-log 스킬이 없어 별도 로그는 생략했다. |
+| 2026-10-23 | 사용자 결정에 따라 공통화 개발 범위를 유지하고 예제를 재사용 가능한 최소 프로젝트 2개로 제한했다. 예제 규모의 경계를 명시하고 T7·산출물·종료 조건을 맞췄으며 필수 검증은 모두 유지한다. 문서만 변경했고 Phase 1은 미시작이다. dev-log 스킬이 없어 별도 로그는 생략했다. |

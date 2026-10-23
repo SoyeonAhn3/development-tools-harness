@@ -34,7 +34,7 @@ AI가 구현하고, 하네스가 검증하며, 사람은 중요한 결정을 승
 | Phase | 내용 | 상태 |
 |---|---|---|
 | [0 — 기준선 확인](Phase/Phase0_Baseline.md) | 현재 환경과 전체 회귀 검사 확인, 기준선 기록, 모듈 대응표 확정 | ✅ |
-| [1 — 검사 계약과 격리](Phase/Phase1_ValidationContract.md) | 언어와 무관한 검사 계약, 격리 방식 C, Java 다운로드 확인 | 🔲 |
+| [1 — 검사 계약과 격리](Phase/Phase1_ValidationContract.md) | 언어와 무관한 검사 계약, 격리 방식 C, Java 다운로드 확인. 최소 Python·Java 예제 각 1개로 검증 | 🔲 |
 | [2 — 계획 확장과 환경 세팅](Phase/Phase2_PlanningAndSetup.md) | Phase 0을 포함한 계획, 기술 구성·버전 제안, Phase 문서, Phase 0 실행 | 🔲 |
 | [3 — 개발 흐름과 품질 장치](Phase/Phase3_WorkflowAndQuality.md) | AI 권한, 품질 장치, 보고서, 인수, CLI 단순화 | 🔲 |
 | [4 — 실사용 검증](Phase/Phase4_RealWorldValidation.md) | Decision Desk Phase 1, 기존 Python 프로젝트, 모의 Java 프로젝트 | 🔲 |
